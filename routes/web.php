@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Middleware\CheckFirstStepRegistration;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -36,10 +37,10 @@ Route::controller(RegisterController::class)->group(function(){
     Route::get("/singup","main")->name("singup1step");
     Route::post("/singup","createStep1")->name("singup1create");
 
-    Route::get("/singup/step2","showStep2")->name("singup2step");
+    Route::get("/singup/step2","showStep2")->middleware("check_step1_register")->name("singup2step");
     Route::post("/singup/step2","createStep2")->name("singup2create");
 
-    Route::get("/singup/step3","showStep3")->name("singup3step");
+    Route::get("/singup/step3","showStep3")->middleware("check_step2_register")->name("singup3step");
     Route::post("/singup/step3","createStep3")->name("singup3create");
 
     Route::get("/singup/step4","showStep4")->name("singup4step");

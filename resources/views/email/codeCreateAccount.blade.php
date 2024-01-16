@@ -10,16 +10,6 @@
     .main_container{
         padding: 0 10px;
     }
-    header{
-        display: flex;
-        width: 100%;
-        justify-content: end;
-        align-items: end;
-    }
-    header i{
-        font-size: 1.3em;
-        color: black
-    }
     .confirm_account{
         direction: flex;
         flex-direction: column;
@@ -52,9 +42,6 @@
 @endsection
 
 @section('content')
-    <header>
-        <i class="fa-brands fa-x-twitter"></i>
-    </header>
     <div class="confirm_account">
         <h2>Confirma tu direccion de correo</h2>
         <p>Debes de completaar este paso rapido para poder crear tu cuenta.Confirma que esta es la direccion correcta</p>
