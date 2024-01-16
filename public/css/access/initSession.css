@@ -1,0 +1,255 @@
+:root{
+    --blanco : rgb(255 255 255);
+    --negro : rgb(0 0 0);
+    --gris : rgb(156, 152, 152);
+    --celeste : rgb(29, 155, 240);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    color: var(--blanco);
+}
+
+body{
+    overflow: hidden;
+    background-color: var(--negro);
+}
+
+.main_container{
+    height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    view-transition-name: main;
+}
+
+.session_container{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    padding: 1px 20px 40px 20px;
+    background: var(--negro);
+}
+
+header{
+    width: 100%;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+    position: relative;
+}
+
+header div{
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+header div:nth-child(1){
+    position: absolute;
+    left: 0;
+    top: -8px;
+}
+
+.exit_container i{
+    font-size: 21px;
+}
+
+.session_init{
+    margin-top: 158px;
+    padding: 0 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.session_init h2{
+    margin-bottom: 25px;
+}
+
+.session_with{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.link_botton{
+    padding: 10px 15px;
+    width: 90%;
+    border-radius: 25px;
+}
+
+.session_with a{
+    width: 100%;
+    background: var(--blanco);
+    display: flex;
+    justify-content: center;
+}
+
+.session_with a img{
+    height: 22px;
+    width: 22px;
+}
+
+.session_with a p{
+    color: var(--gris);
+    margin-left: 5px;
+}
+
+.other_option{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.other_option div{
+    width: 100%;
+    height: 100%;
+    padding: 0px 6px;
+}
+
+.other_option div div{
+    width: 100%;
+    height: 1px;
+    background: var(--gris);
+}
+
+.form_init_session{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.input_container{
+    border-radius: 4px;
+    border: 1px solid var(--gris);
+    padding-bottom: 3px;
+    min-height: 45px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.input_container_focus{
+    border-radius: 4px;
+    outline: 1px solid var(--celeste);
+    padding-bottom: 3px;
+    min-height: 45px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.label_container{
+    display: none;
+    padding: 2px 10px;
+    margin-top: 2px;
+}
+
+.label_container label{
+    font-size: 14px;
+}
+
+.label_focus{
+    color: var(--celeste);
+}
+
+.form_init_session input{
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0px 5px;
+    margin-top: 5px;
+    padding: 3px 10px 5px 10px;
+    font-size: 1.3em;
+}
+
+.form_init_session input::placeholder{
+    font-size: 20px;
+}
+
+.send_form{
+    margin-top: 20px;
+    width: 100%;
+}
+
+.send_form div{
+    padding: 10px 15px;
+    width: 100%;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    background: var(--blanco);
+}
+
+.send_form div p{
+    color: var(--negro);
+}
+
+.forgot_password_container{
+    margin-top: 20px;
+    width: 100%;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    background: var(--negro);
+    border: 1px solid var(--gris);
+}
+
+.forgot_password_container p{
+    color: var(--blanco);
+}
+
+
+@media screen and (min-width:700px){
+    .main_container{
+        background: rgba(21, 21, 21, 0.7);
+    }
+    .session_container{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        opacity: 1;
+        background: var(--negro);
+        max-height: 65%;
+        max-width: 800px !important;
+        border-radius: 25px;
+    }
+
+    .header{
+        align-items: center;
+        position: relative;
+    }
+
+    .logo_container i{
+        font-size: 30px;
+    }
+
+    .session_init{
+        height: 100%;
+        margin-top: 0;
+        width: 65%;
+    }
+    .label_container label{
+        font-size: 19px;
+    }
+    .other_option div div{
+        margin-top: 9px;
+    }
+}
+
+

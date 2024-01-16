@@ -1,0 +1,306 @@
+:root{
+    --blanco : rgb(255 255 255);
+    --negro : rgb(0 0 0);
+    --gris : rgb(156, 152, 152);
+    --celeste : rgb(29, 155, 240);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    color: var(--blanco);
+}
+
+body{
+    overflow: hidden;
+    background-color: var(--negro);
+}
+
+.main_container{
+    height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    view-transition-name: main1;
+}
+
+.main_container div{
+    max-width: 500px;
+}
+
+
+.logo_container{
+    padding: 10px 0 30px 0;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.logo_container img{
+    height: 60px;
+    width: 60px;
+}
+
+.register_cotainer{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.register_container h2{
+    font-size: 41px;
+    padding-bottom: 25px;
+}
+
+.register_container h4{
+    font-size: 28px;
+    font-weight: 700;
+    padding-bottom: 12px;
+}
+
+
+.register_with{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.link_botton{
+    padding: 10px 15px;
+    width: 90%;
+    border-radius: 25px;
+    text-decoration: none;
+}
+
+.register_with a{
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    background: var(--blanco);
+}
+
+.register_with a img{
+    width: 22px;
+    height: 22px;
+}
+
+.register_with a p{
+    color: var(--gris);
+    font-size: 100%;
+    margin-left: 5px;
+}
+
+.register_with a i{
+    color: var(--negro);
+}
+
+.other_option{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10px;
+}
+
+.other_option div{
+    width: 100%;
+    height: 100%;
+    padding: 0px 6px;
+}
+
+.other_option div div{
+    width: 100%;
+    height: 1px;
+    background: var(--gris);
+}
+
+.create_account_container{
+    margin-top: 10px;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.create_account{
+    background: var(--celeste);
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+}
+
+.create_account p{
+    font-family: 100%;
+}
+
+.conditions{
+    margin-top: 5px;
+}
+
+.conditions p{
+    color: var(--gris);
+}
+
+.conditions a{
+    color: var(--celeste);
+    text-decoration: none;
+}
+
+.conditions a:hover{
+    text-decoration: underline;
+}
+
+.init_session_container{
+    margin-top: 55px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.init_session_container h4{
+    width: 100%;
+    text-align: start;
+    font-size: 24px;
+    font-weight: 100;
+    margin-bottom: 15px;
+}
+
+.init_session{
+    display: flex;
+    justify-content: center;
+    border: 1px solid var(--gris);
+}
+
+.init_session p{
+    color: var(--celeste);
+}
+
+footer{
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: center;
+    padding: 0px 0px 15px 0;
+    flex: 1;
+}
+
+footer a{
+    text-decoration: none;
+    color: var(--gris);
+    height: min-content;
+    margin: 0px 5px;
+}
+
+footer a:hover{
+    text-decoration:underline;
+}
+
+@keyframes scale-out{
+    to{
+        scale: 0;
+        opacity: 0;
+    }
+}
+
+
+@keyframes fade-in{
+    from{
+        scale: 0;
+        opacity: 0;
+    }
+    to{
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+
+::view-transition-new(*):only-child{
+    animation-duration: 0.7s;
+    animation-name: fade-in;
+}
+
+::view-transition-old(*):only-child{
+    animation-duration: 1s;
+    animation-name: scale-out;
+}
+
+::view-transition-group(mainbox){
+    animation-duration: 1s;
+}
+
+@media screen and (min-width:500px){
+    .init_session_container{
+        width: 500px;
+    }
+}
+
+@media screen and (min-width:800px){
+    .register_container{
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        min-width: 100%;
+        padding: 0;
+        max-width: none !important;
+    }
+    .logo_container {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        position: relative;
+        max-width: 800px !important;
+    }
+    .logo_container img{
+        display: inline-block;
+        width: 100%;
+        height: 100%;
+    }
+
+    .create_account_content div{
+        max-width: 450px;
+    }
+    .create_account_content h2{
+        font-size: 65px;
+    }
+
+    .create_account_content h4{
+        font-size: 40px;
+        margin-bottom: 30px;
+    }
+
+    .link_botton p{
+        font-size: 20px;
+    }
+
+    .register_with a p{
+        font-size: 20px;
+    }
+
+    .other_option p{
+        font-size: 20px;
+    }
+
+    .conditions{
+        margin-top: 8px;
+    }
+
+    .conditions p{
+        font-size: 14px;
+    }
+
+    .init_session_container h4{
+        font-size: 30px;
+    }
+
+}
+

@@ -1,0 +1,275 @@
+:root{
+    --blanco : rgb(255 255 255);
+    --negro : rgb(0 0 0);
+    --gris : rgb(156, 152, 152);
+    --celeste : rgb(29, 155, 240);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    color: var(--blanco);
+}
+
+body{
+    background: var(--negro);
+    background: rgba(71, 88, 102, 0.4);
+    overflow: hidden;
+}
+
+
+.register_container{
+    background: rgba(0,0,0,0.9);
+    overflow: hidden;
+    height: 100vh;
+    position: relative;
+    padding: 10px 20px 0 20px;
+}
+
+.header_container{
+    display: flex;
+    width: 100%;
+}
+
+.exit_container{
+    display: flex;
+    align-items: end;
+}
+
+.header_container h4{
+    margin-left: 20px;
+    font-size: 18px;
+}
+
+.create_account_title{
+    padding: 30px 0px 20px 0px;
+    font-size: 28px;
+}
+
+.register_data {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    /* margin-left: 10px; */
+}
+
+.contact_data{
+    width: 100%;
+}
+
+.input_container{
+    width: 100%;
+    border: 1px solid var(--gris);
+    border-radius: 4px;
+}
+
+.error_form{
+    font-size: 1.3em;
+    color: var(--blanco);
+    padding: 3px 0;
+    margin-bottom: 15px;
+}
+
+.label_container{
+    display: none;
+}
+
+.label_container_show{
+    display: block;
+}
+
+.input_container div label{
+    font-size: 14px;
+    padding: 0px 0px 0 5px;
+}
+
+.label_show{
+    color: var(--celeste);
+}
+
+.input_container input{
+    width: 100%;
+    padding: 3px 8px 8px 5px;
+    font-size: 1.3em;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+
+.input_contact_focus::placeholder{
+    color: var(--negro);
+}
+
+.personal_data h4{
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.personal_data p{
+    color: var(--gris);
+    font-size: 100%;
+}
+
+.date_container{
+    margin-top: 10px;
+}
+
+
+.date_input{
+    background: var(--negro);
+    font-size: 1.2em;
+    padding: 5px 0px;
+    border: none;
+    outline: none;
+}
+
+.date_input_focus{
+    border: 1px solid var(--celeste);
+    border-radius: 4px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-color: var(--blanco);
+    border-radius: 3px;
+    padding: 3px;
+    margin-right: 2px;
+}
+
+.continue_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.continue_container{
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: start;
+}
+
+.continue_botton{
+    padding: 10px 15px;
+    border-radius: 25px;
+    background: var(--gris);
+    width: 90%;
+    border-radius: 25px;
+}
+
+.continue_botton:hover{
+    cursor: pointer;
+}
+
+.continue_botton h3{
+    font-size: 1.3em;
+    color: var(--negro);
+    width: 100%;
+    text-align: center;
+}
+
+@keyframes fade-in{
+    from{
+        scale: 0;
+        opacity: 0;
+    }
+    to{
+        scale: 1;
+        opacity: 1;
+    }
+}
+
+@keyframes sacale-out{
+    to{
+        scale: 0;
+    }
+}
+
+::view-transition-new(*):only-child{
+    animation-duration: 1s;
+    animation-name: fade-in;
+}
+
+::view-transition-group(mainbox){
+    animation-duration: 0.7s;
+}
+
+@media screen and (min-width:700px){
+    body{
+        background: rgba(20, 20, 20, 0.9);
+    }
+    .main_container{
+        display: flex;
+        width: 100%;
+        height: 100vh;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .register_container{
+        border-radius: 13px;
+        max-height: 80vh;
+        max-width: 550px;
+        padding: 18px 25px 0px 25px;
+    }
+
+    .exit_container i{
+        font-size: 1.4em;
+    }
+
+    .header_container h4{
+        font-size: 1.4em;
+        margin-left: 10px;
+    }
+
+    .create_account_title{
+        font-size: 2.5em;
+        margin-left: 0;
+        padding-left: 22px;
+    }
+
+    .register_data{
+        padding: 0 22px;
+    }
+
+    .input_container{
+        padding: 5px 0px 0 6px;
+        height: 58px;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    .personal_data h4{
+        margin-bottom: 6px;
+    }
+
+    .select_container:nth-child(1){
+        grid-column: span 2;
+    }
+
+    .select_container:nth-child(2){
+        grid-column: span 2;
+    }
+
+    .select_container:nth-child(3){
+        grid-column: span 2;
+    }
+
+    .continue_container{
+        max-width: 500px;
+        padding: 0 22px;
+    }
+
+    .continue_botton{
+        width: 100%;
+        padding: 16px 15px;
+    }
+}
+
+
+
