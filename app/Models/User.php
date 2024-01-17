@@ -64,7 +64,7 @@ class User extends Model implements Authenticatable
             return $verificationCodeID;
         }
         catch(\Exception $e){
-            return response()->json(["error"=>$e,500]);
+            return response()->json(["error"=>$e->getMessage(),500]);
         }
     }
 

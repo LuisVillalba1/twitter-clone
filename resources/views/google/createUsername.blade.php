@@ -12,7 +12,7 @@
 @section('content')
 <div class="register_container">
     <h3 class="account_title">Nombre de usuario</h3>
-    <form class="register_data" method="POST" action="">
+    <form class="register_data" method="POST" action={{route("googleUsernameCreate")}}>
         @csrf
         <div class="user_data">
             <div class="input_container">

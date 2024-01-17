@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Register\Google\NicknameRequest;
+use App\Models\PersonalData;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -27,7 +29,7 @@ class GoogleController extends Controller
 
             $newUser->save();
 
-            session()->put("user",$newUser);
+            session()->put("emailGoogle",$newUser->Email);
 
             return redirect()->route("googleUsername");
         }
@@ -40,7 +42,34 @@ class GoogleController extends Controller
         return view("google.createUsername");
     }
 
-    public function createUsername(Request $request){
-        return $request;
+    public function createUsername(NicknameRequest $request){
+        try{
+            //create a new personal data
+            $nickname = $request->input("nickname");
+
+            $personalData = new PersonalData();
+
+            $personalData->Nickname = $nickname;
+
+            $personalData->save();
+
+            //asing to the user personal data
+            $user = User::where("Email",session()->get("emailGoogle"))->first();
+
+            $user->PersonalDataID = $personalData->PersonalDataID;
+
+            $user->save();
+
+            //Authenticate user
+            Auth::login($user);
+
+            session()->flush();
+
+            return route("mainApp");
+
+        }
+        catch(\Exception $e){
+            return response()->json(["error",$e->getMessage()],500);
+        }   
     }
 }

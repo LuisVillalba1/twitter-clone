@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         "check_step1_register" => \App\Http\Middleware\CheckFirstStepRegistration::class,
         "check_step2_register" => \App\Http\Middleware\CheckStep2Register::class,
         "AuthSession" => \App\Http\Middleware\AuthSession::class,
+        "GoogleEmail"=> \App\Http\Middleware\Google\CheckGoogleEmail::class,
     ];
 
 }

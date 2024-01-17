@@ -33,9 +33,9 @@ Route::get('/google-callback', function () {
 });
 
 //Create username with google account
-Route::controller(GoogleController::class)->group(function(){
-    Route::get("/google/register/username","showUsernameCreate")->name("googleUsername");
-    Route::post("/googe/register/username","createUsername")->name("googleUsernameCreate");
+Route::middleware(["GoogleEmail"])->group(function () {
+    Route::get("/google/register/username",[GoogleController::class,"showUsernameCreate"])->name("googleUsername");
+    Route::post("/googe/register/username",[GoogleController::class,"createUsername"])->name("googleUsernameCreate");
 });
 
 //acces controller

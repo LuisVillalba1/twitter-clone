@@ -54,42 +54,48 @@ function showLabel(label){
 }   
 
 
-// $(".continue_botton").on("click", function (e) {
+$(".continue_botton").on("click", function (e) {
 
-//     let formData = $(".register_data").serialize();
+    let formData = $(".register_data").serialize();
 
-//     $.ajax({
-//         type: "post",
-//         url: $(".register_data").attr("action"),
-//         data : formData,
-//         success: function (response) {
-//             showStep3(response);
-//         },
-//         error: function(error){
-//             if(error.status == 422){
-//                 let errores = error.responseJSON.errors;
-//                 $(".error_form").text("");
-//                 $.each(errores, function (indexInArray, valueOfElement) {
-//                     $(`.error_${indexInArray}`).text(valueOfElement);
-//                 });
-//             }
-//             console.log(error);
-//         }
-//     });
-// });
+    $.ajax({
+        type: "post",
+        url: $(".register_data").attr("action"),
+        data : formData,
+        success: function (response) {
+            showStep2(response);
+        },
+        error: function(error){
+            if(error.status == 422){
+                let errores = error.responseJSON.errors;
+                $(".error_form").text("");
+                $.each(errores, function (indexInArray, valueOfElement) {
+                    $(`.error_${indexInArray}`).text(valueOfElement);
+                });
+            }
+            else{
+                let errores = error.responseJSON.error;
+                $.each(errores, function (indexInArray, valueOfElement) { 
+                    $(".error_form").text(valueOfElement); 
+                });
+            }
+        }
+    });
+});
 
-// function showStep3(url){
-//     if(!document.startViewTransition){
-//         window.location.href = url;
-//     }
 
-//     $(".register_container").attr("style","view-transition-name: mainbox");
-//     document.startViewTransition(async()=> await navigate(url));
-// }
+function showStep2(url){
+    if(!document.startViewTransition){
+        window.location.href = url;
+    }
 
-// function navigate(url){
-//     return new Promise(resolve=>{
-//         window.location.href = url
-//         resolve();
-//     })
-// }
+    $(".register_container").attr("style","view-transition-name: mainbox");
+    document.startViewTransition(async()=> await navigate(url));
+}
+
+function navigate(url){
+    return new Promise(resolve=>{
+        window.location.href = url
+        resolve();
+    })
+}
