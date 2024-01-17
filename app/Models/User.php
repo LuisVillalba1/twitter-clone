@@ -4,17 +4,17 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Mail;
-use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Session;
 use App\Mail\SendCodeMail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 
-class User extends Model
+class User extends Model implements Authenticatable
 {
+    use AuthenticatableTrait;
     use HasFactory;
 
     protected $table = "users";
@@ -45,11 +45,13 @@ class User extends Model
 
     public function createUser(){
         try{
+            //create a a new personal data
             $personalDataID = (new PersonalData())->createPersonalData();
 
-
+            //create a verification code for user email
             $verificationCodeID = (new verificationAccount())->createCode();
 
+            //create a new user
             $user = new User();
             $user->Name = session()->get("name");
             $user->Email = session()->get("email");

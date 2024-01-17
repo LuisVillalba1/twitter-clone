@@ -66,6 +66,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         "check_step1_register" => \App\Http\Middleware\CheckFirstStepRegistration::class,
         "check_step2_register" => \App\Http\Middleware\CheckStep2Register::class,
+        "AuthSession" => \App\Http\Middleware\AuthSession::class,
     ];
 
 }

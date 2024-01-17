@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('personal_data', function (Blueprint $table) {
             $table->id("PersonalDataID");
             $table->string("Nickname");
-            $table->date("Date");
+            $table->date("Date")->nullable();
             $table->timestamps();
         });
     }

@@ -18,9 +18,9 @@ return new class extends Migration
             $table->id("UserID");
             $table->string('Name');
             $table->string('Email')->unique();
-            $table->string('Password');
+            $table->string('Password')->nullable();
             //personal data del usuario
-            $table->unsignedBigInteger("PersonalDataID");
+            $table->unsignedBigInteger("PersonalDataID")->nullable();
             $table->foreign("PersonalDataID")
             ->references("PersonalDataID")
             ->on("personal_data")
@@ -28,7 +28,7 @@ return new class extends Migration
             ->onUpdate("cascade");
 
             //aqui almacenaremos el codigo de verificacion
-            $table->unsignedBigInteger("VerificationID");
+            $table->unsignedBigInteger("VerificationID")->nullable();
             $table->foreign("VerificationID")
             ->references("VerificationID")
             ->on("verification_accounts")
