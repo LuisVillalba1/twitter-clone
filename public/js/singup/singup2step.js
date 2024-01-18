@@ -38,6 +38,7 @@ $.each(inputs, function (indexInArray, valueOfElement) {
 
 const mainContainer = $(".main_container");
 
+//mostramos u ocultamos el label
 function showLabel(label){
     if($(label).attr("class") == "label_container"){
         $(label).removeClass("label_container");
@@ -51,7 +52,7 @@ function showLabel(label){
     }
 }   
 
-
+//enviamos el formulario
 $(".continue_botton").on("click", function (e) {
 
     let formData = $(".register_data").serialize();
@@ -64,18 +65,19 @@ $(".continue_botton").on("click", function (e) {
             showStep3(response);
         },
         error: function(error){
+            $(".server_erro").text("");
+            $(".error_form").text("");
             if(error.status == 422){
                 let errores = error.responseJSON.errors;
-                $(".error_form").text("");
                 $.each(errores, function (indexInArray, valueOfElement) {
                     $(`.error_${indexInArray}`).text(valueOfElement);
                 });
             }
-            console.log(error);
+            $(".server_error").text(error.responseJSON.error);
         }
     });
 });
-
+//con la url obteneida navegamos hacia el pago numero 3
 function showStep3(url){
     if(!document.startViewTransition){
         window.location.href = url;

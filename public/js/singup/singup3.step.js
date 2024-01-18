@@ -1,3 +1,4 @@
+//enviamos el formulario
 $(".continue_botton").on("click", function (e) {
     let formData = $(".register_data").serialize();
     $.ajax({
@@ -5,7 +6,7 @@ $(".continue_botton").on("click", function (e) {
         url: $(".register_data").attr("action"),
         data : formData,
         success: function (response) {
-            showStep4(response);
+            showMain(response);
         },
         error: function(error){
             $(".error_numbers").empty();
@@ -22,13 +23,14 @@ $(".continue_botton").on("click", function (e) {
                 let errores = error.responseJSON.error;
                 let nuevo_parrafo = $("<p></p>");
                 $(nuevo_parrafo).text(errores);
+                $(nuevo_parrafo).css("color", "rgb(189, 4, 4)");
                 $(".error_numbers").append(nuevo_parrafo)
             }
         }
     });
 });
-
-function showStep4(url){
+//con la url obtenida navegamos al main para luego poder iniciar session
+function showMain(url){
     if(!document.startViewTransition){
         window.location.href = url;
     }

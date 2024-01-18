@@ -110,6 +110,12 @@ body{
     font-size: 1.2em;
 }
 
+.server_error{
+    padding: 10px 0;
+    color: rgb(189, 4, 4);
+    font-size: 1.3em;
+}
+
 .continue_container{
     position: absolute;
     bottom: 30px;

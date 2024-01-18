@@ -45,6 +45,7 @@
             </p>
 
             <p class="username_information">Ingrese un nombre de usuario y contraseña, ten en cuenta que el nombre de usuario luego no lo va poder cambiar</p>
+            <p class="server_error"></p>
         </form>
         <div class="continue_container">
             <div class="continue_botton">

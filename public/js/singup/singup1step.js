@@ -11,6 +11,7 @@ $.each(inputs, function (indexInArray, valueOfElement) {
 
             let label = padre.firstElementChild;
 
+            //mostramos el label correspondiente y le agregamos estilos al contenedor
             if(!document.startViewTransition){
 
                 $(e.target).addClass("input_contact_focus");
@@ -28,6 +29,7 @@ $.each(inputs, function (indexInArray, valueOfElement) {
             })
             
         });
+        //ocultamos el label y le quitamos los estilos al contenedor
         $(valueOfElement).on("blur",function(e){
             let padre = e.target.closest(".input_container");
             let label = padre.firstElementChild;
@@ -40,6 +42,7 @@ $.each(inputs, function (indexInArray, valueOfElement) {
 });
 
 function dateInput(){
+    //agregamos estilos al input de tipo date
     $(".date_input").on("focus", function (e) {
         if(!document.startViewTransition){
             $(e.target).addClass("date_input_focus");
@@ -56,8 +59,7 @@ function dateInput(){
 
 dateInput();
 
-const mainContainer = $(".main_container");
-
+//mostramos u ocultamos los label
 function showLabel(label){
     if($(label).attr("class") == "label_container"){
         $(label).removeClass("label_container");
@@ -71,10 +73,7 @@ function showLabel(label){
     }
 }   
 
-// $(".register_data").on("form",function(e){
-//     e.preventDefault();
-// })
-
+//enviamos los datos del formulario
 $(".continue_botton").on("click", function (e) {
     e.preventDefault();
 
@@ -98,7 +97,7 @@ $(".continue_botton").on("click", function (e) {
         }
     });
 });
-
+//con la url obtenida navegamos a el siguiente paso de registro
 function showStep2(url){
     if(!document.startViewTransition){
         window.location.href = url;

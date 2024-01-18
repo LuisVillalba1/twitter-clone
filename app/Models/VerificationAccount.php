@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -46,6 +47,7 @@ class VerificationAccount extends Model
             if($code == $codeVerification){
                 $user->VerifiedMail = true;
                 $user->save();
+                session()->flush();
                 return route("main");
             }
             return response()->json(['error' => 'Incorrect code,please try again'], 404);

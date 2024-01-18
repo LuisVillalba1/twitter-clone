@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use App\Mail\SendCodeMail;
+use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Auth\Authenticatable;
@@ -44,41 +45,40 @@ class User extends Model implements Authenticatable
     }
 
     public function createUser(){
-        try{
-            //create a a new personal data
-            $personalDataID = (new PersonalData())->createPersonalData();
+        //create a a new personal data
+        $personalDataID = (new PersonalData())->createPersonalData();
 
-            //create a verification code for user email
-            $verificationCodeID = (new verificationAccount())->createCode();
+        //create a verification code for user email
+        $verificationCodeID = (new verificationAccount())->createCode();
 
-            //create a new user
-            $user = new User();
-            $user->Name = session()->get("name");
-            $user->Email = session()->get("email");
-            $user->Password = Hash::make(session()->get("password"));
-            $user->PersonalDataID = $personalDataID;
-            $user->VerificationID = $verificationCodeID;
+        //create a new user
+        $user = new User();
+        $user->Name = session()->get("name");
+        $user->Email = session()->get("email");
+        $user->Password = Hash::make(session()->get("password"));
+        $user->PersonalDataID = $personalDataID;
+        $user->VerificationID = $verificationCodeID;
 
-            $user->save();
+        $user->save();
 
-            return $verificationCodeID;
-        }
-        catch(\Exception $e){
-            return response()->json(["error"=>$e->getMessage(),500]);
-        }
+        return $verificationCodeID;
     }
 
     public function safeAndSendEmail($request){
+        try{
         //guardamos en la session el nickname y la contraseña
         session()->put("nickname",$request->input("nickname"));
         session()->put("password",$request->input("password"));
-        
         //creamos el usuario y enviamos el mail correspondiente
         $email = session()->get("email");
         $this->createUser();
         $this->sendEmailCode($email);
-
         return route("singup3step");
+        }
+        catch(\Exception $e){
+            return response()->json(["error"=>$e->getMessage()],500);
+        }
+
     }
 
 }

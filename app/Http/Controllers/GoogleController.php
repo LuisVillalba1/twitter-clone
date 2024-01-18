@@ -21,7 +21,7 @@ class GoogleController extends Controller
                 return redirect()->route("mainApp");
             }
 
-            //create user and redirect main app
+            //create user 
             $newUser = new User();
 
             $newUser->Name = $user->name;
@@ -31,6 +31,7 @@ class GoogleController extends Controller
 
             session()->put("emailGoogle",$newUser->Email);
 
+            //redirecto to create username
             return redirect()->route("googleUsername");
         }
         catch(\Exception $e){
