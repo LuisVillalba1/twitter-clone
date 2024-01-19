@@ -25,7 +25,7 @@
         <div class="session_with">
             <form action="" method="POST">
                 @csrf
-                <a class="session_google_container link_botton" href="#">
+                <a class="session_google_container link_botton" href="{{route("google-siging")}}">
                     <img src="./imgs/google_svg.png" alt=""><p>iniciar sesión con Google</p>
                 </a>
             </form>
@@ -39,16 +39,25 @@
                 <div class="lane"></div>
             </div>
         </div>
-        <form action="" method="POST" class="form_init_session">
-            <div class="input_container" id="input_container">
+        <form action="{{route("initSession")}}" method="POST" class="form_init_session">
+            @csrf
+            <div class="input_container">
                 <div class="label_container">
-                    <label for="init_session_input">Teléfono,correo electrónico o nombre de usuario</label>
+                    <label for="init_session_input">Correo electrónico o nombre de usuario</label>
                 </div>
-                <input id="init_session_input" type="text" placeholder="Teléfono,correo electrónico o nombre de usuario">
+                <input id="init_session_input" type="text" placeholder="Correo electrónico o nombre de usuario" name="user" autocomplete="username">
             </div>
+            <p class="error_user error_form"></p>
+            <div class="input_container">
+                <div class="label_container">
+                    <label for="init_session_input">Contraseña</label>
+                </div>
+                <input type="password" placeholder="Contraseña" name="password" autocomplete="current-password">
+            </div>
+            <p class="server_error error_password error_form"></p>
             <div class="send_form">
                 <div class="input_send_container">
-                    <p>Siguiente</p>
+                    <p>Iniciar sesion</p>
                 </div>
             </div>
         </form>

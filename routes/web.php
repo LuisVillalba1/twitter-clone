@@ -4,6 +4,7 @@ use App\Http\Controllers\AccessController;
 use App\Http\Controllers\AppController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\GoogleRegister;
+use App\Http\Controllers\InitSession;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\CheckFirstStepRegistration;
@@ -41,7 +42,9 @@ Route::middleware(["GoogleEmail"])->group(function () {
 //acces controller
 Route::controller(AccessController::class)->group(function(){
     Route::get("/","index")->name("main");
+
     Route::get("/siging","session")->name("siging");
+    Route::post("/siging","initSession")->name("initSession");
 });
 
 //register controller

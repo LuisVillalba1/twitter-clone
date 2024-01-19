@@ -143,6 +143,11 @@ header div:nth-child(1){
     flex-direction: column;
 }
 
+
+.input_container:last-of-type{
+    margin-top: 13px;
+}
+
 .input_container_focus{
     border-radius: 4px;
     outline: 1px solid var(--celeste);
@@ -159,11 +164,20 @@ header div:nth-child(1){
     margin-top: 2px;
 }
 
-.label_container label{
-    font-size: 14px;
+.label_container_show{
+    display: block;
 }
 
+label{
+    padding: 3px 0px 0px 8px;
+    font-size: 14px;
+}  
+
 .label_focus{
+    color: var(--celeste);
+}
+
+.label_show{
     color: var(--celeste);
 }
 
@@ -178,8 +192,17 @@ header div:nth-child(1){
     font-size: 1.3em;
 }
 
+.input_focus::placeholder{
+    color: transparent;
+}
+
 .form_init_session input::placeholder{
     font-size: 20px;
+}
+
+.error_form{
+    font-size: 1.2em;
+    padding: 5px 0px;
 }
 
 .send_form{
@@ -194,6 +217,7 @@ header div:nth-child(1){
     display: flex;
     justify-content: center;
     background: var(--blanco);
+    cursor: pointer;
 }
 
 .send_form div p{
