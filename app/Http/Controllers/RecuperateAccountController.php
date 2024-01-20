@@ -31,7 +31,8 @@ class RecuperateAccountController extends Controller
 
             return view("recuperateAccount.changePassword",compact("link"));
         }
-        return redirect()->route("main");
+        session()->put("error","Ruta expirada o invalida");
+        return redirect()->route("errorPage");
     }
 
     public function change(NewPasswordRequest $request,$id){

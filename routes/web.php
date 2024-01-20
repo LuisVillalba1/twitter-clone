@@ -71,6 +71,10 @@ Route::controller(RecuperateAccountController::class)->group(function(){
     Route::patch("/recuperateAccount/{id}","change")->name("changePasswordPatch");
 });
 
+Route::get("/error",function(){
+    return view("error.errorPage");
+})->name("errorPage");
+
 //main app
 Route::middleware(["AuthSession"])->group(function () {
     Route::get("/main",[AppController::class,"show"])->name("mainApp");
