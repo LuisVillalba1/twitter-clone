@@ -68,7 +68,7 @@ Route::controller(RecuperateAccountController::class)->group(function(){
     Route::post("/recuperateAccount","sendEmail")->name("RecuperateAccountPost");
 
     Route::get("/recuperateAccount/{id}","changePassword")->name("changePassword");
-    Route::post("/recuperateAccount/{id}","change")->name("changePasswordPost");
+    Route::patch("/recuperateAccount/{id}","change")->name("changePasswordPatch");
 });
 
 //main app

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RecuperateAccount\Email;
+use App\Http\Requests\RecuperateAccount\NewPasswordRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
@@ -23,7 +24,7 @@ class RecuperateAccountController extends Controller
     public function changePassword(Request $request,$id){
         if($request->hasValidSignature()){
             $link = URL::temporarySignedRoute(
-                "changePasswordPost",
+                "changePasswordPatch",
                 now()->addHours(1),
                 ["id"=>$id]
             );
@@ -31,5 +32,9 @@ class RecuperateAccountController extends Controller
             return view("recuperateAccount.changePassword",compact("link"));
         }
         return redirect()->route("main");
+    }
+
+    public function change(NewPasswordRequest $request,$id){
+        return (new User())->changePassword($request,$id);
     }
 }

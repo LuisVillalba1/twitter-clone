@@ -88,21 +88,44 @@ class User extends Model implements Authenticatable
     public function recuperateAccount($request){
         try{
             $user = User::where("Email",$request->input("mail"))->first();
+            $id = $user->UserID;
 
             $linkChangePassword = URL::temporarySignedRoute(
                 "changePassword",
                 now()->addHours(1),
-                ["id"=>Crypt::encryptString($user)]
+                ["id"=>Crypt::encryptString($id)]
             );
 
             Mail::to($request->input("mail"))
             ->send(new RecuperateAccountMail($linkChangePassword));
 
-            return "Mail send succefully,please check your current mail account";
+            return "Mail send successfully,please check your current mail account";
         }
         catch(\Exception $e){
             return response()->json(["error"=>$e->getMessage()],500);
         }
     }
 
+    public function changePassword($request,$id){
+        try{
+            if(!$request->hasValidSignature()){
+                throw new Exception("The token has expired");
+            }
+
+            $descripID = Crypt::decryptString($id);
+
+            $user = User::where("UserID",$descripID)->first();
+
+            $newPassword = Hash::make($request->input("password"));
+
+            $user->Password = $newPassword;
+
+            $user->save();
+
+            return "Password change successfully";
+        }
+        catch(\Exception $e){
+            return response()->json(["error"=>$e->getMessage()],500);
+        }
+    }
 }
