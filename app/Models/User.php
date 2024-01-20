@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Mail\RecuperateAccountMail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
@@ -12,6 +14,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\URL;
 
 class User extends Model implements Authenticatable
 {
@@ -79,6 +83,26 @@ class User extends Model implements Authenticatable
             return response()->json(["error"=>$e->getMessage()],500);
         }
 
+    }
+
+    public function recuperateAccount($request){
+        try{
+            $user = User::where("Email",$request->input("mail"))->first();
+
+            $linkChangePassword = URL::temporarySignedRoute(
+                "changePassword",
+                now()->addHours(1),
+                ["id"=>Crypt::encryptString($user)]
+            );
+
+            Mail::to($request->input("mail"))
+            ->send(new RecuperateAccountMail($linkChangePassword));
+
+            return "Mail send succefully,please check your current mail account";
+        }
+        catch(\Exception $e){
+            return response()->json(["error"=>$e->getMessage()],500);
+        }
     }
 
 }

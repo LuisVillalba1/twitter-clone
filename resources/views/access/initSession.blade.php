@@ -61,7 +61,7 @@
                 </div>
             </div>
         </form>
-        <a class="forgot_password_container link_botton" href="#">
+        <a class="forgot_password_container link_botton" href="{{route("recuperateAccount")}}">
             <p>¿Olvidate tu contraseña?</p>
         </a>
     </div>

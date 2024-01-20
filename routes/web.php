@@ -6,6 +6,7 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\GoogleRegister;
 use App\Http\Controllers\InitSession;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RecuperateAccountController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\CheckFirstStepRegistration;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,16 @@ Route::controller(RegisterController::class)->group(function(){
     Route::get("/singup/step4","showStep4")->name("singup4step");
 });
 
+//recuperateAccount
+Route::controller(RecuperateAccountController::class)->group(function(){
+    Route::get("/recuperateAccount","recuperateAccount")->name("recuperateAccount");
+    Route::post("/recuperateAccount","sendEmail")->name("RecuperateAccountPost");
+
+    Route::get("/recuperateAccount/{id}","changePassword")->name("changePassword");
+    Route::post("/recuperateAccount/{id}","change")->name("changePasswordPost");
+});
+
+//main app
 Route::middleware(["AuthSession"])->group(function () {
     Route::get("/main",[AppController::class,"show"])->name("mainApp");
 });

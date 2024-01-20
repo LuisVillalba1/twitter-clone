@@ -14,11 +14,13 @@ $.each(inputs, function (indexInArray, valueOfElement) {
             if(!document.startViewTransition){
                 showLabel(label);
                 $(padre).css("border-color", "rgb(29, 155, 240)");
+                $(e.target).addClass("input_focus");
                 return ;
             }
             document.startViewTransition(()=>{
                 showLabel(label);
                 $(padre).css("border-color", "rgb(29, 155, 240)");
+                $(e.target).addClass("input_focus");
             })
             
         });
@@ -30,11 +32,10 @@ $.each(inputs, function (indexInArray, valueOfElement) {
 
             showLabel(label);
             $(padre).css("border-color", "rgb(156, 152, 152)");
+            $(e.target).removeClass("input_focus");
         })
     }
 });
-
-
 
 //mostramos u ocultamos el label
 function showLabel(label){
@@ -50,44 +51,75 @@ function showLabel(label){
     }
 }   
 
-//enviamos el formulario
+function showLoader(){
+    if(!document.startViewTransition){
+        $(".loader_container").css("display", "flex");
+        return;
+    }
+
+    document.startViewTransition(()=>{
+        $(".loader_container").css("display", "flex");
+    })
+}
+
+function ocultContainer(){
+    $(".title_recuperate_account").css("display","none");
+    $(".recuperate_account_form").css("display","none");
+    $(".continue_container").css("display","none");
+}
+
+function ocultLoader(){
+    $(".loader_container").css("display", "none");
+}
+
+
+function showContainer(){
+    $(".title_recuperate_account").css("display","block");
+    $(".recuperate_account_form").css("display","flex");
+    $(".continue_container").css("display","flex")
+}
+
+
+function showSucefullyReponse(value){
+    let container = $(".succefully_response_container");
+    $(container).css("display", "flex");
+
+    let hijo = container[0].firstElementChild;
+
+    $(hijo).addClass("succefully_response");
+    $(hijo).text(value);
+}
+
+//enviamos los datos del formulario
 $(".continue_botton").on("click", function (e) {
 
-    let formData = $(".register_data").serialize();
+    let formData = $(".recuperate_account_form").serialize();
 
+    $(".error_form").text("");
+    $(".error_server").text("");
+    ocultContainer();
+    showLoader();
     $.ajax({
         type: "post",
-        url: $(".register_data").attr("action"),
+        url: $(".recuperate_account_form").attr("action"),
         data : formData,
         success: function (response) {
-            showStep3(response);
+            ocultLoader();
+            showSucefullyReponse(response);
         },
         error: function(error){
-            $(".server_erro").text("");
-            $(".error_form").text("");
+            ocultLoader();
+            showContainer();
             if(error.status == 422){
                 let errores = error.responseJSON.errors;
                 $.each(errores, function (indexInArray, valueOfElement) {
                     $(`.error_${indexInArray}`).text(valueOfElement);
                 });
             }
-            $(".server_error").text(error.responseJSON.error);
+            else{
+                let errores = error.responseJSON.error;
+                $(".error_server").text(errores);
+            }
         }
     });
 });
-//con la url obteneida navegamos hacia el pago numero 3
-function showStep3(url){
-    if(!document.startViewTransition){
-        window.location.href = url;
-    }
-
-    $(".register_container").attr("style","view-transition-name: mainbox");
-    document.startViewTransition(async()=> await navigate(url));
-}
-
-function navigate(url){
-    return new Promise(resolve=>{
-        window.location.href = url
-        resolve();
-    })
-}
