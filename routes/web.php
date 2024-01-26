@@ -77,5 +77,6 @@ Route::get("/error",function(){
 
 //main app
 Route::middleware(["AuthSession"])->group(function () {
-    Route::get("/main",[AppController::class,"show"])->name("mainApp");
+    Route::get("/home",[AppController::class,"show"])->name("mainApp");
+    Route::get("/home/createPost",[AppController::class,"showCreatePost"])->name("showCreatePost");
 });

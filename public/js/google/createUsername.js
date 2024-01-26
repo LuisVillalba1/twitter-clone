@@ -53,11 +53,8 @@ function showLabel(label){
     }
 }   
 
-
-$(".continue_botton").on("click", function (e) {
-
-    let formData = $(".register_data").serialize();
-
+function sendForm(formData){
+    
     $.ajax({
         type: "post",
         url: $(".register_data").attr("action"),
@@ -81,6 +78,20 @@ $(".continue_botton").on("click", function (e) {
             }
         }
     });
+}
+
+$("body").on("keydown", function (e) {
+    if(e.key == "Enter"){
+        let formData = $(".register_data").serialize();
+        sendForm(formData)
+    }
+});
+
+$(".continue_botton").on("click", function (e) {
+
+    let formData = $(".register_data").serialize();
+
+    sendForm(formData)
 });
 
 

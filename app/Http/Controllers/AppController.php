@@ -9,4 +9,8 @@ class AppController extends Controller
     public function show(){
         return view("app.main");
     }
+
+    public function showCreatePost(){
+        return view("app.posts.createPost");
+    }
 }

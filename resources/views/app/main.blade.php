@@ -7,6 +7,7 @@
 <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
 <meta name="view-transition" content="same-origin" />
 <link rel="stylesheet" href="./css/mainApp/home.css">
+
 <title>Twitter</title>
 @endsection
 
@@ -133,103 +134,105 @@
         </ul>
     </div>
     <div class="create_post_container">
-        <a href="#">
+        <a href="{{route("showCreatePost")}}">
             <i class="fa-solid fa-feather"></i>
         </a>
     </div>
     <div class="main_container">
-        <div class="nav">
-            <div class="nav_border_filter"></div>
-            <div class="nav_icon_container">
-                <a href="#" title="Home">
-                    <i class="fa-brands fa-x-twitter"></i>
-                </a>
-            </div>
-            <div class="nav_icon_container">
-                <a href="#" title="Home">
-                    <div class="nav_icon_link_container">
-                        <i class="fa-solid fa-house"></i>
-                    </div>
-                    <div class="nav_link_description_container">
-                        <p class="nav_link_description">Home</p>
-                    </div>
-                </a>
-            </div>
-            <div class="nav_icon_container">
-                <a href="#" title="Buscar">
-                    <div class="nav_icon_link_container">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                    <div class="nav_link_description_container">
-                        <p class="nav_link_description">Explorar</p>
-                    </div>
-                </a>
-            </div>
-            <div class="nav_icon_container">
-                <a href="#" title="Notificaciones">
-                    <div class="nav_icon_link_container">
-                        <i class="fa-regular fa-bell"></i>
-                    </div>
-                    <div class="nav_link_description_container">
-                        <p class="nav_link_description">Notificaciones</p>
-                    </div>
-                </a>
-            </div>
-            <div class="nav_icon_container">
-                <a href="#" title="Mensajes">
-                    <div class="nav_icon_link_container">
-                        <i class="fa-regular fa-envelope"></i>
-                    </div>
-                    <div class="nav_link_description_container">
-                        <p class="nav_link_description">Mensajes</p>
-                    </div>
-                </a>
-            </div>
-            <div class="nav_icon_container">
-                <a href="#" title="Listas">
-                    <div class="nav_icon_link_container">
-                        <i class="fa-solid fa-sheet-plastic"></i>
-                    </div>
-                    <div class="nav_link_description_container">
-                        <p class="nav_link_description">Listas</p>
-                    </div>
-                </a>
-            </div>
-            <div class="nav_icon_container">
-                <a href="#" title="Guardados">
-                    <div class="nav_icon_link_container">
-                        <i class="fa-regular fa-bookmark"></i>
-                    </div>
-                    <div class="nav_link_description_container">
-                        <p class="nav_link_description">Guardados</p>
-                    </div>
-                </a>
-            </div>
-            <div class="nav_icon_container">
-                <a href="#" title="Amigos">
-                  <div class="nav_icon_link_container">
-                    <i class="fas fa-user-group"></i>
-                  </div>
-                  <div class="nav_link_description_container">
-                    <p class="nav_link_description">Amigos</p>
-                  </div>
-                </a>
-              </div>
-              <div class="nav_icon_container">
-                <a href="#" title="Premium">
-                  <div class="nav_icon_link_container">
-                    <i class="fab fa-twitter"></i>
-                  </div>
-                  <div class="nav_link_description_container">
-                    <p class="nav_link_description">Premium</p>
-                  </div>
-                </a>
-              </div>
-            <div class="nav_owner_logo_container">
-                <div class="logo_icon_container">
-                    <a href="#" title="Cuenta">
-                        <i class="fa-solid fa-l"></i>
+        <div class="nav_container">
+            <div class="nav">
+                <div class="nav_border_filter"></div>
+                <div class="nav_icon_container">
+                    <a href="#" title="Home">
+                        <i class="fa-brands fa-x-twitter"></i>
                     </a>
+                </div>
+                <div class="nav_icon_container">
+                    <a href="#" title="Home">
+                        <div class="nav_icon_link_container">
+                            <i class="fa-solid fa-house"></i>
+                        </div>
+                        <div class="nav_link_description_container">
+                            <p class="nav_link_description">Home</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="nav_icon_container">
+                    <a href="#" title="Buscar">
+                        <div class="nav_icon_link_container">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <div class="nav_link_description_container">
+                            <p class="nav_link_description">Explorar</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="nav_icon_container">
+                    <a href="#" title="Notificaciones">
+                        <div class="nav_icon_link_container">
+                            <i class="fa-regular fa-bell"></i>
+                        </div>
+                        <div class="nav_link_description_container">
+                            <p class="nav_link_description">Notificaciones</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="nav_icon_container">
+                    <a href="#" title="Mensajes">
+                        <div class="nav_icon_link_container">
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+                        <div class="nav_link_description_container">
+                            <p class="nav_link_description">Mensajes</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="nav_icon_container">
+                    <a href="#" title="Listas">
+                        <div class="nav_icon_link_container">
+                            <i class="fa-solid fa-sheet-plastic"></i>
+                        </div>
+                        <div class="nav_link_description_container">
+                            <p class="nav_link_description">Listas</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="nav_icon_container">
+                    <a href="#" title="Guardados">
+                        <div class="nav_icon_link_container">
+                            <i class="fa-regular fa-bookmark"></i>
+                        </div>
+                        <div class="nav_link_description_container">
+                            <p class="nav_link_description">Guardados</p>
+                        </div>
+                    </a>
+                </div>
+                <div class="nav_icon_container">
+                    <a href="#" title="Amigos">
+                      <div class="nav_icon_link_container">
+                        <i class="fas fa-user-group"></i>
+                      </div>
+                      <div class="nav_link_description_container">
+                        <p class="nav_link_description">Amigos</p>
+                      </div>
+                    </a>
+                  </div>
+                  <div class="nav_icon_container">
+                    <a href="#" title="Premium">
+                      <div class="nav_icon_link_container">
+                        <i class="fab fa-twitter"></i>
+                      </div>
+                      <div class="nav_link_description_container">
+                        <p class="nav_link_description">Premium</p>
+                      </div>
+                    </a>
+                  </div>
+                <div class="nav_owner_logo_container">
+                    <div class="logo_icon_container">
+                        <a href="#" title="Cuenta">
+                            <i class="fa-solid fa-l"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -246,27 +249,26 @@
                         <i class="fa-solid fa-l"></i>
                     </div>
                 </div>
-                <div class="new_post">
+                <form class="new_post">
                     <div class="new_post_content_container">
                         <div class="textarea_container">
                             <textarea id="textarea_post" name="message" placeholder="¿Que estas pensando?" autocomplete="off"></textarea>
-                        </div>  
+                        </div> 
+                        <div class="error_files_container">
+                        </div> 
                         <div class="imgs_container">
-                            <div class="drag_and_drop_file">
-                                <p>Arraste su imagen aqui</p>
-                            </div>
                         </div>
                     </div>
                     <div class="send_and_add_content">
                         <div class="send_and_add_content__icons">
-                            <input type="file" id="upload_img_input">
+                            <input type="file" id="upload_img_input" multiple>
                             <i class="fa-regular fa-image icon_upload_img"></i>
                         </div>
                         <div class="send_and_add_content__repost">
                             <p>Postear</p>
                         </div>
                     </div>
-                </div>
+                </form>
             </div>
             <div class="post">
                 <div class="logo_container">
@@ -293,106 +295,12 @@
                             <i class="fa-solid fa-repeat interaction_icon"></i>
                         </div>
                         <div class="like_container">
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                        <div class="views_container">
-                            <i class="fa-solid fa-chart-simple interaction_icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="post">
-                <div class="logo_container">
-                    <div class="img_container">
-                        <img src="https://img.freepik.com/foto-gratis/hombre-feliz-pie-playa_107420-9868.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705795200&semt=sph" alt="">
-                    </div>
-                </div>
-                <div class="post_content">
-                    <div class="name_container">
-                        <h5>BA Tránsito</h5>
-                    </div>
-                    <div class="content">
-                        <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                        Quasi, in veritatis similique quod non placeat corporis incidunt at earum molestiae ut. 
-                        Id cupiditate vero dignissimos vel autem, consequuntur sint ad.
-                        </p>
-                    </div>
-                    <div class="interaction">
-                        <div class="comment_container">
-                            <i class="fa-regular fa-comment interaction_icon"></i>
-                        </div>
-                        <div class="repost_container">
-                            <i class="fa-solid fa-repeat interaction_icon"></i>
-                        </div>
-                        <div class="like_container">
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                        <div class="views_container">
-                            <i class="fa-solid fa-chart-simple interaction_icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="post">
-                <div class="logo_container">
-                    <div class="img_container">
-                        <img src="https://img.freepik.com/foto-gratis/hombre-feliz-pie-playa_107420-9868.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705795200&semt=sph" alt="">
-                    </div>
-                </div>
-                <div class="post_content">
-                    <div class="name_container">
-                        <h5>BA Tránsito</h5>
-                    </div>
-                    <div class="content">
-                        <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                        Quasi, in veritatis similique quod non placeat corporis incidunt at earum molestiae ut. 
-                        Id cupiditate vero dignissimos vel autem, consequuntur sint ad.
-                        </p>
-                    </div>
-                    <div class="interaction">
-                        <div class="comment_container">
-                            <i class="fa-regular fa-comment interaction_icon"></i>
-                        </div>
-                        <div class="repost_container">
-                            <i class="fa-solid fa-repeat interaction_icon"></i>
-                        </div>
-                        <div class="like_container">
-                            <i class="fa-regular fa-heart"></i>
-                        </div>
-                        <div class="views_container">
-                            <i class="fa-solid fa-chart-simple interaction_icon"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="post">
-                <div class="logo_container">
-                    <div class="img_container">
-                        <img src="https://img.freepik.com/foto-gratis/hombre-feliz-pie-playa_107420-9868.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705795200&semt=sph" alt="">
-                    </div>
-                </div>
-                <div class="post_content">
-                    <div class="name_container">
-                        <h5>BA Tránsito</h5>
-                    </div>
-                    <div class="content">
-                        <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                        Quasi, in veritatis similique quod non placeat corporis incidunt at earum molestiae ut. 
-                        Id cupiditate vero dignissimos vel autem, consequuntur sint ad.
-                        </p>
-                    </div>
-                    <div class="interaction">
-                        <div class="comment_container">
-                            <i class="fa-regular fa-comment interaction_icon"></i>
-                        </div>
-                        <div class="repost_container">
-                            <i class="fa-solid fa-repeat interaction_icon"></i>
-                        </div>
-                        <div class="like_container">
-                            <i class="fa-regular fa-heart"></i>
+                            <div class="heart_bg">
+                                <div class="heart_icon">
+
+                                </div>
+                            </div>
+                            <div class="likes_count"></div>
                         </div>
                         <div class="views_container">
                             <i class="fa-solid fa-chart-simple interaction_icon"></i>
@@ -415,4 +323,5 @@
 @section('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="./js/mainApp/home.js"></script>
+<script src="./js/mainApp/homeDragAndDrop.js"></script>
 @endsection

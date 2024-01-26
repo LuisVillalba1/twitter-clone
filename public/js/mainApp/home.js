@@ -40,6 +40,18 @@ $(ownerLogoContainer).on("click", function (e) {
     })
 });
 
+const heartIcon = $(".heart_icon");
+const likeContainer = $(".like_container");
+
+$(likeContainer).on("click", function () {
+    if($(heartIcon).attr("style")){
+        $(heartIcon).removeAttr("style");
+    }
+    else{
+        $(heartIcon).css("animation","like-anim 0.5s steps(28) forwards");
+    }
+});
+
 //ocult nav
 $(document.body).on("click", function (e) {
     if($(nav).hasClass("nav_responsive_show") && e.target != nav[0] && !nav.has(e.target).length){
@@ -55,28 +67,6 @@ $(document.body).on("click", function (e) {
 
     }
 });
-
-function likeAndDislikePost(){
-    let likeContainer = $(".like_container");
-
-    let likeIcon = likeContainer.find(".fa-heart");
-
-    $(likeIcon).on("click", function (e) {
-        let padre = e.target.closest(".post");
-
-        if($(padre).hasClass("liked")){
-            $(e.target).removeAttr("style");
-            $(padre).removeClass("liked");
-            return ;
-        }
-
-        $(e.target).css("animation","0.3s ease-in 0s forwards 1 likePost");
-        $(padre).addClass("liked");
-    });
-}
-
-likeAndDislikePost();
-
 
 function interactionIcon(){
     let posts = $(".post");
