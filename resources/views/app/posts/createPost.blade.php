@@ -19,7 +19,8 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </a>
             </div>
-            <form class="new_post">
+            <form class="new_post" method="POST" action="{{route("createPost")}}">
+                @csrf
                 <div class="new_post_content_container">
                     <div class="owner_logo_container">
                         <div class="owner_logo">

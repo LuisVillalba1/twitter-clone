@@ -13,4 +13,9 @@ class AppController extends Controller
     public function showCreatePost(){
         return view("app.posts.createPost");
     }
+
+    public function createPost(Request $request){
+        return $request->images;
+    }
 }
+

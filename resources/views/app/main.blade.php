@@ -249,7 +249,8 @@
                         <i class="fa-solid fa-l"></i>
                     </div>
                 </div>
-                <form class="new_post">
+                <form class="new_post" method="POST" action="{{route("createPost")}}">
+                    @csrf
                     <div class="new_post_content_container">
                         <div class="textarea_container">
                             <textarea id="textarea_post" name="message" placeholder="¿Que estas pensando?" autocomplete="off"></textarea>
