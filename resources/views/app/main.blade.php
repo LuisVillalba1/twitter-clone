@@ -249,11 +249,16 @@
                         <i class="fa-solid fa-l"></i>
                     </div>
                 </div>
-                <form class="new_post" method="POST" action="{{route("createPost")}}">
+                <form class="new_post" method="POST" action="{{route("createPost")}}" enctype="multipart/form-data">
                     @csrf
                     <div class="new_post_content_container">
                         <div class="textarea_container">
-                            <textarea id="textarea_post" name="message" placeholder="¿Que estas pensando?" autocomplete="off"></textarea>
+                            <textarea id="textarea_post" name="message" placeholder="¿Que estas pensando?" autocomplete="off" maxlength="280"></textarea>
+                            <div class="textarea_length_container">
+                                <p class="current_length_textarea">0</p>
+                                <p>/</p>
+                                <p class="max_length_textarea">280</p>
+                            </div>
                         </div> 
                         <div class="error_files_container">
                         </div> 
@@ -324,5 +329,6 @@
 @section('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="./js/mainApp/home.js"></script>
+<script src="./js/mainApp/posts/createPost.js"></script>
 <script src="./js/mainApp/homeDragAndDrop.js"></script>
 @endsection

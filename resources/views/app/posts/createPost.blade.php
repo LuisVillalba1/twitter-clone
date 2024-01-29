@@ -29,7 +29,12 @@
                     </div>
                     <div class="new_post_content">
                         <div class="textarea_container">
-                            <textarea id="textarea_post" name="message" placeholder="¿Que estas pensando?" autocomplete="off"></textarea>
+                            <textarea id="textarea_post" name="message" placeholder="¿Que estas pensando?" autocomplete="off" maxlength="280"></textarea>
+                            <div class="textarea_length_container">
+                                <p class="current_length_textarea">0</p>
+                                <p>/</p>
+                                <p class="max_length_textarea">280</p>
+                            </div>
                         </div> 
                         <div class="error_files_container">
                         </div> 

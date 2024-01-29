@@ -33,6 +33,10 @@ class User extends Model implements Authenticatable
         return $this->hasOne(VerificationAccount::class,"VerificationID","VerificationID");
     }
 
+    public function userPosts(){
+        return $this->hasMany(UserPost::class,"PostID");
+    }
+
     public function safePersonalDate($request){
         Session::put("name",$request->input("name"));
         Session::put("email",$request->input("email"));

@@ -9,12 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    protected $primaryKey = "MultiMediaID";
     public function up(): void
     {
         Schema::create('multimedia_posts', function (Blueprint $table) {
             $table->id("MultimediaID");
             $table->string("Name");
-            $table->string("Route");
+            $table->text("Url");
+            $table->unsignedBigInteger("PostID");
+
+            $table->foreign("PostID")
+            ->references("PostID")
+            ->on("user_posts")
+            ->onDelete("CASCADE")
+            ->onUpdate("CASCADE");
+
             $table->timestamps();
         });
     }

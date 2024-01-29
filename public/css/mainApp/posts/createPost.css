@@ -91,6 +91,13 @@ body{
     width: 0;
 }
 
+.textarea_length_container{
+    display: none;
+    width: 100%;
+    justify-content: end;
+    padding-right: 20px;
+}
+
 .error_files_container{
     width: 100%;
     display: flex;
