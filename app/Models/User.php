@@ -26,7 +26,7 @@ class User extends Model implements Authenticatable
     protected $primaryKey = "UserID";
 
     public function personalData(){
-        return $this->hasOne(PersonalData::class,"PersonalDataID","PersonalDataID");
+        return $this->hasOne(PersonalData::class,"PersonalDataID");
     }
 
     public function verificationAccount(){

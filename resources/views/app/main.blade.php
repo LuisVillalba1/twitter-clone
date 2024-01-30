@@ -236,6 +236,7 @@
                 </div>
             </div>
         </div>
+        <div class="get_publics" id="{{route("getUsersPosts")}}"></div>
         <div class="posts_container">
             <div class="header">
                 <h2>Inicio</h2>
@@ -275,44 +276,6 @@
                         </div>
                     </div>
                 </form>
-            </div>
-            <div class="post">
-                <div class="logo_container">
-                    <div class="img_container">
-                        <img src="https://img.freepik.com/foto-gratis/hombre-feliz-pie-playa_107420-9868.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705795200&semt=sph" alt="">
-                    </div>
-                </div>
-                <div class="post_content">
-                    <div class="name_container">
-                        <h5>BA Tránsito</h5>
-                    </div>
-                    <div class="content">
-                        <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                        Quasi, in veritatis similique quod non placeat corporis incidunt at earum molestiae ut. 
-                        Id cupiditate vero dignissimos vel autem, consequuntur sint ad.
-                        </p>
-                    </div>
-                    <div class="interaction">
-                        <div class="comment_container">
-                            <i class="fa-regular fa-comment interaction_icon"></i>
-                        </div>
-                        <div class="repost_container">
-                            <i class="fa-solid fa-repeat interaction_icon"></i>
-                        </div>
-                        <div class="like_container">
-                            <div class="heart_bg">
-                                <div class="heart_icon">
-
-                                </div>
-                            </div>
-                            <div class="likes_count"></div>
-                        </div>
-                        <div class="views_container">
-                            <i class="fa-solid fa-chart-simple interaction_icon"></i>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

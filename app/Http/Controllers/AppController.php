@@ -37,5 +37,14 @@ class AppController extends Controller
             return response()->json(["error"=>$e->getMessage()],500);
         }
     }
+
+    public function getUsersPosts(){
+        try{
+            return (new UserPost())->getAllPublics();
+        }
+        catch(\Exception $e){
+            return response()->json(["error",$e->getMessage()],500);
+        }
+    }
 }
 

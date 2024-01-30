@@ -81,4 +81,6 @@ Route::middleware(["AuthSession"])->group(function () {
     //posts
     Route::get("/home/createPost",[AppController::class,"showCreatePost"])->name("showCreatePost");
     Route::post("/home/createPost",[AppController::class,"createPost"])->name("createPost");
+
+    Route::get("/home/getPosts",[AppController::class,"getUsersPosts"])->name("getUsersPosts");
 });
