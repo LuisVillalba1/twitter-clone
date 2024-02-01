@@ -18,19 +18,29 @@ class Like extends Model
     }
 
     public function checkLike($interactionID,$personalDataID){
-        //if no se ha likeado creamos un nuevo like
-        $like = Like::where("InteractionID",$interactionID)->first();
+        //verificamos si el usuario le ha dado like al post correspondiente
+        $like = Like::where("InteractionID",$interactionID)
+                ->where("NicknameID",$personalDataID)
+                ->first();
 
+        //en caso de que no haya likeado al post creamos un nuevo like
         if(!$like){
             $newLike = new Like();
 
             $newLike->InteractionID = $interactionID;
             $newLike->NicknameID = $personalDataID;
 
-            return $newLike->save();
+            $newLike->save();
+
+            return true;
         }
 
-        return "ya esta likeado el post";
+        //si no eliminamos el like en concreto
+        Like::where("InteractionID",$interactionID)
+        ->where("NicknameID",$personalDataID)
+        ->delete();
+
+        return false;
     }
 
     public function likePost(Request $request,$username){

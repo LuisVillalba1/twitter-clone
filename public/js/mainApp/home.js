@@ -64,7 +64,6 @@ function getPublicPosts(){
         url: $(".get_publics").attr("id"),
         success: function (response) {
             if(response.length > 0){
-                console.log(response);
                 showPosts(response)
             }
         },
@@ -101,12 +100,42 @@ function showPosts(info){
         if(multimedia && multimedia.length > 0){
             $(postContent).append(showMultimedia(multimedia));
         }
-        $(postContent).append(showInteraction(nicknameNoSpaces,postID));
+        //obtenemos las interacciones y lo agregamos al post content
+        let interactionContainer = showInteraction(nicknameNoSpaces,postID)
+
+        $(postContent).append(interactionContainer);
+        //agregamos al contenedor del post el post container
         $(postContainer).append(postContent);
+
         //agregamos todos los post al contenedor principal
         $(allPost).append(postContainer);
+
+        //Obtenemos el contenedor del like
+        let likeContainer = $(interactionContainer).children(".like_container");
+
+        postYetLiked(likeContainer,currentPost.liked);
+        likePost(likeContainer);
     }
-    likePost();
+    createIntersectionObserver();
+}
+
+function createIntersectionObserver(){
+    //obtenemos todos los post
+    let posts = document.querySelectorAll(".post");
+
+    posts.forEach(post=>{
+        let observer = new IntersectionObserver(chekIntersection,{});
+        observer.observe(post)
+    })
+}
+
+function postYetLiked(likeContainer,info){
+    //obtenemos el icono del corazon
+    let heartContainer = $(likeContainer).children(".heart_bg");
+    let heart = $(heartContainer).children(".heart_icon")
+    if(info){
+        $(heart).css("animation","like-anim 0.5s steps(28) forwards");
+    }
 }
 
 //remplazamos los espacios por un signo bajo
@@ -114,37 +143,47 @@ function deleteSpaces(value){
     return value.replace(/ /g, "_");
 }
 
-//permitimos que el usuario pueda likear cada post
-function likePost(){
-    let hearstIcon = $(".heart_icon");
-    let likesContainer = $(".like_container");
+function chekIntersection(e){
+    let data = e[0]
+    let post = data.target;
+    let id = $(post).attr("id");
 
-    $.each(hearstIcon, function (indexInArray, valueOfElement) { 
-         $(valueOfElement).on("click", function (e) {
-            if($(e.target).attr("style")){
-                $(e.target).removeAttr("style");
-            }
-            else{
-                $(e.target).css("animation","like-anim 0.5s steps(28) forwards");
-            }
+    if(data.isIntersecting){
+        console.log(post);
+    }
+    // console.log(`el elemento con id:${id} su intersepcion es:${data.isIntersecting}`)
+}
+
+//permitimos que el usuario pueda likear cada post
+async function likePost(likeContainer){
+    let heartContainer = $(likeContainer).children(".heart_bg");
+    let hearstIcon = $(heartContainer).children(".heart_icon")
+
+    $.each(hearstIcon, function (indexInArray, valueOfElement) {
+         $(valueOfElement).on("click", async function (e) {
             let padre = $(e.target).closest(".like_container");
             let action = $(padre).attr("action");
-            sendLike(action)
+            let response = await sendLike(action);
+            if(response){
+                $(e.target).css("animation","like-anim 0.5s steps(28) forwards");
+            }
+            else{
+                $(e.target).removeAttr("style");
+            }
          });
     });
 }
 
-function sendLike(action){
-    $.ajax({
-        type: "POST",
-        url: action,
-        success: function (response) {
-            console.log(response)
-        },
-        error:function(e){
-            console.log(e.responseJSON.message);
-        }
-    });
+async function sendLike(action){
+    try {
+        const response = await $.ajax({
+            type: "POST",
+            url: action
+        });
+        return response;
+    } catch (error) {
+        console.log(error.responseJSON.message);
+    }
 }
 
 //agregamos el logo del post el cual contendra la primera letra del usuario
