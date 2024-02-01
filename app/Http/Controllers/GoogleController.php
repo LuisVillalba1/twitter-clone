@@ -13,7 +13,7 @@ class GoogleController extends Controller
 {
     public function create($user){
         try{
-            //If the user has exist,redirect from the main app
+            //si el usuario existe lo redirigimos a la app main
             $foundUser = User::where("Email",$user->email)->first();
 
             if($foundUser){
@@ -21,7 +21,7 @@ class GoogleController extends Controller
                 return redirect()->route("mainApp");
             }
 
-            //create user 
+            //creamos un un nuevo usuario
             $newUser = new User();
 
             $newUser->Name = $user->name;
@@ -31,7 +31,7 @@ class GoogleController extends Controller
 
             session()->put("emailGoogle",$newUser->Email);
 
-            //redirecto to create username
+            //lo redirigimos para crear un nombre de usuario
             return redirect()->route("googleUsername");
         }
         catch(\Exception $e){
@@ -39,13 +39,15 @@ class GoogleController extends Controller
         }   
     }
 
+    //vista para crear un nombre de usuario con google
     public function showUsernameCreate(){
         return view("google.createUsername");
     }
 
+    //creamos un username
     public function createUsername(NicknameRequest $request){
         try{
-            //create a new personal data
+            //creamos un nuevo personal data
             $nickname = $request->input("nickname");
 
             $personalData = new PersonalData();
@@ -54,14 +56,15 @@ class GoogleController extends Controller
 
             $personalData->save();
 
-            //asing to the user personal data
+            //buscamos el usuario con el email en concreto
             $user = User::where("Email",session()->get("emailGoogle"))->first();
 
+            //le asignamos el nuevo personal data
             $user->PersonalDataID = $personalData->PersonalDataID;
 
             $user->save();
 
-            //Authenticate user
+            //autenticamos el usuario y limpiamos todos los datos de session
             Auth::login($user);
 
             session()->flush();

@@ -10,18 +10,19 @@ use Illuminate\Support\Facades\URL;
 
 class RecuperateAccountController extends Controller
 {
-    //show view recuperateAccount
+    //mostramos la vista para recuperar la cuenta
     public function recuperateAccount(){
         return view("recuperateAccount.emailAccount");
     }
 
-    //send email to recuperateAccount
+    //enviamos un mail para recuperar la cuenta 
     public function sendEmail(Email $request){
         return (new User())->recuperateAccount($request);
     }
 
-    //show view recuperateAccount
+    //mostramos la vista para recupear la cuenta
     public function changePassword(Request $request,$id){
+        //en caso de que el link no haya expirado mostramos la vista para modificar la contraseña
         if($request->hasValidSignature()){
             $link = URL::temporarySignedRoute(
                 "changePasswordPatch",
@@ -35,6 +36,7 @@ class RecuperateAccountController extends Controller
         return redirect()->route("errorPage");
     }
 
+    //cambiamos la contraseña del usuario
     public function change(NewPasswordRequest $request,$id){
         return (new User())->changePassword($request,$id);
     }

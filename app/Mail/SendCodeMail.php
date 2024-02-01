@@ -41,6 +41,7 @@ class SendCodeMail extends Mailable
         return new Content(
             view: 'email.codeCreateAccount',
             with: [
+                //enviamos el codigo a la vista
                 "code" => $this->code,
             ]
         );

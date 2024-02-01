@@ -9,21 +9,10 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    protected $primaryKey = "PostID";
     public function up(): void
     {
-        Schema::create('user_posts', function (Blueprint $table) {
-            $table->id("PostID");
-            //Usuario al que hace referencia el post
-            $table->unsignedBigInteger("UserID");
-
-            $table->foreign("UserID")
-            ->references("UserID")
-            ->on("users")
-            ->onDelete("CASCADE")
-            ->onUpdate("CASCADE");
-
-            //interaccion al que hace referencia el post
+        Schema::create('likes', function (Blueprint $table) {
+            $table->id("LikeID");
             $table->unsignedBigInteger("InteractionID");
 
             $table->foreign("InteractionID")
@@ -32,8 +21,14 @@ return new class extends Migration
             ->onDelete("CASCADE")
             ->onUpdate("CASCADE");
 
-            $table->string("Message")->nullable();
-
+            $table->unsignedBigInteger("NicknameID");
+            
+            $table->foreign("NicknameID")
+            ->references("PersonalDataID")
+            ->on("personal_data")
+            ->onUpdate("CASCADE")
+            ->onDelete("CASCADE");
+            
             $table->timestamps();
         });
     }
@@ -43,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_posts');
+        Schema::dropIfExists('likes');
     }
 };

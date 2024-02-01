@@ -13,22 +13,22 @@ use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
-    //show main register
+    //mostramos el main register
     public function main(){
         return view("create-account.personalData");
     }
 
-    //personal data register post
+    //Paso uno para poder registrar a un usuario
     public function createStep1(Step1Register $request){
         return (new User())->safePersonalDate($request);
     }
 
-    //show create username register
+    //mostramos el paso numero dos para registrarse
     public function showStep2(){
         return view("create-account.accountData");
     }
 
-    //create username
+    //Paso dos para poder registrar al usuario
     public function createStep2(NickAndPasswordRequest $request){
         return (new User())->safeAndSendEmail($request);
     }
@@ -38,6 +38,7 @@ class RegisterController extends Controller
         return view("create-account.codeEmail");
     }
 
+    //chequeamos que le codigo ingresado por el usuario sea el mismo
     public function createStep3(CodeRequest $request){
         $suma = [];
         // iteramos sobre los inputs

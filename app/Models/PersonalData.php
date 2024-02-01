@@ -11,6 +11,7 @@ class PersonalData extends Model
 
     protected $primaryKey = "PersonalDataID";
 
+    //obtenemos al usuario correspondiente
     public function user(){
         return $this->belongsTo(User::class,"UserID");
     }

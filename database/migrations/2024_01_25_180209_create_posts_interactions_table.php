@@ -9,14 +9,11 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-
-    protected $primaryKey = "PersonalDataID";
+    protected $primaryKey = "InteractionID";
     public function up(): void
     {
-        Schema::create('personal_data', function (Blueprint $table) {
-            $table->id("PersonalDataID");
-            $table->string("Nickname");
-            $table->date("Date")->nullable();
+        Schema::create('posts_interactions', function (Blueprint $table) {
+            $table->id("InteractionID");
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personal_data');
+        Schema::dropIfExists('posts_interactions');
     }
 };

@@ -11,6 +11,7 @@ class MultimediaPost extends Model
     use HasFactory;
     protected $table = "multimedia_posts";
 
+    //obtenemos al post correspondiente
     public function UserPost(){
         return $this->belongsTo(UserPost::class,"PostID");
     }

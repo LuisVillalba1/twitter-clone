@@ -27,7 +27,7 @@ function desfilterElements(){
 }
 
 
-//show nav
+//show nav y filtramos los elementos
 $(ownerLogoContainer).on("click", function (e) {
     if(!document.startViewTransition){
         $(nav).addClass("nav_responsive_show");
@@ -56,19 +56,7 @@ $(document.body).on("click", function (e) {
     }
 });
 
-function interactionIcon(){
-    let posts = $(".post");
-
-    let icons = posts.find(".interaction_icon");
-
-    $(icons).on("click", function (e) {
-        $(e.target).css("animation", "0.4s ease-in 0s none iconSelected");
-    });
-}
-
-interactionIcon();
-
-
+//obtenemos todas las publicaciones
 function getPublicPosts(){
 
     $.ajax({
@@ -76,8 +64,8 @@ function getPublicPosts(){
         url: $(".get_publics").attr("id"),
         success: function (response) {
             if(response.length > 0){
-                showPosts(response)
                 console.log(response);
+                showPosts(response)
             }
         },
         error: function(e){
@@ -93,24 +81,40 @@ const allPost = $(".posts_container");
 function showPosts(info){
     for(let i in info){
         let currentPost = info[i]
-        //main post
+        //a cada post le agregamos un id con su nickname y el numero de post
         let postContainer = $("<div></div>");
         $(postContainer).addClass("post");
 
+        let nickname = currentPost.user_post.user.personal_data.Nickname;
+        let postID = currentPost.user_post.PostID;
 
-        $(postContainer).append(logoContainerShow(currentPost.user.Name));
-        let postContent = showNameAndMessage(currentPost.user.personal_data.Nickname,currentPost.Message)
+        let nicknameNoSpaces = deleteSpaces(nickname);
+        $(postContainer).attr("id",`${nicknameNoSpaces}-${postID}`);
 
-        if(currentPost.multimedia_post && currentPost.multimedia_post.length > 0){
-            $(postContent).append(showMultimedia(currentPost.multimedia_post));
+
+        let name = currentPost.user_post.user.Name;
+        let message = currentPost.user_post.Message;
+        $(postContainer).append(logoContainerShow(name));
+        let postContent = showNameAndMessage(nickname,message);
+
+        let multimedia = currentPost.user_post.multimedia_post;
+        if(multimedia && multimedia.length > 0){
+            $(postContent).append(showMultimedia(multimedia));
         }
-        $(postContent).append(showInteraction());
+        $(postContent).append(showInteraction(nicknameNoSpaces,postID));
         $(postContainer).append(postContent);
+        //agregamos todos los post al contenedor principal
         $(allPost).append(postContainer);
     }
     likePost();
 }
 
+//remplazamos los espacios por un signo bajo
+function deleteSpaces(value){
+    return value.replace(/ /g, "_");
+}
+
+//permitimos que el usuario pueda likear cada post
 function likePost(){
     let hearstIcon = $(".heart_icon");
     let likesContainer = $(".like_container");
@@ -123,11 +127,27 @@ function likePost(){
             else{
                 $(e.target).css("animation","like-anim 0.5s steps(28) forwards");
             }
+            let padre = $(e.target).closest(".like_container");
+            let action = $(padre).attr("action");
+            sendLike(action)
          });
     });
 }
 
+function sendLike(action){
+    $.ajax({
+        type: "POST",
+        url: action,
+        success: function (response) {
+            console.log(response)
+        },
+        error:function(e){
+            console.log(e.responseJSON.message);
+        }
+    });
+}
 
+//agregamos el logo del post el cual contendra la primera letra del usuario
 function logoContainerShow(Name){
     let logoContainer = $("<div></div>");
     let imgContainer = $("<div></div>");
@@ -143,6 +163,7 @@ function logoContainerShow(Name){
     return logoContainer;
 }
 
+//creamos los contenedores del nombre de usuario y mensaje
 function showNameAndMessage(username,userMessage){
     let postContent = $("<div></div>");
     $(postContent).addClass("post_content");
@@ -155,15 +176,18 @@ function showNameAndMessage(username,userMessage){
 
     $(nameContainer).append(name);
 
-    let content = $("<div></div>");
-    $(content).addClass("content");
-    let message = $("<p></p>");
-    $(message).text(userMessage);
-
-    $(content).append(message);
-
     $(postContent).append(nameContainer);
-    $(postContent).append(content);
+    if(userMessage){
+        let content = $("<div></div>");
+        $(content).addClass("content");
+        let message = $("<p></p>");
+        $(message).text(userMessage);
+    
+        $(content).append(message);
+        $(postContent).append(content);
+
+        return postContent;
+    }
 
     return postContent;
 }
@@ -184,9 +208,12 @@ function showMultimedia(multimedia){
     return imgsContainer;
 }
 
-function showInteraction(){
+//por cada post permitimos que puedan interactuar con el mismo
+function showInteraction(nickname,post){
     let interactionContainer = $("<div></div>");
     $(interactionContainer).addClass("interaction");
+    let protocol = window.location.protocol + "//"
+    let actionLike = protocol + window.location.host + "/likePost/" + nickname + "?post=" + post
 
     let interactions = `<div class="comment_container">
             <i class="fa-regular fa-comment interaction_icon"></i>
@@ -194,14 +221,14 @@ function showInteraction(){
     <div class="repost_container">
         <i class="fa-solid fa-repeat interaction_icon"></i>
     </div>
-    <div class="like_container">
+    <form class="like_container" method="POST" action = "${actionLike}">
         <div class="heart_bg">
             <div class="heart_icon">
 
             </div>
         </div>
         <div class="likes_count"></div>
-    </div>
+    </form>
     <div class="views_container">
         <i class="fa-solid fa-chart-simple interaction_icon"></i>
     </div>`
@@ -210,5 +237,3 @@ function showInteraction(){
 
     return interactionContainer;
 }
-
-

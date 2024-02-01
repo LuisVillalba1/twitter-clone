@@ -4,6 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
+
+use function PHPSTORM_META\map;
 
 class UserPost extends Model
 {
@@ -11,14 +15,22 @@ class UserPost extends Model
 
     protected $primaryKey = "PostID";
 
+    //obtenemos las imagenes multimedia
     public function MultimediaPost(){
         return $this->hasMany(MultimediaPost::class,"PostID");
     }
 
+    //obtenemos el usuario
     public function User(){
         return $this->belongsTo(User::class,"UserID");
     }
 
+    //obtenemos la interaccion correspondiente
+    public function Interaction(){
+        return $this->belongsTo(PostsInteraction::class,"InteractionID");
+    }
+
+    //creamos un nueva post
     public function createPost($user,$message){
         try{
             $userID = $user->UserID;
@@ -26,6 +38,8 @@ class UserPost extends Model
             $newPost = new UserPost();
             $newPost->Message = $message;
             $newPost->UserID = $userID;
+            //junto a su nuevo post interaccion que nos servira para ver las interacciones que recibio ese post
+            $newPost->InteractionID = (new PostsInteraction())->createInteraction();
     
             $newPost->save();
     
@@ -36,22 +50,11 @@ class UserPost extends Model
         }
     }
 
+    //obtenemos todas las publicaciones
     public function getAllPublics(){
-        //obtenemos el post junto al nombre del usuario, y su contenido multimedia
-        $posts = UserPost::with([
-            "MultimediaPost"=>function($query){
-                $query->select("PostID","Name","Url");
-            },
-            "User"=>function($query2){
-                $query2->select("UserID","Name","PersonalDataID")
-                ->with([
-                    "PersonalData"=>function($query3){
-                        $query3->select("PersonalDataID","Nickname");
-                    }
-                ]);
-            }
-        ])->select("Message","PostID","UserID")->get();
+        //utilizaremos las post interacctions ya que nos brindara una query mas simple
+        $interacciones = (new PostsInteraction())->getPublicInteractions();
 
-        return $posts;
+        return $interacciones;
     }
 }

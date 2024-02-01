@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecuperateAccountController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\CheckFirstStepRegistration;
+use App\Models\Like;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -78,9 +79,13 @@ Route::get("/error",function(){
 //main app
 Route::middleware(["AuthSession"])->group(function () {
     Route::get("/home",[AppController::class,"show"])->name("mainApp");
-    //posts
+    //mostramos y permitimos crear un nuevo post
     Route::get("/home/createPost",[AppController::class,"showCreatePost"])->name("showCreatePost");
     Route::post("/home/createPost",[AppController::class,"createPost"])->name("createPost");
 
+    //mostramos todos los posts de los usuarios
     Route::get("/home/getPosts",[AppController::class,"getUsersPosts"])->name("getUsersPosts");
+
+    //likeamos un post
+    Route::post("/likePost/{username}",[Like::class,"likePost"])->name("likePost");
 });
