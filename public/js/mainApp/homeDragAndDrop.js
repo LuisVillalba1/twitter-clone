@@ -9,6 +9,13 @@ let images = [];
 
 let files;
 
+const iconUploadImg = $(".icon_upload_img");
+
+$(iconUploadImg).on("click", function () {
+    inputFile.click();
+});
+
+
 //obtenemos los arhivos seleccionados por parte del usuario
 $(inputFile).on("change", function () {
     files = this.files;
@@ -136,11 +143,18 @@ function sendForm(){
         contentType: false,
         processData: false,
         success: function (response) {
-            console.log(response);
-            window.location.href = "";
+            window.location.href = response;
         },
         error: function(error){
-            console.log(error)
+            console.log(error);
+            let errors_container = $(".errors_form")
+            $(errors_container).empty();
+            $.each(error.responseJSON.errors, function (indexInArray, valueOfElement) {
+                let parrafo = $("<p></p>");
+                $(parrafo).css("color","red");
+                $(parrafo).text(valueOfElement[0]); 
+                $(errors_container).append(parrafo);
+            });
         }
     });
 }

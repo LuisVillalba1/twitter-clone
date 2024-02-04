@@ -217,6 +217,7 @@ header i{
     display: flex;
     flex-direction: column;
     width: 100%;
+    max-width: 90%;
 }
 
 .name_container{
@@ -234,6 +235,8 @@ header i{
 
 .content p{
     font-size: 1.05em;
+    word-wrap: break-word;
+    max-width: 93%;
 }
 
 .img_container_user_posts{
@@ -242,7 +245,6 @@ header i{
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    width: 100%;
 }
 
 
@@ -257,11 +259,27 @@ header i{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+}
+
+.interaction_icon_container{
+    padding: 0px 7px;
 }
 
 
 .like_container{
     position: relative;
+    display: flex;
+}
+
+.count_interaction_container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.interaction_container{
+    display: flex;
 }
 
 .heart_bg{
@@ -289,7 +307,7 @@ footer{
     border-top: 1px solid var(--grisClaro);
     background: var(--negro);
     position: fixed;
-    bottom: 25px;
+    bottom: 0;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -349,6 +367,10 @@ footer i{
 
     .posts_container{
         max-width: 720px;
+    }
+
+    .post{
+        max-width: 100%;
     }
 
     .nav_icon_container{
@@ -565,6 +587,9 @@ footer i{
     .img_container_user_posts{
         grid-template-columns: repeat(2,minmax(50px,210px));
         grid-template-rows: repeat(auto-fill,350px);
+    }
+    .interaction{
+        max-width: 100%;
     }
 }
 

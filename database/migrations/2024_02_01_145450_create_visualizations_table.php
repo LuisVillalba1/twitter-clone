@@ -9,38 +9,29 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    protected $primaryKey = "CommentID";
+    protected $primaryKey = "VisualizationID";
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
-            $table->id("CommentID");
-            //hace referencia a que interaccion corresponde
+        Schema::create('visualizations', function (Blueprint $table) {
+            $table->id("VisualizationID");
             $table->unsignedBigInteger("InteractionID");
 
+            //a que interaccion es correspondiente la visualizacion
             $table->foreign("InteractionID")
             ->references("InteractionID")
             ->on("posts_interactions")
             ->onDelete("CASCADE")
             ->onUpdate("CASCADE");
-            $table->timestamps();
 
-            //mensajes anidados
-            $table->unsignedBigInteger("ParentID")->nullable();
-            $table->foreign("ParentiD")
-            ->references("CommentID")
-            ->on("comments")
-            ->onDelete("CASCADE")
-            ->onUpdate("CASCADE");
-
-            //usuario que realiza el comentario
-            $table->unsignedBigInteger("NicknameID")->nullable();
+            //el usuario que realizo la visualizacion
+            $table->unsignedBigInteger("NicknameID");
             $table->foreign("NicknameID")
             ->references("PersonalDataID")
             ->on("personal_data")
             ->onDelete("CASCADE")
-            ->onUpdate("CASCADE");
+            ->onUpdate("CASCADE");           
 
-            $table->string("Message");
+            $table->timestamps();
         });
     }
 
@@ -49,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('visualizations');
     }
 };

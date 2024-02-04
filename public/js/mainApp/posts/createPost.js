@@ -33,10 +33,3 @@ function changeValueLenth(target,value){
         $(target).text(value)
     }
 }
-
-const iconUploadImg = $(".icon_upload_img");
-const inputUploadImg = $("#upload_img_input");
-
-$(iconUploadImg).on("click", function () {
-    inputUploadImg.click();
-});

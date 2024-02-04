@@ -37,7 +37,7 @@ class AppController extends Controller
             if($images){
                 (new MultimediaPost())->createMultimediaPost($images,$newPostID);
             }
-            return "facts";
+            return redirect()->route("mainApp")->getTargetUrl();
         }
         catch(\Exception $e){
             return response()->json(["error"=>$e->getMessage()],500);

@@ -13,7 +13,16 @@ class PersonalData extends Model
 
     //obtenemos al usuario correspondiente
     public function user(){
-        return $this->belongsTo(User::class,"UserID");
+        return $this->belongsTo(User::class,"PersonalDataID");
+    }
+
+    public function getUserId($username){
+        $user = PersonalData::where("Nickname",$username)->first();
+
+        if($user){
+            return response()->json(["errors"=>"No se ha encontrado el id del usuario"],404);
+        }
+        return $user->PersonalDataID;
     }
 
     public function createPersonalData(){

@@ -6,6 +6,8 @@ const mainContainer = $(".main_container");
 const footer = $("footer");
 
 
+const host = window.location.protocol + "//" + window.location.host
+
 function filterElements(){
     let hijosBody = $("body").children().slice(0,-2);
 
@@ -113,10 +115,23 @@ function showPosts(info){
         //Obtenemos el contenedor del like
         let likeContainer = $(interactionContainer).children(".like_container");
 
-        postYetLiked(likeContainer,currentPost.liked);
+        postYetInteraction(interactionContainer,currentPost)
+        postYetLiked(likeContainer,currentPost.likes);
         likePost(likeContainer);
+
+        countIcon(currentPost);
     }
     createIntersectionObserver();
+}
+
+//dependiendo de cada interaccion posible mostramos la candidad de likes, visualizaciones, comentarios etc
+function countIcon(data){
+    for(let i in data){
+        if(i.includes("count")){
+            let container = $(`.${i}`);
+            $(container).text(data[i]);
+        }
+    }
 }
 
 function createIntersectionObserver(){
@@ -133,8 +148,36 @@ function postYetLiked(likeContainer,info){
     //obtenemos el icono del corazon
     let heartContainer = $(likeContainer).children(".heart_bg");
     let heart = $(heartContainer).children(".heart_icon")
-    if(info){
+    if(info.length >= 1){
         $(heart).css("animation","like-anim 0.5s steps(28) forwards");
+    }
+}
+
+//verificamos si el post ya ha obtenido cierta interaccion
+function postYetInteraction(interactionContainer,data){
+    //interamos sobre todos los hijos del interactionContainer
+    $.each(interactionContainer.children(), function (indexInArray, valueOfElement) { 
+        //obtenemos el valor de la clase
+         let valueClass = $(valueOfElement).attr("class");
+
+         if(!valueClass.includes("like_container")){
+            //obtenemos la primera clase, la cual va a contener el valor de la propiedad de nuestro objeto
+            let valueClassSplit = valueClass.split(" ")
+            let ultimoGuionIndex = valueClassSplit[0].lastIndexOf("_");
+            let property =valueClassSplit[0].substring(0,ultimoGuionIndex);
+            //en caso de que ya se haya visto,comentado, o resposteado el post marcamos el icono en cuestion de color
+            updateInteracction(data[property],valueOfElement)
+         }
+    });
+}
+
+//agregamos un color al icono
+function updateInteracction(data,element){
+    if(data && data.length > 0){
+        let child = $(element).children()[0];
+        let icon = $(child).children()[0]
+        
+        $(icon).css("color", "rgb(57, 179, 255)");
     }
 }
 
@@ -144,14 +187,48 @@ function deleteSpaces(value){
 }
 
 function chekIntersection(e){
+    //obtenemos el post que se ha visualidado
     let data = e[0]
     let post = data.target;
     let id = $(post).attr("id");
 
+    //en caso de que el usuario lo haya visto obtenemos los datos del post y la enviamos al servidor
     if(data.isIntersecting){
-        console.log(post);
+        let data = getUserAndID(id)
+
+        sendVisualization(data.usuario,data.id);
     }
-    // console.log(`el elemento con id:${id} su intersepcion es:${data.isIntersecting}`)
+}
+
+function getUserAndID(cadena) {
+    // Buscar la última aparición del guion "-"
+    let ultimoGuionIndex = cadena.lastIndexOf('-');
+
+    if (ultimoGuionIndex !== -1) {
+        // Extraer el nombre de usuario y el ID
+        let usuario = cadena.substring(0, ultimoGuionIndex);
+        let id = cadena.substring(ultimoGuionIndex + 1);
+
+        return { usuario, id };
+    } else {
+        // En caso de que no haya guion, asumimos que la cadena completa es el nombre de usuario
+        return { usuario: cadena, id: null };
+    }
+}
+
+//enviamos los datos al servidor
+function sendVisualization(user,id){
+    let url = window.location.protocol + "//" + window.location.host + `/visualization/${user}?post=${id}`;
+    $.ajax({
+        type: "POST",
+        url: url,
+        success: function (response) {
+            // console.log(response);
+        },
+        error : function(error){
+            console.log(error)
+        }
+    });
 }
 
 //permitimos que el usuario pueda likear cada post
@@ -220,7 +297,7 @@ function showNameAndMessage(username,userMessage){
         let content = $("<div></div>");
         $(content).addClass("content");
         let message = $("<p></p>");
-        $(message).text(userMessage);
+        message[0].textContent = userMessage;
     
         $(content).append(message);
         $(postContent).append(content);
@@ -254,22 +331,39 @@ function showInteraction(nickname,post){
     let protocol = window.location.protocol + "//"
     let actionLike = protocol + window.location.host + "/likePost/" + nickname + "?post=" + post
 
-    let interactions = `<div class="comment_container">
-            <i class="fa-regular fa-comment interaction_icon"></i>
+    let interactions = `<div class="comments_container interaction_container">
+            <a class="interaction_icon_container" href= ${host + "/comment/"}${nickname + "?post="}${post} >
+                <i class="fa-regular fa-comment interaction_icon"></i>
+            </a>
+            <div class="count_interaction_container">
+                <p class="comments_count count_interaction"></p>
+            </div>
         </div>
-    <div class="repost_container">
-        <i class="fa-solid fa-repeat interaction_icon"></i>
+    <div class="repost_container interaction_container">
+        <div class="interaction_icon_container">
+            <i class="fa-solid fa-repeat interaction_icon"></i>
+        </div>
+        <div class="count_interaction_container">
+            <p class="visualizations_count count_interaction"></p>
+        </div>
     </div>
-    <form class="like_container" method="POST" action = "${actionLike}">
+    <form class="like_container interaction_container" method="POST" action = "${actionLike}">
         <div class="heart_bg">
             <div class="heart_icon">
 
             </div>
         </div>
-        <div class="likes_count"></div>
+        <div class="count_interaction_container">
+            <p class="likes_count count_interaction"></p>
+        </div>
     </form>
-    <div class="views_container">
-        <i class="fa-solid fa-chart-simple interaction_icon"></i>
+    <div class="visualizations_container interaction_container">
+        <div class="interaction_icon_container">
+            <i class="fa-solid fa-chart-simple interaction_icon"></i>
+        </div>
+        <div class="count_interaction_container">
+            <p class="visualizations_count count_interaction"></p>
+        </div>
     </div>`
 
     $(interactionContainer).append(interactions);

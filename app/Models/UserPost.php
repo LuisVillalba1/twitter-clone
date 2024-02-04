@@ -57,4 +57,5 @@ class UserPost extends Model
 
         return $interacciones;
     }
+
 }

@@ -37,7 +37,7 @@ class User extends Model implements Authenticatable
 
     //obtenemos los posts del usuario
     public function userPosts(){
-        return $this->hasMany(UserPost::class,"PostID");
+        return $this->hasMany(UserPost::class,"UserID");
     }
 
     //guardamos en los datos de session su nombre email y fecha de nacimiento

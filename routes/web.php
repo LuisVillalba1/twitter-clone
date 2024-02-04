@@ -9,7 +9,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecuperateAccountController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\CheckFirstStepRegistration;
+use App\Models\Comment;
 use App\Models\Like;
+use App\Models\UserPost;
+use App\Models\Visualization;
 use Illuminate\Support\Facades\Route;
 use Laravel\Socialite\Facades\Socialite;
 
@@ -88,4 +91,11 @@ Route::middleware(["AuthSession"])->group(function () {
 
     //likeamos un post
     Route::post("/likePost/{username}",[Like::class,"likePost"])->name("likePost");
+
+    Route::post("/visualization/{username}",[Visualization::class,"VisualizationPost"])->name("VisualizationPost");
+
+    Route::get("/post/{username}",[UserPost::class,"showPost"])->name("showPost");
+
+    Route::get("/comment/{username}",[Comment::class,"commentPostView"])->name("commentPostView");
+    Route::post("/comment/{username}",[Comment::class,"commentPost"])->name("commentPost");
 });
