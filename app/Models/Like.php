@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class Like extends Model
 {
@@ -43,14 +44,14 @@ class Like extends Model
         return false;
     }
 
-    public function likePost(Request $request,$username){
+    public function likePost(Request $request,$username,$idEncrypt){
         try{
-            //obtenemos el post al que se le dio like
-            $postID = $request->query("post");
+            //verificamos si existe el usuario y el postID
+            (new PersonalData())->checkUsername($username);
 
-            if(!$postID){
-               throw new Exception("Query no encontrada");
-            }
+            $postID = Crypt::decryptString($idEncrypt);
+
+            (new UserPost())->checkPostID($postID);
             
             //obtenemos la interaccion
             $interaction = (new PostsInteraction())->getPostInteracction($postID);

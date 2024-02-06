@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 
 class PostsInteraction extends Model
@@ -83,6 +84,15 @@ class PostsInteraction extends Model
                     ]);
                 },
             ])->get();
+        
+        
+        foreach($interactions as $interaction){
+            $nickname = $interaction->UserPost->User->PersonalData->Nickname;
+            $idEncrypt = Crypt::encryptString($interaction->UserPost->PostID);
+            $interaction->linkPost = route("showPost",["username"=>$nickname,"encryptID"=>$idEncrypt]);
+            $interaction->linkLike = route("likePost",["username"=>$nickname,"encryptID"=>$idEncrypt]);
+        }
+
         return $interactions;
     }
 

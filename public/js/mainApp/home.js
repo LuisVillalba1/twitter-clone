@@ -82,9 +82,12 @@ const allPost = $(".posts_container");
 function showPosts(info){
     for(let i in info){
         let currentPost = info[i]
+        let linkPost = currentPost.linkPost;
+        let linkLike = currentPost.linkLike;
         //a cada post le agregamos un id con su nickname y el numero de post
-        let postContainer = $("<div></div>");
+        let postContainer = $("<a></a>");
         $(postContainer).addClass("post");
+        $(postContainer).attr("href", linkPost);
 
         let nickname = currentPost.user_post.user.personal_data.Nickname;
         let postID = currentPost.user_post.PostID;
@@ -103,7 +106,7 @@ function showPosts(info){
             $(postContent).append(showMultimedia(multimedia));
         }
         //obtenemos las interacciones y lo agregamos al post content
-        let interactionContainer = showInteraction(nicknameNoSpaces,postID)
+        let interactionContainer = showInteraction(nicknameNoSpaces,postID,linkLike)
 
         $(postContent).append(interactionContainer);
         //agregamos al contenedor del post el post container
@@ -238,6 +241,7 @@ async function likePost(likeContainer){
 
     $.each(hearstIcon, function (indexInArray, valueOfElement) {
          $(valueOfElement).on("click", async function (e) {
+            e.preventDefault();
             let padre = $(e.target).closest(".like_container");
             let action = $(padre).attr("action");
             let response = await sendLike(action);
@@ -257,7 +261,7 @@ async function sendLike(action){
             type: "POST",
             url: action
         });
-        return response;
+        return response
     } catch (error) {
         console.log(error.responseJSON.message);
     }
@@ -325,11 +329,10 @@ function showMultimedia(multimedia){
 }
 
 //por cada post permitimos que puedan interactuar con el mismo
-function showInteraction(nickname,post){
+function showInteraction(nickname,post,linkLike){
     let interactionContainer = $("<div></div>");
     $(interactionContainer).addClass("interaction");
     let protocol = window.location.protocol + "//"
-    let actionLike = protocol + window.location.host + "/likePost/" + nickname + "?post=" + post
 
     let interactions = `<div class="comments_container interaction_container">
             <a class="interaction_icon_container" href= ${host + "/comment/"}${nickname + "?post="}${post} >
@@ -347,7 +350,7 @@ function showInteraction(nickname,post){
             <p class="visualizations_count count_interaction"></p>
         </div>
     </div>
-    <form class="like_container interaction_container" method="POST" action = "${actionLike}">
+    <form class="like_container interaction_container" method="POST" action = "${linkLike}">
         <div class="heart_bg">
             <div class="heart_icon">
 

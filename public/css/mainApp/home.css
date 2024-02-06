@@ -193,6 +193,7 @@ header i{
     display: flex;
     padding: 5px 10px 5px 15px;
     border-bottom: 0.4px solid var(--grisClaro);
+    text-decoration: none;
 }
 
 .logo_container{

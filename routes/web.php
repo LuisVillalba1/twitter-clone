@@ -90,11 +90,14 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/home/getPosts",[AppController::class,"getUsersPosts"])->name("getUsersPosts");
 
     //likeamos un post
-    Route::post("/likePost/{username}",[Like::class,"likePost"])->name("likePost");
+    Route::post("/likePost/{username}/{encryptID}",[Like::class,"likePost"])->name("likePost");
 
+    //realizamos la visualizacion de un post en concreto
     Route::post("/visualization/{username}",[Visualization::class,"VisualizationPost"])->name("VisualizationPost");
 
-    Route::get("/post/{username}",[UserPost::class,"showPost"])->name("showPost");
+    //mostramos la vista de un post y mostramos la informacion del post
+    Route::get("/post/{username}/{encryptID}",[UserPost::class,"showPost"])->name("showPost");
+    Route::get("/post/{username}/{encryptID}/details",[UserPost::class,"getPostData"])->name("getPostData");
 
     Route::get("/comment/{username}",[Comment::class,"commentPostView"])->name("commentPostView");
     Route::post("/comment/{username}",[Comment::class,"commentPost"])->name("commentPost");
