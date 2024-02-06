@@ -23,12 +23,12 @@ return new class extends Migration
             ->onDelete("CASCADE")
             ->onUpdate("CASCADE");
 
-            //interaccion al que hace referencia el post
-            $table->unsignedBigInteger("InteractionID");
+            //cada posteo puede contar o no con un parentID, esto hace referencia a los comentarios
+            $table->unsignedBigInteger("ParentID")->nullable();
 
-            $table->foreign("InteractionID")
-            ->references("InteractionID")
-            ->on("posts_interactions")
+            $table->foreign("ParentID")
+            ->references("PostID")
+            ->on("user_posts")
             ->onDelete("CASCADE")
             ->onUpdate("CASCADE");
 

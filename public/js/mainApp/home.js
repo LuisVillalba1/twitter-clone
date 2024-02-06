@@ -66,7 +66,8 @@ function getPublicPosts(){
         url: $(".get_publics").attr("id"),
         success: function (response) {
             if(response.length > 0){
-                showPosts(response)
+                console.log(response);
+                // showPosts(response)
             }
         },
         error: function(e){

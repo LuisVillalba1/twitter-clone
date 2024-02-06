@@ -13,14 +13,16 @@ return new class extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id("LikeID");
-            $table->unsignedBigInteger("InteractionID");
+            //post al que se le dio like
+            $table->unsignedBigInteger("PostiD");
 
-            $table->foreign("InteractionID")
-            ->references("InteractionID")
-            ->on("posts_interactions")
+            $table->foreign("PostiD")
+            ->references("PostID")
+            ->on("user_posts")
             ->onDelete("CASCADE")
             ->onUpdate("CASCADE");
 
+            //usuario que realizo el like
             $table->unsignedBigInteger("NicknameID");
             
             $table->foreign("NicknameID")

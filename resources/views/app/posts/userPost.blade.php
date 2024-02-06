@@ -43,11 +43,18 @@
             </div>
             <div class="interaction_post_container">
             </div>
-            <div class="comments_container">
+            <div class="comments_post_container">
 
             </div>
         </div>
     </div>
+@endsection
+
+@section('footer')
+<i class="fa-solid fa-house"></i>
+<i class="fa-solid fa-magnifying-glass"></i>
+<i class="fa-regular fa-bell"></i>
+<i class="fa-solid fa-envelope"></i>
 @endsection
 
 @section('scripts')

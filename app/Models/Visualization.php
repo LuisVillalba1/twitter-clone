@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Dflydev\DotAccessData\Data;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,14 +16,14 @@ class Visualization extends Model
     protected $primayKey = "VisualizationID";
 
     public function PostInteraction(){
-        return $this->belongsTo(PostsInteraction::class,"InteractionID");
+        return $this->belongsTo(UserPost::class,"PostID");
     }
 
     //creamos una nueva visualizacion
-    public function createVisualization($userID,$interactionID){
+    public function createVisualization($userID,$postID){
         $newVisualization = new Visualization();
 
-        $newVisualization->InteractionID = $interactionID;
+        $newVisualization->PostID = $postID;
         $newVisualization->NicknameID = $userID;
 
         $newVisualization->save();
@@ -31,59 +32,41 @@ class Visualization extends Model
     }
 
     //chekeamos si ya existe la visualizacion
-    public function checkVisualization($data){
-        //obtenemos la interaccion y el usuario
-        $interactionID = $data->user->userPosts[0]->InteractionID;
-        $usernameID = $data->PersonalDataID;
-
+    public function checkVisualization($postID){
         //obtenemos el usuario autenticado junto a su id
         $user = Auth::user();
 
         $userID = $user->UserID;        
 
         //buscamos si ya existe una visualizacion de ese post
-        $visualization = Visualization::where("InteractionID",$interactionID)
-                        ->where("NicknameID",$usernameID)
+        $visualization = Visualization::where("PostID",$postID)
+                        ->where("NicknameID",$userID)
                         ->first();
         if($visualization){
             return ;
         }
         //en caso de que no exista la creamos
-        return $this->createVisualization($userID,$interactionID);
+        return $this->createVisualization($userID,$postID);
     }
 
     //creamos un nueva visualizacion dependiendo del posteo
     public function VisualizationPost(Request $request,$username){
         try{
+            $user = Auth::user();
             //obtenemos el post id
             $postID = $request->query("post");
             if(!$postID){
                 return response()->json(["errors"=>"No se ha encontrado el post"],404);
             }
 
-            $data = PersonalData::with([
-                //obtenemos el usuario
-                "user"=>function ($query) use ($postID){
-                    $query->with([
-                        //obtenemos todos los posts
-                        "userPosts"=>function($query2) use ($postID){
-                            $query2
-                            ->select("UserID","Message","InteractionID")
-                            ->where("PostID",$postID);
-                        }
-                    ])->select("PersonalDataID","UserID");
-                }
-            ])
-            //en caso de que el nickname y el post id sean correctos
-            ->where("Nickname",$username)
-            ->select("Nickname","PersonalDataID")->first();
+            $post= UserPost::where("PostID",$postID)->first();
 
-
-            //en caso de que no se haya encontrado el post correspondiente
-            if(!$data || count($data->user->userPosts) <= 0){
-                return response()->json(["errors"=>"No se ha encontrado la publicacion en concreto"],404);
+            //en caso de que exista un post retornamos un error
+            if(!$post){
+                return response()->json(["errors"=>"No se ha encontrado el post correspondiente"],404);
             }
-            return $this->checkVisualization($data);
+
+            return $this->checkVisualization($postID);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>$e->getMessage()],500);

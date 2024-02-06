@@ -18,7 +18,7 @@ class Comment extends Model
 
     protected $primaryKey = "CommentID";
     public function Interaction(){
-        return $this->belongsTo(PostsInteraction::class,"InteractionID");
+        return $this->belongsTo(UserPost::class,"PostID");
     }
 
     public function commentPostView(Request $request,$username){
@@ -28,23 +28,12 @@ class Comment extends Model
             if(!$request->query("post")){
                 throw new Exception();
             }
-            $post = UserPost::
-            where("PostID",$request->query("post"))
-            ->with([
-                "MultimediaPost"=>function($queryMultimedia){
-                    $queryMultimedia->select("MultimediaID","PostID","Url");
-                },
-                "User"=>function($query){
-                    $query
-                    ->select("UserID","PersonalDataID")
-                    ->with([
-                        "personalData"
-                    ]);
-                }
-            ])
-            ->first();
+            if(!$user){
+                throw new Exception();
+            }
 
-            if(!($user && $post)){
+            $post = UserPost::where("PostID",$request->query("post"))->first();
+            if(!$post){
                 throw new Exception();
             }
 
@@ -56,7 +45,7 @@ class Comment extends Model
     }
 
     //guardamos las imagenes y asignamos el contenido al comentario
-    public function createMultimediaComment($images,$commentID){
+    public function createMultimediaComment($images,$postID){
         foreach($images as $image){
             //obtenemos el nombre del archivo
             $imageName = $image->getClientOriginalName();
@@ -72,32 +61,33 @@ class Comment extends Model
 
             $newMultimedia->Name = $imageName;
             $newMultimedia->Url = $newUrl;
-            $newMultimedia->CommentID = $commentID;
+            $newMultimedia->PostID = $postID;
 
             $newMultimedia->save();
         }
     }
 
     //creamos un nuevo comentario
-    public function createCommentPost($interactionID,$message){
+    public function createCommentPost($postID,$message){
+        //obtenemos los datos del usuario
         $user = Auth::user();
 
         $userID = $user->UserID;
 
-        $newComment = new Comment();
+        $newComment = new UserPost();
 
-        $newComment->InteractionID = $interactionID;
-        $newComment->NicknameID = $userID;
-        $newComment->Message = $message;
+        $newComment->UserID = $userID;
+        $newComment->ParentID = $postID;
+        $newComment->message->$message;
 
         $newComment->save();
 
-        return $newComment->CommentID;
+        return $newComment->PostID;
     }
 
     public function commentPost(NewPostRequest $request,$userName){
         try{
-                    //en caso de que no se encuentre el usuario o el parametro query retornamos un error
+            //en caso de que no se encuentre el usuario o el parametro query retornamos un error
         if(!$userName){
             return response()->json(["errors"=>"No se ha encontrado el usuario"],404);
         }
@@ -107,20 +97,17 @@ class Comment extends Model
 
         //obtenemos el post junto a su interactionID
         $post = UserPost::
-        select("PostID","InteractionID")
+        select("PostID")
         ->where("PostID",$request->query("post"))->first();
 
         if(!$post){
             return response()->json(["errors"=>"No se ha encontrado el post"],404);
         }
-
-        $interactionID = $post->InteractionID;
-
         //obtenemos el mensaje
         $message = $request->message;
 
         //creamos y obtenemos el nuevo id del comentario
-        $commentID = $this->createCommentPost($interactionID,$message);
+        $commentID = $this->createCommentPost($post->PostID,$message);
 
         //obtenemos y verificamos que existan imagenes
         $images = $request->file('images');

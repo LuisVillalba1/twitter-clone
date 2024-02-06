@@ -16,7 +16,7 @@ return new class extends Migration
             $table->id("MultimediaID");
             $table->string("Name");
             $table->text("Url");
-            //en caso de que el contenido multimedia venga de un post main
+            //post al que hace referencia el contenido multimedia
             $table->unsignedBigInteger("PostID")->nullable();
 
             $table->foreign("PostID")
@@ -25,13 +25,6 @@ return new class extends Migration
             ->onDelete("CASCADE")
             ->onUpdate("CASCADE");
 
-            //en caso de que el multimedia venga de un comentario
-            $table->unsignedBigInteger("CommentID")->nullable();
-            $table->foreign("CommentID")
-            ->references("CommentID")
-            ->on("comments")
-            ->onDelete("CASCADE")
-            ->onUpdate("CASCADE");
 
             $table->timestamps();
         });

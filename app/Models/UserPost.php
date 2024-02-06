@@ -20,14 +20,28 @@ class UserPost extends Model
         return $this->hasMany(MultimediaPost::class,"PostID");
     }
 
+    //obtenemos todos los likes del post
+    public function Likes(){
+        return $this->hasMany(Like::class,"PostID");
+    }
+
+    //obtenemos todas sus visualizaciones
+    public function Visualizations(){
+        return $this->hasMany(Visualization::class,"PostID");
+    }
+
     //obtenemos el usuario
     public function User(){
         return $this->belongsTo(User::class,"UserID");
     }
 
-    //obtenemos la interaccion correspondiente
-    public function Interaction(){
-        return $this->belongsTo(PostsInteraction::class,"InteractionID");
+    //obtenemos todos los comentarios
+    public function Comments(){
+        return $this->hasMany(Comment::class,"PostID");
+    }
+
+    public function ParentID(){
+        return $this->hasOne(UserPost::class,"ParentID","PostID");
     }
 
     //creamos un nueva post
@@ -38,8 +52,6 @@ class UserPost extends Model
             $newPost = new UserPost();
             $newPost->Message = $message;
             $newPost->UserID = $userID;
-            //junto a su nuevo post interaccion que nos servira para ver las interacciones que recibio ese post
-            $newPost->InteractionID = (new PostsInteraction())->createInteraction();
     
             $newPost->save();
     
@@ -52,10 +64,7 @@ class UserPost extends Model
 
     //obtenemos todas las publicaciones
     public function getAllPublics(){
-        //utilizaremos las post interacctions ya que nos brindara una query mas simple
-        $interacciones = (new PostsInteraction())->getPublicInteractions();
-
-        return $interacciones;
+        return UserPost::all();
     }
 
     //mostramos la vista para un post
@@ -88,6 +97,7 @@ class UserPost extends Model
         //obtenemos ciertos datos del post
         return UserPost::
         select("PostID","UserID","Message","InteractionID")
+        //obtenemos el nombre del usuario
         ->with([
             "User"=>function ($queryUser){
                 $queryUser->with([
@@ -96,17 +106,31 @@ class UserPost extends Model
                     }
                 ])->select("UserID","PersonalDataID");
             },
+            //en caso de que posea el post contenido multimedia lo mostramos
             "MultimediaPost",
+            //las interacciones que ha tenido el post
             "Interaction"=>function($queryInteraction){
                 $queryInteraction
                 ->select("InteractionID")
+                //cantidad de likes vizualizaciones y comentarios
                 ->withCount([
                     "Likes",
                     "Visualizations",
                     "Comments"
                 ])
+                //por cada comentario vamos a obtener las interacciones que posee este mismo
                 ->with([
-                    "Comments"
+                    "Comments"=>function($queryComments){
+                        $queryComments->with([
+                            "Interaction"=>function($commentsInteracition){
+                                $commentsInteracition->withCount([
+                                    "Likes",
+                                    "Visualizations",
+                                    "Comments",
+                                ])->where("InteractionID","");
+                            }
+                        ]);
+                    }
                 ]);
             }
         ])

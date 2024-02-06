@@ -14,13 +14,13 @@ class Like extends Model
     use HasFactory;
 
     //obtenemos la interaccion correspondiente
-    public function Interaction(){
-        return $this->belongsTo(PostsInteraction::class,"InteractionID");
+    public function Post(){
+        return $this->belongsTo(UserPost::class,"PostID");
     }
 
-    public function checkLike($interactionID,$personalDataID){
+    public function checkLike($postID,$personalDataID){
         //verificamos si el usuario le ha dado like al post correspondiente
-        $like = Like::where("InteractionID",$interactionID)
+        $like = Like::where("PostID",$postID)
                 ->where("NicknameID",$personalDataID)
                 ->first();
 
@@ -28,7 +28,7 @@ class Like extends Model
         if(!$like){
             $newLike = new Like();
 
-            $newLike->InteractionID = $interactionID;
+            $newLike->PostID = $postID;
             $newLike->NicknameID = $personalDataID;
 
             $newLike->save();
@@ -37,7 +37,7 @@ class Like extends Model
         }
 
         //si no eliminamos el like en concreto
-        Like::where("InteractionID",$interactionID)
+        Like::where("PostID",$postID)
         ->where("NicknameID",$personalDataID)
         ->delete();
 
@@ -46,15 +46,12 @@ class Like extends Model
 
     public function likePost(Request $request,$username,$idEncrypt){
         try{
-            //verificamos si existe el usuario y el postID
+            //verificamos si existe el usuario y el post
             (new PersonalData())->checkUsername($username);
 
             $postID = Crypt::decryptString($idEncrypt);
 
             (new UserPost())->checkPostID($postID);
-            
-            //obtenemos la interaccion
-            $interaction = (new PostsInteraction())->getPostInteracction($postID);
             
             //obtenemos los datos de autenticacion del usuario
             $user = Auth::user();
@@ -64,7 +61,7 @@ class Like extends Model
             $personalDataID = $personalData->PersonalDataID;
             
             
-            return $this->checkLike($interaction->InteractionID,$personalDataID);
+            return $this->checkLike($postID,$personalDataID);
 
         }
         catch(\Exception $e){

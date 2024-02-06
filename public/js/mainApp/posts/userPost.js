@@ -45,6 +45,9 @@ function showData(data){
 
     let interactions = data.interaction;
     createInteraction(interactions);
+
+    let comments = data.interaction.comments
+    showCommenst(comments)
 }
 
 //mostramos el contido multimedia en caso de que exista
@@ -63,6 +66,15 @@ function showMultimedia(data){
         $(imgContainer).append(img);
 
         $(".user_multimedia_container").append(imgContainer);
+    }
+}
+
+function showCommenst(comments){
+    if(!comments.length <= 0){
+        let commentContainer = $("<div></div>");
+        $(commentContainer).addClass("comment_post_constainer");
+
+        let 
     }
 }
 

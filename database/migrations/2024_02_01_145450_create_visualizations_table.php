@@ -14,12 +14,12 @@ return new class extends Migration
     {
         Schema::create('visualizations', function (Blueprint $table) {
             $table->id("VisualizationID");
-            $table->unsignedBigInteger("InteractionID");
+            $table->unsignedBigInteger("PostID");
 
             //a que interaccion es correspondiente la visualizacion
-            $table->foreign("InteractionID")
-            ->references("InteractionID")
-            ->on("posts_interactions")
+            $table->foreign("PostID")
+            ->references("PostID")
+            ->on("user_posts")
             ->onDelete("CASCADE")
             ->onUpdate("CASCADE");
 
