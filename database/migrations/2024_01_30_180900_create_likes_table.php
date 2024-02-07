@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('likes', function (Blueprint $table) {
             $table->id("LikeID");
             //post al que se le dio like
-            $table->unsignedBigInteger("PostiD");
+            $table->unsignedBigInteger("PostID");
 
-            $table->foreign("PostiD")
+            $table->foreign("PostID")
             ->references("PostID")
             ->on("user_posts")
             ->onDelete("CASCADE")

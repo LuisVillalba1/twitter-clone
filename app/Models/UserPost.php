@@ -37,9 +37,10 @@ class UserPost extends Model
 
     //obtenemos todos los comentarios
     public function Comments(){
-        return $this->hasMany(Comment::class,"PostID");
+        return $this->hasMany(UserPost::class,"ParentID","PostID");
     }
 
+    //obtenemos el parentID
     public function ParentID(){
         return $this->hasOne(UserPost::class,"ParentID","PostID");
     }
@@ -64,7 +65,44 @@ class UserPost extends Model
 
     //obtenemos todas las publicaciones
     public function getAllPublics(){
-        return UserPost::all();
+        $user = Auth::user();
+        $userID = $user->UserID;
+
+        $posts = UserPost::with([
+            "MultimediaPost",
+            "Likes"=>function($queryLike) use ($userID){
+                $queryLike->where("NicknameID",$userID);
+            },
+            "Visualizations"=>function($queryVisualization) use ($userID){
+                $queryVisualization->where("NicknameID",$userID);
+            },
+            "User"=>function($queryUser){
+                $queryUser->select("UserID","PersonalDataID")
+                ->with([
+                    "PersonalData"=>function($queryPersonal){
+                        $queryPersonal->select("PersonalDataID","Nickname");
+                    }
+                ]);
+            }
+        ])
+        ->withCount([
+            "Likes",
+            "Visualizations",
+            "Comments"
+        ])
+        ->where("ParentID",null)
+        ->get();
+
+        foreach($posts as $post){
+            $userName = $post->User->PersonalData->Nickname;
+            $idEncrypt = Crypt::encryptString($post->PostID);
+            $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
+            $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+            $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
+            $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        }
+
+        return $posts;
     }
 
     //mostramos la vista para un post
@@ -80,14 +118,16 @@ class UserPost extends Model
             return view("app.posts.userPost");
         }
         catch(\Exception $e){
-            return $e->getMessage();
             return redirect()->route("errorPage");
         }
     }
 
     public function getPostData($username,$encryptID){
         try{
-                    //chekeamos que exista el usuario y el post
+        //obtenemso los datos del usuario
+        $user = Auth::user();
+        $userID = $user->UserID;
+        //chekeamos que exista el usuario y el post
         (new PersonalData())->checkUsername($username);
 
         $postID = Crypt::decryptString($encryptID);
@@ -95,46 +135,65 @@ class UserPost extends Model
         (new UserPost())->checkPostID($postID);
         
         //obtenemos ciertos datos del post
-        return UserPost::
-        select("PostID","UserID","Message","InteractionID")
-        //obtenemos el nombre del usuario
-        ->with([
-            "User"=>function ($queryUser){
-                $queryUser->with([
+        $post =  UserPost::with([
+            //obtenemos su contenido multimedia
+            "MultimediaPost",
+            //en caso de que el usuario logeado haya likeado o visualizado el post
+            "Likes"=>function($queryLike) use ($userID){
+                $queryLike->where("NicknameID",$userID);
+            },
+            "Visualizations"=>function($queryVisualization) use ($userID){
+                $queryVisualization->where("NicknameID",$userID);
+            },
+            //obtenemos tambien datos del usuario que realiazo el posteo
+            "User"=>function($queryUser){
+                $queryUser->select("UserID","PersonalDataID")
+                ->with([
                     "PersonalData"=>function($queryPersonal){
                         $queryPersonal->select("PersonalDataID","Nickname");
                     }
-                ])->select("UserID","PersonalDataID");
+                ]);
             },
-            //en caso de que posea el post contenido multimedia lo mostramos
-            "MultimediaPost",
-            //las interacciones que ha tenido el post
-            "Interaction"=>function($queryInteraction){
-                $queryInteraction
-                ->select("InteractionID")
-                //cantidad de likes vizualizaciones y comentarios
+            //mostramos todos los comentarios que tuvo el post
+            "Comments"=>function($comments){
+                $comments
+                ->select()
+                //por cada comentario mostramos la cantidad de visualizaciones,likes y comentarios que tiene el mismo
                 ->withCount([
-                    "Likes",
                     "Visualizations",
+                    "Likes",
                     "Comments"
                 ])
-                //por cada comentario vamos a obtener las interacciones que posee este mismo
                 ->with([
-                    "Comments"=>function($queryComments){
-                        $queryComments->with([
-                            "Interaction"=>function($commentsInteracition){
-                                $commentsInteracition->withCount([
-                                    "Likes",
-                                    "Visualizations",
-                                    "Comments",
-                                ])->where("InteractionID","");
-                            }
+                    "user"=>function($queryUserComment){
+                        $queryUserComment->select("UserID","PersonalDataID")
+                        ->with([
+                            "PersonalData"=>function($queryPersonalComment){
+                                $queryPersonalComment->select("PersonalDataID","Nickname");
+                            },
                         ]);
-                    }
+                    },
+                    "MultimediaPost"
                 ]);
-            }
+            },
         ])
-        ->where("PostID",$postID)->first();
+        ->withCount([
+            "Likes",
+            "Visualizations",
+            "Comments"
+        ])
+        //obtenemos el nombre del usuario
+        ->where("PostID",$postID)
+        ->first();
+
+        $userName = $post->User->PersonalData->Nickname;
+        $idEncrypt = Crypt::encryptString($post->PostID);
+        $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
+        $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+
+        return $post;
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener el post"],500);

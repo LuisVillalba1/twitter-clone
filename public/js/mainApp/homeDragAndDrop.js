@@ -140,6 +140,7 @@ function sendForm(){
         type: "POST",
         url: $(".new_post").attr("action"),
         data: formData,
+        //el content type y procces data nos sirve para enviar imagenes
         contentType: false,
         processData: false,
         success: function (response) {

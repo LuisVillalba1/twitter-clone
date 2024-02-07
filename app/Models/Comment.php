@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Storage;
 
 class Comment extends Model
@@ -21,21 +22,30 @@ class Comment extends Model
         return $this->belongsTo(UserPost::class,"PostID");
     }
 
-    public function commentPostView(Request $request,$username){
+    public function commentPostView(Request $request,$username,$encryptID){
         try{
             //verificamos que exista el usuario y el post en cuestion
             $user = PersonalData::where("Nickname",$username)->first();
-            if(!$request->query("post")){
-                throw new Exception();
-            }
-            if(!$user){
+
+            $postID = Crypt::decryptString($encryptID);
+
+            $post = UserPost::
+            with([
+                "User"=>function($queryUser){
+                    $queryUser
+                    ->with("PersonalData")
+                    ->select("PersonalDataID","UserID");
+                },
+                "MultimediaPost"
+            ])
+            ->where("PostID",$postID)
+            ->first();
+
+            if(!$user || !$post){
                 throw new Exception();
             }
 
-            $post = UserPost::where("PostID",$request->query("post"))->first();
-            if(!$post){
-                throw new Exception();
-            }
+            $post["linkComment"] = route("commentPost",["username"=>$user->Nickname,"encryptID"=>Crypt::encryptString($postID)]);
 
             return view("app.posts.commentPosts",compact("post"));
         }
@@ -78,27 +88,27 @@ class Comment extends Model
 
         $newComment->UserID = $userID;
         $newComment->ParentID = $postID;
-        $newComment->message->$message;
+        $newComment->message = $message;
 
         $newComment->save();
 
         return $newComment->PostID;
     }
 
-    public function commentPost(NewPostRequest $request,$userName){
+    public function commentPost(NewPostRequest $request,$userName,$encryptID){
         try{
-            //en caso de que no se encuentre el usuario o el parametro query retornamos un error
-        if(!$userName){
-            return response()->json(["errors"=>"No se ha encontrado el usuario"],404);
-        }
-        if(!$request->query("post")){
-            return response()->json(["errors"=>"No se ha encontrado el post en cuestion"],404);
-        }
+
+        $postID = Crypt::decryptString($encryptID);
 
         //obtenemos el post junto a su interactionID
         $post = UserPost::
-        select("PostID")
-        ->where("PostID",$request->query("post"))->first();
+        where("PostID",$postID)->first();
+
+        $user = PersonalData::where("Nickname",$userName)->first();
+
+        if(!$user){
+            return response()->json(["errors"=>"No se ha enontrado el usuario correspondiente"],404);
+        }
 
         if(!$post){
             return response()->json(["errors"=>"No se ha encontrado el post"],404);

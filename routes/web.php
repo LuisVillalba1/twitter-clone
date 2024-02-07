@@ -93,12 +93,12 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::post("/likePost/{username}/{encryptID}",[Like::class,"likePost"])->name("likePost");
 
     //realizamos la visualizacion de un post en concreto
-    Route::post("/visualization/{username}",[Visualization::class,"VisualizationPost"])->name("VisualizationPost");
+    Route::post("/visualization/{username}/{encryptID}",[Visualization::class,"VisualizationPost"])->name("VisualizationPost");
 
     //mostramos la vista de un post y mostramos la informacion del post
     Route::get("/post/{username}/{encryptID}",[UserPost::class,"showPost"])->name("showPost");
     Route::get("/post/{username}/{encryptID}/details",[UserPost::class,"getPostData"])->name("getPostData");
 
-    Route::get("/comment/{username}",[Comment::class,"commentPostView"])->name("commentPostView");
-    Route::post("/comment/{username}",[Comment::class,"commentPost"])->name("commentPost");
+    Route::get("/comment/{username}/{encryptID}",[Comment::class,"commentPostView"])->name("commentPostView");
+    Route::post("/comment/{username}/{encryptID}",[Comment::class,"commentPost"])->name("commentPost");
 });

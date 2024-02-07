@@ -7,6 +7,8 @@
 <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
 <meta name="view-transition" content="same-origin" />
 <link rel="stylesheet" href="../../css/mainApp/posts/userPost.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilComments.css">
+{{-- <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css"> --}}
 
 <title></title>
 @endsection
@@ -25,23 +27,27 @@
             <div class="loader"></div>
         </div>
         <div class="post_container">
-            <div class="user_data_container">
-                <div class="owner_logo_container">
-                    <div class="owner_logo">
-                        <h4 class="logo"></h4>
+            <div class="current_post">
+                <div class="user_data_container">
+                    <div class="owner_logo_container">
+                        <div class="owner_logo">
+                            <h4 class="logo"></h4>
+                        </div>
+                    </div>
+                    <div class="content">
+                        <div class="user_nickname_container">
+                            <p class="user_nickname"></p>
+                        </div>
+                        <div class="user_message_container">
+                            <p class="user_message"></p>
+                        </div>
+                        <div class="user_multimedia_container">
+    
+                        </div>
                     </div>
                 </div>
-                <div class="user_nickname_container">
-                    <p class="user_nickname"></p>
+                <div class="interaction_post_container">
                 </div>
-            </div>
-            <div class="user_message_container">
-                <p class="user_message"></p>
-            </div>
-            <div class="user_multimedia_container">
-
-            </div>
-            <div class="interaction_post_container">
             </div>
             <div class="comments_post_container">
 
@@ -59,5 +65,5 @@
 
 @section('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="../../js/mainApp/posts/userPost.js"></script>
+<script type="module" src="../../js/mainApp/posts/userPost.js"></script>
 @endsection

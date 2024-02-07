@@ -148,10 +148,6 @@ header div{
     border-radius: 50%;
 }
 
-.owner_logo_container{
-    background: rgb(55, 171, 9);
-}
-
 header i{
     color: var(--blanco);
     font-size: 1.32em;
@@ -188,111 +184,6 @@ header i{
     width: 0;
 }
 
-.post{
-    width: 100%;
-    display: flex;
-    padding: 5px 10px 5px 15px;
-    border-bottom: 0.4px solid var(--grisClaro);
-    text-decoration: none;
-}
-
-.logo_container{
-    display: flex;
-    justify-content: center;
-    padding-right: 8px;
-}
-
-.img_container img{
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
-}
-
-.img_container h4{
-    padding: 8px;
-    border-radius: 25px;
-    background: rgb(55, 171, 9);
-}
-
-.post_content{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-width: 90%;
-}
-
-.name_container{
-    width: 100%;
-}
-
-.name_container h5{
-    font-size: 1.1em;
-}
-
-.content{
-    width: 100%;
-    padding-top: 5px;
-}
-
-.content p{
-    font-size: 1.05em;
-    word-wrap: break-word;
-    max-width: 93%;
-}
-
-.img_container_user_posts{
-    margin: 10px 0;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.img_container_user_posts img{
-    width: calc(50% - 10px);
-    min-height: 150px;
-}
-
-
-.interaction{
-    padding: 5px 14px 5px 0px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.interaction_icon_container{
-    padding: 0px 7px;
-}
-
-
-.like_container{
-    position: relative;
-    display: flex;
-}
-
-.count_interaction_container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.interaction_container{
-    display: flex;
-}
-
-.heart_bg{
-    background: rgba(255, 192, 200, 0);
-    border-radius: 80%;
-    height: 30px;
-    width: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 .heart_icon{
     background: url("../../imgs/heart.png");
     background-size: cover;
@@ -303,17 +194,6 @@ header i{
     position: absolute;
 }
 
-
-footer{
-    border-top: 1px solid var(--grisClaro);
-    background: var(--negro);
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 30px 10px 30px;
-}
 
 footer i{
     font-size: 1.3em;
@@ -340,9 +220,6 @@ footer i{
         display: none;
     }
 
-    footer{
-        display: none;
-    }
 
     .main_container{
         display: flex;

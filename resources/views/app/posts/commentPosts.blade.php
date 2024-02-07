@@ -6,8 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
 <meta name="view-transition" content="same-origin" />
-<link rel="stylesheet" href="../css/mainApp/posts/createPost.css">
-<link rel="stylesheet" href="../css/mainApp/posts/commentPost.css">
+<link rel="stylesheet" href="../../css/mainApp/posts/createPost.css">
+<link rel="stylesheet" href="../../css/mainApp/posts/commentPost.css">
 
 <title>Create post</title>
 @endsection
@@ -45,7 +45,7 @@
                     </div>
                 </div>
             </div>
-            <form class="new_post" method="POST" action="{{route("commentPost",["username"=>$post->User->personalData->Nickname])}}?post={{$post->PostID}}">
+            <form class="new_post" method="POST" action="{{$post->linkComment}}">
                 @csrf
                 <div class="new_post_content_container">
                     <div class="owner_logo_container">
@@ -84,5 +84,5 @@
 
 @section('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="../js/mainApp/homeDragAndDrop.js"></script>
+<script src="../../js/mainApp/homeDragAndDrop.js"></script>
 @endsection

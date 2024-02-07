@@ -87,7 +87,6 @@ body{
 
 .user_data_container{
     display: flex;
-    width: 100%;
 }
 
 .owner_logo_container{
@@ -106,6 +105,7 @@ body{
 
 .user_message_container{
     padding: 7px 5px;
+    padding-left: 0;
 }
 
 .user_message_container p{
@@ -150,6 +150,10 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.interaction a{
+    text-decoration: none;
 }
 
 .count_interaction{

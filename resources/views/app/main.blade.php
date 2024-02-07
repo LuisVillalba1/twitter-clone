@@ -7,6 +7,7 @@
 <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
 <meta name="view-transition" content="same-origin" />
 <link rel="stylesheet" href="./css/mainApp/home.css">
+<link rel="stylesheet" href="./css/mainApp/utils/utilPost.css">
 
 <title>Twitter</title>
 @endsection
@@ -291,7 +292,7 @@
 
 @section('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="./js/mainApp/home.js"></script>
+<script type="module" src="./js/mainApp/home.js"></script>
 <script src="./js/mainApp/posts/createPost.js"></script>
 <script src="./js/mainApp/homeDragAndDrop.js"></script>
 @endsection
