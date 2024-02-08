@@ -136,4 +136,17 @@ class Comment extends Model
         }
 
     }
+
+    //por cada comentario obtenemos los links para para interacciones
+    public function setLinksInteraction($comments){
+        foreach($comments as $comment){
+            //obtengo el usuario y encript el postID
+            $commentID = Crypt::encryptString($comment->PostID);
+            $userName = $comment->user->PersonalData->Nickname;
+            $comment["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$commentID]);
+            $comment["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$commentID]);
+            $comment["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$commentID]);
+            $comment["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$commentID]);
+        } 
+    }
 }

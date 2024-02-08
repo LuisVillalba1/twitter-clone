@@ -7,6 +7,7 @@
 <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
 <meta name="view-transition" content="same-origin" />
 <link rel="stylesheet" href="./css/mainApp/home.css">
+<link rel="stylesheet" href="./css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="./css/mainApp/utils/utilPost.css">
 
 <title>Twitter</title>
@@ -144,12 +145,12 @@
             <div class="nav">
                 <div class="nav_border_filter"></div>
                 <div class="nav_icon_container">
-                    <a href="#" title="Home">
+                    <a href={{route("mainApp")}} title="Home">
                         <i class="fa-brands fa-x-twitter"></i>
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href="#" title="Home">
+                    <a href={{route("mainApp")}} title="Home">
                         <div class="nav_icon_link_container">
                             <i class="fa-solid fa-house"></i>
                         </div>

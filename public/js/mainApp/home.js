@@ -1,4 +1,5 @@
 import * as utilsPosts from "./utils/utilsPosts.js";
+import * as utilsIntersection from "./utils/utilsIntersection.js";
 
 
 const nav = $(".nav_responsive");
@@ -25,6 +26,7 @@ function desfilterElements(){
     let hijosBody = $("body").children().slice(0,-2);
 
     $.each(hijosBody, function (indexInArray, valueOfElement) { 
+        console.log(valueOfElement);
         if(!$(valueOfElement).hasClass("nav_responsive")){
            $(valueOfElement).removeAttr("style");
         }
@@ -69,7 +71,6 @@ function getPublicPosts(){
         url: $(".get_publics").attr("id"),
         success: function (response) {
             if(response.length > 0){
-                console.log(response);
                 showPosts(response)
             }
         },
@@ -123,7 +124,7 @@ function showPosts(info){
             $(postContent).append(utilsPosts.showMultimedia(multimedia));
         }
         //obtenemos las interacciones y lo agregamos al post content
-        let interactionContainer = utilsPosts.showInteraction(nicknameNoSpaces,postID,linkLike,linkComment,linkVisualization);
+        let interactionContainer = utilsPosts.showInteraction(linkLike,linkComment,linkVisualization);
 
         $(postContainer).append(userDataContainer);
         //agregamos al contenedor del post el post container
@@ -139,34 +140,11 @@ function showPosts(info){
         utilsPosts.postYetLiked(likeContainer,currentPost.likes);
         utilsPosts.likePost(likeContainer);
 
-        utilsPosts.countIcon(currentPost);
+        utilsPosts.countIcon(currentPost,interactionContainer);
     }
-    createIntersectionObserver();
+    utilsIntersection.createIntersectionObserver(".post")
 }
 
 
-function createIntersectionObserver(){
-    //obtenemos todos los post
-    let posts = document.querySelectorAll(".post");
-
-    posts.forEach(post=>{
-        let observer = new IntersectionObserver(chekIntersection,{});
-        observer.observe(post)
-    })
-}
-
-function chekIntersection(e){
-    //obtenemos el post que se ha visualidado
-    let data = e[0];
-    let post = data.target;
-    let lastChild = post.lastElementChild;
-    let visualization = $(lastChild.lastChild)
-
-    //en caso de que el usuario lo haya visto obtenemos los datos del post y la enviamos al servidor
-    if(data.isIntersecting){
-        let actionVisualization = $(visualization).attr("action");
-        utilsPosts.sendVisualization(actionVisualization);
-    }
-}
 
 

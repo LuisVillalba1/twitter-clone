@@ -68,14 +68,17 @@ class UserPost extends Model
         $user = Auth::user();
         $userID = $user->UserID;
 
+        //obtenemos su contenido multimedia
         $posts = UserPost::with([
             "MultimediaPost",
+            //verificamos si el usuario logeado ya ha visualizado o likeado el post
             "Likes"=>function($queryLike) use ($userID){
                 $queryLike->where("NicknameID",$userID);
             },
             "Visualizations"=>function($queryVisualization) use ($userID){
                 $queryVisualization->where("NicknameID",$userID);
             },
+            //obtenemos datos del usuario correspondiente al post
             "User"=>function($queryUser){
                 $queryUser->select("UserID","PersonalDataID")
                 ->with([
@@ -85,6 +88,7 @@ class UserPost extends Model
                 ]);
             }
         ])
+        //mostramos la cantidad de interacciones que contiene el post
         ->withCount([
             "Likes",
             "Visualizations",
@@ -94,6 +98,7 @@ class UserPost extends Model
         ->get();
 
         foreach($posts as $post){
+            //mostramos los links para poder interactuar con cada post
             $userName = $post->User->PersonalData->Nickname;
             $idEncrypt = Crypt::encryptString($post->PostID);
             $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
@@ -115,11 +120,23 @@ class UserPost extends Model
 
             (new UserPost())->checkPostID($postID);
 
+            //mostramos la vista del post
             return view("app.posts.userPost");
         }
         catch(\Exception $e){
             return redirect()->route("errorPage");
         }
+    }
+
+    public function setLinksInteraction($post){
+        $userName = $post->User->PersonalData->Nickname;
+        $idEncrypt = Crypt::encryptString($post->PostID);
+        $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
+        $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+
+        return $post;
     }
 
     public function getPostData($username,$encryptID){
@@ -155,7 +172,7 @@ class UserPost extends Model
                 ]);
             },
             //mostramos todos los comentarios que tuvo el post
-            "Comments"=>function($comments){
+            "Comments"=>function($comments) use ($userID){
                 $comments
                 ->select()
                 //por cada comentario mostramos la cantidad de visualizaciones,likes y comentarios que tiene el mismo
@@ -173,6 +190,12 @@ class UserPost extends Model
                             },
                         ]);
                     },
+                    "Likes"=>function($queryLikeComment) use ($userID){
+                        $queryLikeComment->where("NicknameID",$userID);
+                    },
+                    "Visualizations"=>function($queryVisualizationComment) use ($userID){
+                        $queryVisualizationComment->where("NicknameID",$userID);
+                    },
                     "MultimediaPost"
                 ]);
             },
@@ -186,14 +209,11 @@ class UserPost extends Model
         ->where("PostID",$postID)
         ->first();
 
-        $userName = $post->User->PersonalData->Nickname;
-        $idEncrypt = Crypt::encryptString($post->PostID);
-        $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
-        $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
-        $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
-        $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        //por cada comentario establecemos los links para interactuar
+        (new Comment())->setLinksInteraction($post->Comments);
 
-        return $post;
+
+        return $this->setLinksInteraction($post);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener el post"],500);

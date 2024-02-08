@@ -1,4 +1,5 @@
 import * as utilsPosts from "../utils/utilsPosts.js";
+import * as utilsIntersection from "../utils/utilsIntersection.js"
 
 const loaderContainer = $(".loader_container");
 
@@ -13,7 +14,6 @@ async function getPostData(){
         url : link
     })
     //mostramos la informacion
-    console.log(data);
     showData(data)
     }
     catch(e){
@@ -46,14 +46,14 @@ function showData(data){
 
     let interactionContainer = createInteraction(data);
 
-    let interactions = interactionContainer[0].lastElementChild;
-    postYetInteraction(interactions,data)
-    for(let i of interactions.children){
+    let interactions = $(interactionContainer[0].lastElementChild);
+    utilsPosts.postYetInteraction(interactions,data)
+    for(let i of interactions.children()){
         let child = i;
 
         if($(child).hasClass("like_container")){
-            likePost(child)
-            postYetLiked(child,data.likes)
+            utilsPosts.likePost(child)
+            utilsPosts.postYetLiked(child,data.likes);
         }
     }
 
@@ -61,79 +61,6 @@ function showData(data){
     showCommenst(comments)
 
 }
-
-
-function postYetInteraction(interactionContainer,data){
-    let interaction = $(interactionContainer);
-    //interamos sobre todos los hijos del interactionContainer
-    $.each(interaction.children(), function (indexInArray, valueOfElement) { 
-        //obtenemos el valor de la clase
-         let valueClass = $(valueOfElement).attr("class");
-
-         if(!valueClass.includes("like_container")){
-            //obtenemos la primera clase, la cual va a contener el valor de la propiedad de nuestro objeto
-            let valueClassSplit = valueClass.split(" ")
-            let ultimoGuionIndex = valueClassSplit[0].lastIndexOf("_");
-            let property =valueClassSplit[0].substring(0,ultimoGuionIndex);
-            //en caso de que ya se haya visto,comentado, o resposteado el post marcamos el icono en cuestion de color
-            updateInteracction(data[property],valueOfElement)
-         }
-    });
-}
-
-function updateInteracction(data,element){
-    if(data && data.length > 0){
-        let child = $(element).children()[0];
-        let icon = $(child).children()[0];
-        
-        $(icon).css("color", "rgb(57, 179, 255)");
-    }
-}
-
-//verificamos si el posteo ya esta likeado
-function postYetLiked(likeContainer,info){
-    //obtenemos el icono del corazon
-    let heartContainer = $(likeContainer).children(".heart_bg");
-    let heart = $(heartContainer).children(".heart_icon")
-    if(info.length >= 1){
-        $(heart).css("animation","like-anim 0.5s steps(28) forwards");
-    }
-}
-
-//likeamos el post
-async function likePost(likeContainer){
-    let heartContainer = $(likeContainer).children(".heart_bg");
-    let hearstIcon = $(heartContainer).children(".heart_icon")
-
-    $.each(hearstIcon, function (indexInArray, valueOfElement) {
-         $(valueOfElement).on("click", async function (e) {
-            e.preventDefault();
-            let padre = $(e.target).closest(".like_container");
-            let action = $(padre).attr("action");
-            let response = await sendLike(action);
-            if(response){
-                $(e.target).css("animation","like-anim 0.5s steps(28) forwards");
-            }
-            else{
-                $(e.target).removeAttr("style");
-            }
-         });
-    });
-}
-
-//hacemos la solicitud para likear el post
-async function sendLike(action){
-    try {
-        const response = await $.ajax({
-            type: "POST",
-            url: action
-        });
-        return response
-    } catch (error) {
-        console.log(error.responseJSON.message);
-    }
-}
-
 
 //mostramos el contido multimedia en caso de que exista
 function showMultimedia(data){
@@ -184,15 +111,28 @@ function showCommenst(comments){
                 $(postContent).append(utilsPosts.showMultimedia(multimedia));
             }
 
-            let interaction_container = utilsPosts.showInteraction(multimedia);
+            //obtenemos todas las interacciones
+            let interaction_container = utilsPosts.showInteraction(currentComment.linkLike,currentComment.linkComment,currentComment.linkVisualization);
 
             $(commentContainer).append(userDataContainer);
             $(commentContainer).append(interaction_container);
 
             $(commentsContainer).append(commentContainer);
+
+            let likeContainer = (interaction_container).children(".like_container");
+
+            utilsPosts.postYetInteraction(interaction_container,currentComment);
+            utilsPosts.postYetLiked(likeContainer,currentComment.likes);
+            utilsPosts.likePost(likeContainer);
+
+            utilsPosts.countIcon(currentComment,interaction_container);
         }
+
+        utilsIntersection.createIntersectionObserver(".comment_post_constainer")
     }
 }
+
+
 
 //creamos las interacciones del post
 function createInteraction(data){
@@ -235,8 +175,6 @@ function createInteraction(data){
 </div>
 </div>
     `
-
-
  $(interactionContainer).append(interaction);
  return interactionContainer;
 }

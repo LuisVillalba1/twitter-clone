@@ -72,7 +72,7 @@ export function showMultimedia(multimedia){
 }
 
 //por cada post permitimos que puedan interactuar con el mismo
-export function showInteraction(nickname,post,linkLike,linkComment,linkVisualization){
+export function showInteraction(linkLike,linkComment,linkVisualization){
     let interactionContainer = $("<div></div>");
     $(interactionContainer).addClass("interaction");
     let protocol = window.location.protocol + "//"
@@ -156,10 +156,10 @@ export function postYetLiked(likeContainer,info){
 }
 
  //dependiendo de cada interaccion posible mostramos la candidad de likes, visualizaciones, comentarios etc
-export function countIcon(data){
+export function countIcon(data,interactionContainer){
     for(let i in data){
         if(i.includes("count")){
-            let container = $(`.${i}`);
+            let container = interactionContainer.find(`.${i}`);
             $(container).text(data[i]);
         }
     }
@@ -199,15 +199,3 @@ async function sendLike(action){
     }
 }
 
-export function sendVisualization(url){
-    $.ajax({
-        type: "POST",
-        url: url,
-        success: function (response) {
-            // console.log(response);
-        },
-        error : function(error){
-            console.log(error)
-        }
-    });
-}
