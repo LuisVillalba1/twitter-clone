@@ -13,19 +13,22 @@ async function getPostData(){
         type : "GET",
         url : link
     })
+    $(".post_container").css("display", "block");
     //mostramos la informacion
-    showData(data)
+    showData(data);
     }
     catch(e){
         console.log(e);
     }
     //una ves finalizada la peticion ocultamos el loader
-    $(loaderContainer).css("display", "none");
+    finally{
+        $(loaderContainer).css("display", "none");
+    }
 }
 
 getPostData();
 
-function showData(data){
+async function showData(data){
     //mostramos datos del usuario y el mensaje del post
     let userName = data.user.personal_data.Nickname;
     let logo = userName[0].toUpperCase();
@@ -85,8 +88,10 @@ const commentsContainer = $(".comments_post_container");
 function showCommenst(comments){
     if(!comments.length <= 0){
         for(let i in comments){
-            let currentComment = comments[i]
+            let currentComment = comments[i];
+            let linkPost = currentComment.linkPost;
             let commentContainer = $("<a></a>");
+            $(commentContainer).attr("href", linkPost);
             $(commentContainer).addClass("comment_post_constainer");
     
             let nickname = currentComment.user.personal_data.Nickname;

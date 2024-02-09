@@ -32,45 +32,6 @@ body{
     font-size: 1.2em;
 }
 
-.loader_container{
-    width: 100%;
-    height: 100%;
-    max-width: 550px;
-    justify-content: center;
-    align-items: center;
-    display: none;
-    padding-bottom: 10px;
-}
-
-.loader{
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  animation: spin 1.2s linear infinite; 
-}
-
-.loader::before,
-.loader::after{
-    content: "";
-    position: absolute;
-    border-radius: inherit;
-}
-
-.loader::before{
-    width: 100%;
-    height: 100%;
-    background-image: linear-gradient(0deg,#f0c 0%,#80f 100%);
-}
-
-.loader::after{
-    width: 85%;
-    height: 85%;
-    background: var(--negro);
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-
 @keyframes spin{
     to{
         transform: rotate(360deg);
@@ -194,6 +155,10 @@ body{
     width: 100%;
     display: flex;
     flex-direction: column;
+}
+
+.comment_post_constainer{
+    text-decoration: none;
 }
 
 footer{

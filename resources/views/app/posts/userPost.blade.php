@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="../../css/mainApp/posts/userPost.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilComments.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 
 <title></title>
 @endsection

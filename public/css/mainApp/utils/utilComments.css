@@ -12,3 +12,7 @@
     flex-direction: column;
     border-bottom: 1px solid var(--grisClaro);
 }
+
+.current_post{
+    display: none;
+}
