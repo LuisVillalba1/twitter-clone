@@ -95,6 +95,7 @@ class UserPost extends Model
             "Comments"
         ])
         ->where("ParentID",null)
+        ->orderBy("PostID","desc")
         ->get();
 
         foreach($posts as $post){

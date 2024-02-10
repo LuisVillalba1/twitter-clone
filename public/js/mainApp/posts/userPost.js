@@ -60,6 +60,8 @@ async function showData(data){
         }
     }
 
+    $(".current_post").css("display","block");
+
     let comments = data.comments
     showCommenst(comments)
 
@@ -85,10 +87,24 @@ function showMultimedia(data){
 }
 
 const commentsContainer = $(".comments_post_container");
-function showCommenst(comments){
-    if(!comments.length <= 0){
-        for(let i in comments){
-            let currentComment = comments[i];
+function showCommenst(commentsData){
+    //mostramos los comentarios de 6 en 6
+    let currentIndex = 0;
+    let commentPerPage = 6;
+
+    function showMoreComments(currentIndex,commentPerPage){
+        //obtenemos de 6 en 6 los comentarios
+        let max = Math.min(currentIndex + commentPerPage,commentsData.length);
+
+        let comments = commentsData.slice(currentIndex,max);
+
+        //en caso de que ya no existan mas comentarios detenemos la ejecucion
+        if(comments.length == 0){
+            console.log("end");
+            return
+        }
+        //por cada comentarios mostramos la informacion correspondiente
+        comments.forEach(currentComment=>{
             let linkPost = currentComment.linkPost;
             let commentContainer = $("<a></a>");
             $(commentContainer).attr("href", linkPost);
@@ -131,10 +147,13 @@ function showCommenst(comments){
             utilsPosts.likePost(likeContainer);
 
             utilsPosts.countIcon(currentComment,interaction_container);
-        }
-
-        utilsIntersection.createIntersectionObserver(".comment_post_constainer")
+        })
+        currentIndex += commentPerPage;
+        //verificamos que el ultimo comentario sea visible para mostrar mas
+        utilsIntersection.createIntersectionObserver(".comment_post_constainer",showMoreComments.bind(null,currentIndex,commentPerPage))
     }
+
+    showMoreComments(currentIndex,commentPerPage);
 }
 
 
