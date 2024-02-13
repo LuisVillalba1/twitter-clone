@@ -15,6 +15,7 @@ async function getPostData(){
     })
     $(".post_container").css("display", "block");
     //mostramos la informacion
+    console.log(data);
     showData(data);
     }
     catch(e){
@@ -58,7 +59,11 @@ async function showData(data){
             utilsPosts.likePost(child)
             utilsPosts.postYetLiked(child,data.likes);
         }
+        if($(child).hasClass("save_container")){
+            savePost(child);
+        }
     }
+
 
     $(".current_post").css("display","block");
 
@@ -145,6 +150,7 @@ function showCommenst(commentsData){
             utilsPosts.postYetInteraction(interaction_container,currentComment);
             utilsPosts.postYetLiked(likeContainer,currentComment.likes);
             utilsPosts.likePost(likeContainer);
+            savePost(saveContainer);
 
             utilsPosts.countIcon(currentComment,interaction_container);
         })
@@ -189,6 +195,12 @@ function createInteraction(data){
         <p class="likes_count count_interaction">${data.likes_count}</p>
     </div>
 </form>
+<form class="save_container interaction_container">
+    <div class="save_bg">
+        <div class="save_icon">
+        </div>
+    </div>
+</form>
 <div class="visualizations_container interaction_container">
     <div class="interaction_icon_container">
         <i class="fa-solid fa-chart-simple interaction_icon"></i>
@@ -201,4 +213,21 @@ function createInteraction(data){
     `
  $(interactionContainer).append(interaction);
  return interactionContainer;
+}
+
+function savePost(saveContainer){
+    saveContainer = $(saveContainer)
+    let heartContainer = $(saveContainer).children(".save_bg");
+    let hearstIcon = $(heartContainer).children(".save_icon")
+
+    console.log(hearstIcon)
+    $.each(hearstIcon, function (indexInArray, valueOfElement) {
+         $(valueOfElement).on("click", async function (e) {
+            e.preventDefault();
+            let padre = $(e.target).closest(".safe_container");
+            let action = $(padre).attr("action");
+            // let response = await sendLike(action);
+            $(e.target).css("animation","save-anim 0.5s steps(20) forwards")
+         });
+    });
 }

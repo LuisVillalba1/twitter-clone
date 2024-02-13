@@ -3,7 +3,6 @@
 export function createIntersectionObserver(postsNames,callback){
     //obtenemos todos los post
     let posts = document.querySelectorAll(postsNames);
-    console.log(posts)
 
     //con el metodo forEach iteramos sobre cada post y con el index obtenemos la posicion del ultimo post
     posts.forEach((post,index)=>{
@@ -31,7 +30,6 @@ function chekIntersection(e,isLastPost,observer,callback){
     }
     //si se observa el ultimo post detenemos el observer y mostramos mas posts en caso de que existan
     if(isLastPost && data.isIntersecting){
-        console.log(data.isIntersecting)
         observer.disconnect()
         callback()
         return

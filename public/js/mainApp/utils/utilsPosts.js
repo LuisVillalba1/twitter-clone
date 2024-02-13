@@ -66,6 +66,8 @@ export function showMultimedia(multimedia){
 
         $(container).append(img);
         $(imgsContainer).append(container);
+
+        console.log(img[0]);
     }
 
     return imgsContainer;
