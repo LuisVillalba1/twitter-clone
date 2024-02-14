@@ -6,6 +6,10 @@
     --celeste : rgb(72, 152, 232);
 }
 
+.nav_container{
+    display: none;
+}
+
 .post_to_comment{
     width: 100%;
     display: flex;

@@ -18,8 +18,25 @@ class SavePost extends Model
         return $this->belongsTo(UserPost::class,"PostID");
     }
 
+    //mostramos la vista de elementos guardados por parte del usuario
     public function showBookmarks(){
         return view("app.posts.bookmarks.bookmarks");
+    }
+
+    //obtenemos todos los post que ha guardado el usuario
+    public function getBookmarks(){
+        try{
+            $user = Auth::user();
+
+            $userID = $user->UserID;
+            
+            return SavePost::where("UserID",$userID);
+
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>"Ha ocurrido un error"],500);
+        }
+        
     }
 
     public function checkSavePost($postID){

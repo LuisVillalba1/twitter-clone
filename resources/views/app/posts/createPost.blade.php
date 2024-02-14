@@ -1,4 +1,4 @@
-@extends('../../layouts.mainPlantilla')
+@extends('../../layouts.plantilla')
 
 @section('head')
 <meta charset="UTF-8">
@@ -12,7 +12,6 @@
 @endsection
 
 @section('content')
-    <div class="main_container">
         <div class="new_post_container">
             <div class="redireck_home_container">
                 <a href="{{route("mainApp")}}">
@@ -53,7 +52,6 @@
                 </div>
             </form>
         </div>
-    </div>
 @endsection
 
 @section('scripts')

@@ -104,5 +104,6 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::post("/comment/{username}/{encryptID}",[Comment::class,"commentPost"])->name("commentPost");
 
     Route::get("/bookmarks",[SavePost::class,"showBookmarks"])->name("showBookmarks");
+    Route::get("/bookmarks/details",[SavePost::class,"getBookmarks"])->name("getBookmarks");
     Route::post("/bookmarks/{username}/{encryptID}",[SavePost::class,"savePost"])->name("savePost");
 });
