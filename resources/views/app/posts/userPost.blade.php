@@ -11,20 +11,14 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/utilComments.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilFooter.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
 
 <title></title>
 @endsection
 
 @section('content')
     <div class="main_container">
-        <div class="redireck_home_container">
-            <a class="redireck_home_icon_container" href="{{route("mainApp")}}">
-                <i class="fa-solid fa-arrow-left-long"></i>
-            </a>
-            <div class="redireck_home_content">
-                <h3>Post</h3>
-            </div>
-        </div>
         <div class="nav_container">
             <div class="nav">
                 <div class="nav_border_filter"></div>
@@ -123,6 +117,14 @@
             </div>
         </div>
         <div class="post_container">
+            <div class="redireck_home_container">
+                <a class="redireck_home_icon_container" href="{{route("mainApp")}}">
+                    <i class="fa-solid fa-arrow-left-long"></i>
+                </a>
+                <div class="redireck_home_content">
+                    <h3>Post</h3>
+                </div>
+            </div>
             <div class="loader_container">
                 <div class="loader"></div>
             </div>
@@ -144,6 +146,12 @@
     
                         </div>
                     </div>
+                </div>
+                <div class="post_information">
+
+                </div>
+                <div class="repost_and_likes_container">
+
                 </div>
                 <div class="interaction_post_container">
                 </div>

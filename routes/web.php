@@ -11,6 +11,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\CheckFirstStepRegistration;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\SavePost;
 use App\Models\UserPost;
 use App\Models\Visualization;
 use Illuminate\Support\Facades\Route;
@@ -101,4 +102,7 @@ Route::middleware(["AuthSession"])->group(function () {
 
     Route::get("/comment/{username}/{encryptID}",[Comment::class,"commentPostView"])->name("commentPostView");
     Route::post("/comment/{username}/{encryptID}",[Comment::class,"commentPost"])->name("commentPost");
+
+    Route::get("/bookmarks",[SavePost::class,"showBookmarks"])->name("showBookmarks");
+    Route::post("/bookmarks/{username}/{encryptID}",[SavePost::class,"savePost"])->name("savePost");
 });

@@ -201,3 +201,95 @@ async function sendLike(action){
     }
 }
 
+//mostramos la cantidad de visualizaciones y likes
+export function showRepostAndLikes(likesCount,visualizatiosCount){
+    let interactionContainer = $(".repost_and_likes_container");
+
+    let repostContainer = $("<div></div>");
+
+    $(repostContainer).addClass("respost_count_container");
+
+    let countRepost = $("<b></b>")
+    $(countRepost).text(visualizatiosCount);
+
+    let respostText = $("<p></p");
+    $(respostText).text("Republicaciones");
+
+    let likeContainer = $("<div></div>");
+    $(likeContainer).addClass("likes_count_container");
+
+    let countLikes = $("<b></b>");
+    $(countLikes).text(likesCount);
+
+    let likesText = $("<p></p>");
+    $(likesText).text("Me gusta");
+
+
+    $(repostContainer).append(countRepost);
+    $(repostContainer).append(respostText);
+
+    $(likeContainer).append(countLikes);
+    $(likeContainer).append(likesText);
+
+    $(interactionContainer).append(repostContainer);
+    $(interactionContainer).append(likeContainer);
+}
+
+export function showVisualizations(visualizationsCount){
+    let informationContainer = $(".post_information");
+
+    let visualizationCountContainer = $("<div></div>");
+    $(visualizationCountContainer).addClass("visualization_count_container");
+
+    let count = $("<b></b>");
+
+    $(count).text(visualizationsCount);
+
+    let visualizationText = $("<p></p>");
+
+    $(visualizationText).text("Visualizaciones");
+
+
+    $(visualizationCountContainer).append(count);
+    $(visualizationCountContainer).append(visualizationText);
+    $(informationContainer).append(visualizationCountContainer);
+}
+
+export function savePost(saveFormContainer){
+    let saveContainer = $(saveFormContainer).children(".save_bg");
+    let iconSave = $(saveContainer).children(".save_icon")
+
+    $(saveFormContainer).on("click", async function () {
+        let action = $(saveFormContainer).attr("action");
+        let response = await sendSavePost(action);
+
+        if(response){
+            iconSave.css("animation","save-anim 0.5s steps(20) forwards")
+        }
+        else{
+            $(iconSave).removeAttr("style");
+        }
+    });
+}
+
+
+async function sendSavePost(action){
+    try {
+        const response = await $.ajax({
+            type: "POST",
+            url: action
+        });
+        return response
+    } catch (error) {
+        console.log(error.responseJSON.message);
+    }
+}
+
+export function postYetSave(saveForm,info){
+        //obtenemos el icono del corazon
+        let saveContainer = $(saveForm).children(".save_bg");
+        let saveIcon = $(saveContainer).children(".save_icon")
+        if(info.length >= 1){
+            $(saveIcon).css("animation","save-anim 0.5s steps(20) forwards");
+        }
+}

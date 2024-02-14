@@ -45,6 +45,10 @@ class UserPost extends Model
         return $this->hasOne(UserPost::class,"ParentID","PostID");
     }
 
+    public function Safes(){
+        return $this->hasMany(savePost::class,"PostID");
+    }
+
     //creamos un nueva post
     public function createPost($user,$message){
         try{
@@ -132,6 +136,7 @@ class UserPost extends Model
     public function setLinksInteraction($post){
         $userName = $post->User->PersonalData->Nickname;
         $idEncrypt = Crypt::encryptString($post->PostID);
+        $post["linkSave"] = route("savePost",["username"=>$userName,"encryptID"=>$idEncrypt]);
         $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
         $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
         $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
@@ -159,6 +164,9 @@ class UserPost extends Model
             //en caso de que el usuario logeado haya likeado o visualizado el post
             "Likes"=>function($queryLike) use ($userID){
                 $queryLike->where("NicknameID",$userID);
+            },
+            "Safes"=>function($querySave) use ($userID){
+                $querySave->where("UserID",$userID);
             },
             "Visualizations"=>function($queryVisualization) use ($userID){
                 $queryVisualization->where("NicknameID",$userID);
@@ -212,7 +220,6 @@ class UserPost extends Model
 
         //por cada comentario establecemos los links para interactuar
         (new Comment())->setLinksInteraction($post->Comments);
-
 
         return $this->setLinksInteraction($post);
         }
