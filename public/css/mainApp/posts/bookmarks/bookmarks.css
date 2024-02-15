@@ -29,6 +29,45 @@ body{
     width: 100%;
     max-width: 700px;
     border-right: 1px solid var(--grisClaro);
+    display: flex;
+    flex-direction: column;
 }
 
+.heart_icon{
+    background: url("../../../../imgs/heart.png");
+    background-size: cover;
+    height: 56px;
+    width: 56px;
+    background-position: left;
+    cursor: pointer;
+    position: absolute;
+}
 
+.interaction a{
+    text-decoration: none;
+}
+
+.interaction form{
+    display: flex;
+    align-items: center;
+}
+
+.save_bg{
+    background: rgba(255, 192, 200, 0);
+    border-radius: 80%;
+    height: 56px;
+    width: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.save_icon{
+    background: url("../../../../imgs/save.png");
+    background-size:cover;
+    height: 46px;
+    width: 46px;
+    background-position: left;
+    cursor: pointer;
+    position: absolute;
+}

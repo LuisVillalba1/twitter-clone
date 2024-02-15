@@ -6,10 +6,13 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
 <meta name="view-transition" content="same-origin" />
-<link rel="stylesheet" href="../../css/mainApp/posts/bookmarks/bookmarks.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilFooter.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilSave.css">
+<link rel="stylesheet" href="../../css/mainApp/posts/bookmarks/bookmarks.css">
 
 
 <title>Elementos guardados</title>
@@ -25,6 +28,9 @@
                 <h3>Elementos Guardados</h3>
             </div>
         </div>
+        <div class="loader_container">
+            <div class="loader"></div>
+        </div>
     </div>
 @endsection
 
@@ -36,5 +42,6 @@
 @endsection
 
 @section('scripts')
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script type="module" src="../../js/mainApp/posts/bookmarks/bookmarks.js"></script>
 @endsection

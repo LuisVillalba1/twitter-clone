@@ -161,7 +161,7 @@ function showCommenst(commentsData){
         })
         currentIndex += commentPerPage;
         //verificamos que el ultimo comentario sea visible para mostrar mas
-        utilsIntersection.createIntersectionObserver(".comment_post_constainer",showMoreComments.bind(null,currentIndex,commentPerPage))
+        utilsIntersection.createIntersectionObserver(".comment_post_constainer",true,showMoreComments.bind(null,currentIndex,commentPerPage))
     }
 
     showMoreComments(currentIndex,commentPerPage);

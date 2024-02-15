@@ -66,8 +66,6 @@ export function showMultimedia(multimedia){
 
         $(container).append(img);
         $(imgsContainer).append(container);
-
-        console.log(img[0]);
     }
 
     return imgsContainer;
@@ -125,7 +123,6 @@ export function postYetInteraction(interactionContainer,data){
     $.each(interactionContainer.children(), function (indexInArray, valueOfElement) { 
         //obtenemos el valor de la clase
          let valueClass = $(valueOfElement).attr("class");
-
          if(!valueClass.includes("like_container")){
             //obtenemos la primera clase, la cual va a contener el valor de la propiedad de nuestro objeto
             let valueClassSplit = valueClass.split(" ")
@@ -168,7 +165,7 @@ export function countIcon(data,interactionContainer){
 }
 
 //likeamos el post
-export async function likePost(likeContainer){
+export async function likePost(likeContainer,likesCount){
     let heartContainer = $(likeContainer).children(".heart_bg");
     let hearstIcon = $(heartContainer).children(".heart_icon")
 
@@ -180,12 +177,24 @@ export async function likePost(likeContainer){
             let response = await sendLike(action);
             if(response){
                 $(e.target).css("animation","like-anim 0.5s steps(28) forwards");
+                sumValue(likesCount)
             }
             else{
                 $(e.target).removeAttr("style");
+                subtractValue(likesCount)
             }
          });
     });
+}
+
+//sumamos el valor
+function sumValue(name){
+    $(name).text(parseInt($(name).text())+ 1);
+}
+
+//restamos el valor
+function subtractValue(name){
+    $(name).text(parseInt($(name).text())- 1);
 }
 
 //enviamos el like
@@ -255,19 +264,22 @@ export function showVisualizations(visualizationsCount){
     $(informationContainer).append(visualizationCountContainer);
 }
 
-export function savePost(saveFormContainer){
+export function savePost(saveFormContainer,saveCount){
     let saveContainer = $(saveFormContainer).children(".save_bg");
     let iconSave = $(saveContainer).children(".save_icon")
 
-    $(saveFormContainer).on("click", async function () {
+    $(saveFormContainer).on("click", async function (e) {
+        e.preventDefault();
         let action = $(saveFormContainer).attr("action");
         let response = await sendSavePost(action);
 
         if(response){
             iconSave.css("animation","save-anim 0.5s steps(20) forwards")
+            sumValue(saveCount)
         }
         else{
             $(iconSave).removeAttr("style");
+            subtractValue(saveCount);
         }
     });
 }

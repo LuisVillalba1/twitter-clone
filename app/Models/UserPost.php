@@ -90,6 +90,9 @@ class UserPost extends Model
                         $queryPersonal->select("PersonalDataID","Nickname");
                     }
                 ]);
+            },
+            "Comments"=>function($queryComments) use ($userID){
+                $queryComments->where("UserID",$userID);
             }
         ])
         //mostramos la cantidad de interacciones que contiene el post

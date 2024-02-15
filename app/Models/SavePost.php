@@ -14,7 +14,7 @@ class SavePost extends Model
 
     protected $primaryKey = "SaveID";
 
-    public function PostID(){
+    public function Post(){
         return $this->belongsTo(UserPost::class,"PostID");
     }
 
@@ -29,8 +29,50 @@ class SavePost extends Model
             $user = Auth::user();
 
             $userID = $user->UserID;
-            
-            return SavePost::where("UserID",$userID);
+
+            $safesPost = SavePost::
+            where("UserID",$userID)
+            ->with([
+                "Post"=>function($queryPost) use ($userID){
+                    $queryPost->with([
+                        "MultimediaPost",
+                        "User"=>function($queryUser){
+                            $queryUser
+                            ->select("UserID","PersonalDataID")
+                            ->with([
+                                "PersonalData"=>function($queryPersonal){
+                                    $queryPersonal->select("PersonalDataID","Nickname");
+                                }
+                            ]);
+                        },
+                        "Likes"=>function($queryLike) use ($userID){
+                            $queryLike->where("NicknameID",$userID);
+                        },
+                        "Visualizations"=>function($queryVisualization) use ($userID){
+                            $queryVisualization->where("NicknameID",$userID);
+                        },
+                        "Comments"=>function($queryComments) use ($userID){
+                            $queryComments->where("UserID",$userID);
+                        }
+                    ])
+                    ->withCount([
+                        "Likes",
+                        "Comments",
+                        "Visualizations",
+                        "Safes"
+                    ]);
+                }
+            ])
+            ->orderBy("SaveID","desc")
+            ->get();
+
+            //seteamos todos los links para interactuar
+
+            foreach($safesPost as $safePost){
+                (new UserPost())->setLinksInteraction($safePost->Post);
+            }
+
+            return $safesPost;
 
         }
         catch(\Exception $e){

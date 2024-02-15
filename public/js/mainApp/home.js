@@ -149,12 +149,13 @@ function showPosts(info){
             //agregamos todos los post al contenedor principal
             $(allPost).append(postContainer);
         
-            //Obtenemos el contenedor del like
+            //Obtenemos el contenedor del like y la suma de likes que contiene el mismo
             let likeContainer = $(interactionContainer).children(".like_container");
+            let likesCount = $(likeContainer).children().children(".likes_count")
         
             utilsPosts.postYetInteraction(interactionContainer,currentPost)
             utilsPosts.postYetLiked(likeContainer,currentPost.likes);
-            utilsPosts.likePost(likeContainer);
+            utilsPosts.likePost(likeContainer,likesCount);
         
             utilsPosts.countIcon(currentPost,interactionContainer);
         })
@@ -162,11 +163,10 @@ function showPosts(info){
         currentIndex += postPerPage
         //verificamos si el ultimo post mostrado es interceptado
         //utilizamos bind para poder llamar a esta funcion callback dentro de createIntersectionObserver con los argumentos necesarios
-        utilsIntersection.createIntersectionObserver(".post",showMorePosts.bind(null,currentIndex,postPerPage))
+        utilsIntersection.createIntersectionObserver(".post",true,showMorePosts.bind(null,currentIndex,postPerPage))
     }
     showMorePosts(currentIndex,postPerPage)
 }
-
 
 
 

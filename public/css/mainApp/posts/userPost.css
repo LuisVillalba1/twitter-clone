@@ -17,11 +17,6 @@ body{
     background: var(--negro);
 }
 
-@keyframes spin{
-    to{
-        transform: rotate(360deg);
-    }
-}
 
 .post_container{
     padding: 10px 0;
