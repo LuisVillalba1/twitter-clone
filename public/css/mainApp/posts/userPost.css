@@ -26,15 +26,56 @@ body{
 }
 
 
-.user_data_container{
+.user_data_container,
+.parent_data_container{
     display: flex;
 }
 
-.owner_logo_container{
-    padding-right: 5px;
+.response_container{
+    display: none;
 }
 
-.owner_logo{
+.response_container p:nth-child(1){
+    color: var(--grisClaro);
+}
+
+.response_post{
+    color: var(--celeste);
+    padding-left: 3px;
+}
+
+.parent_user{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.parent_lane{
+    height: 100%;
+    width: 1px;
+    background: var(--gris);
+}
+
+.owner_logo_container,
+.parent_user{
+    padding: 0px 5px;
+}
+
+.parent_post_content{
+    text-decoration: none;
+    width: 100%;
+    padding-bottom: 20px;
+}
+
+.parent_multimedia_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.owner_logo,
+.parent_img_container{
     border-radius: 50%;
     padding: 8px;
     background: var(--celeste);

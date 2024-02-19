@@ -11,6 +11,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\CheckFirstStepRegistration;
 use App\Models\Comment;
 use App\Models\Like;
+use App\Models\PersonalData;
 use App\Models\SavePost;
 use App\Models\UserPost;
 use App\Models\Visualization;
@@ -100,10 +101,15 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/post/{username}/{encryptID}",[UserPost::class,"showPost"])->name("showPost");
     Route::get("/post/{username}/{encryptID}/details",[UserPost::class,"getPostData"])->name("getPostData");
 
+    //permitimos al usuario comentar un posteo
     Route::get("/comment/{username}/{encryptID}",[Comment::class,"commentPostView"])->name("commentPostView");
     Route::post("/comment/{username}/{encryptID}",[Comment::class,"commentPost"])->name("commentPost");
 
+    //obtenemos los elementos guardados
     Route::get("/bookmarks",[SavePost::class,"showBookmarks"])->name("showBookmarks");
     Route::get("/bookmarks/details",[SavePost::class,"getBookmarks"])->name("getBookmarks");
+    //permitimos guardar un posteo
     Route::post("/bookmarks/{username}/{encryptID}",[SavePost::class,"savePost"])->name("savePost");
+
+    Route::get("/{username}",[PersonalData::class,"showProfile"])->name("showProfile");
 });

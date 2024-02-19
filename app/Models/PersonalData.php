@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class PersonalData extends Model
 {
@@ -41,6 +43,49 @@ class PersonalData extends Model
         $user = PersonalData::where("Nickname",$userName)->first();
 
         if(!$user){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //mostramos el perfil del usuario
+    public function showProfile($username){
+        try{
+        //obtenemos el perfil
+        $profile = PersonalData::
+        where("Nickname",$username)
+        ->with([
+            "user"=>function ($queryUser){
+                $queryUser->select("UserID","Name","created_at");
+            }
+        ])
+        ->first();
+
+        $user = Auth::user();
+
+        $userID = $user->UserID;
+
+        //en caso de que no exista el usuario lo enviamos a nuestra pagina de error
+        if(!$profile){
+            session()->put("error","No se ha encontrado la ruta solicitada");
+            return redirect()->route("errorPage");
+        }
+
+        $name = $profile->user->Name;
+        $created = $profile->user->created_at;
+        
+        //cambiamos el formato del date
+        $fecha_objeto = new DateTime($created);
+        $created = $fecha_objeto->format('d/m/Y');
+
+        //si el perfil al que acceder es el mismo que el que esta logeado, permitimos a este editar su perfil
+        if($profile->PersonalDataID == $userID){
+            $edit = true;
+            return view("app.profile.profile",compact(["username","name","created","edit"]));
+        }
+        //si no mostramos el perfil del usuario
+        return view("app.profile.profile",compact(["username","name","created"]));
+        }
+        catch(\Exception $e){
             return redirect()->route("errorPage");
         }
     }

@@ -32,6 +32,22 @@
                 <div class="loader"></div>
             </div>
             <div class="current_post">
+                <div class="parent_data_container">
+                    <div class="parent_user">
+                        
+                    </div>
+                    <a class="parent_post_content">
+                        <div class="parent_nickname_container">
+                            <p class="parent_nickname"></p>
+                        </div>
+                        <div class="parent_message_container">
+                            <p class="parent_message"></p>
+                        </div>
+                        <div class="parent_multimedia_container">
+
+                        </div>
+                    </a>
+                </div>
                 <div class="user_data_container">
                     <div class="owner_logo_container">
                         <div class="owner_logo">
@@ -42,6 +58,10 @@
                         <div class="user_nickname_container">
                             <p class="user_nickname"></p>
                         </div>
+                        <div class="response_container">
+                            <p>En respuesta a </p>
+                            <p class="response_post"></p>
+                        </div>
                         <div class="user_message_container">
                             <p class="user_message"></p>
                         </div>
@@ -51,7 +71,6 @@
                     </div>
                 </div>
                 <div class="post_information">
-
                 </div>
                 <div class="repost_and_likes_container">
 

@@ -15,7 +15,7 @@ async function getPostData(){
     })
     $(".post_container").css("display", "block");
     //mostramos la informacion
-    console.log(data);
+    console.log(data)
     showData(data);
     }
     catch(e){
@@ -30,6 +30,12 @@ async function getPostData(){
 getPostData();
 
 async function showData(data){
+
+    //en caso de que el posteo sea un comentario,mostramos los datos del post padre
+    if(data.parent){
+        showParentData(data.parent)
+    }
+
     //mostramos datos del usuario y el mensaje del post
     let userName = data.user.personal_data.Nickname;
     let logo = userName[0].toUpperCase();
@@ -77,6 +83,73 @@ async function showData(data){
     showCommenst(comments)
 
 }
+
+//mostramos el posteo padre
+function showParentData(parentData){
+    let username = parentData.user.personal_data.Nickname;
+    let parentUser = $(".parent_user");
+
+    let parenImgContainer = $("<div></div>");
+
+    $(parenImgContainer).addClass("parent_img_container");
+
+    let logo = $("<h4></h4>");
+
+    $(logo).addClass("logo");
+
+    $(logo).text(username[0].toUpperCase());
+
+    let userLane = $("<div></div>");
+
+    $(userLane).addClass("parent_lane");
+
+    //mostramos el logo del usuario
+    $(parenImgContainer).append(logo);
+    $(parentUser).append(parenImgContainer);
+    $(parentUser).append(userLane);
+
+    $(".parent_nickname").text(username);
+
+    $(".parent_post_content").attr("href", parentData.linkPost);
+    //mostramos el mensaje y el contenido multimedia en caso de que existan
+    if(parentData.Message){
+        $(".parent_message").text(parentData.Message)
+    }
+
+    let multimedia = parentData.multimedia_post;
+
+    if(multimedia.length > 0){
+        showMultimediaParent(multimedia);
+    }
+
+    showResponse(username)
+}
+
+//en caso de que sea un comentario mostramos que se responde a cierto usuario
+function showResponse(nickname){
+    $(".response_container").css("display", "flex");
+    
+    $(".response_post").text(`@` + nickname);
+}
+
+function showMultimediaParent(data){
+    for(let i in data){
+        let currentMultimedia = data[i];
+
+        let imgContainer = $("<div></div>");
+        $(imgContainer).addClass("multimedia_img_container");
+
+        let img = $("<img></img>");
+
+        $(img).attr("alt",currentMultimedia.Name);
+        $(img).attr("src", currentMultimedia.Url);
+
+        $(imgContainer).append(img);
+
+        $(".parent_multimedia_container").append(imgContainer);
+    }
+}
+
 
 //mostramos el contido multimedia en caso de que exista
 function showMultimedia(data){

@@ -41,8 +41,8 @@ class UserPost extends Model
     }
 
     //obtenemos el parentID
-    public function ParentID(){
-        return $this->hasOne(UserPost::class,"ParentID","PostID");
+    public function Parent(){
+        return $this->belongsTo(UserPost::class,"ParentID");
     }
 
     public function Safes(){
@@ -183,6 +183,23 @@ class UserPost extends Model
                     }
                 ]);
             },
+            //en caso de que este post sea un comentario de otro post,mandamos los datos del post padre
+            "Parent"=>function($queryParent){
+                $queryParent
+                ->select("Message","PostID","UserID")
+                ->with([
+                    "User"=>function($parentUser){
+                        $parentUser
+                        ->select("UserID","PersonalDataID")
+                        ->with([
+                            "PersonalData"=>function($parentPersonal){
+                                $parentPersonal->select("PersonalDataID","Nickname");
+                            }
+                        ]);
+                    },
+                    "MultimediaPost"
+                ]);
+            },
             //mostramos todos los comentarios que tuvo el post
             "Comments"=>function($comments) use ($userID){
                 $comments
@@ -221,6 +238,12 @@ class UserPost extends Model
         ->where("PostID",$postID)
         ->first();
 
+        if($post->Parent){
+            $usernameParent = $post->Parent->User->PersonalData->Nickname;
+            $postIDParent = $post->Parent->PostID;
+
+            $post->Parent["linkPost"] = route("showPost",["username"=>$usernameParent,"encryptID"=>Crypt::encryptString($postIDParent)]);
+        }
         //por cada comentario establecemos los links para interactuar
         (new Comment())->setLinksInteraction($post->Comments);
 
