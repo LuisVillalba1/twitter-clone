@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
 <link rel="stylesheet" href="../../css/mainApp/profile/profile.css">
+<link rel="stylesheet" href="../../css/mainApp/setting/settingProfile.css">
 
 <title>{{$username}} profile</title>
 @endsection
@@ -84,6 +85,8 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../../js/mainApp/profile/profile.js"></script>
 @endsection

@@ -18,6 +18,16 @@ $(textareaPost).on("input", function (e) {
     }
 });
 
+function changeValueLenth(target,value){
+    if(value >= 280){
+        $(target).css("color", "red");
+        $(target).text(value);
+    }
+    else{
+        $(target).removeAttr("style");
+        $(target).text(value)
+    }
+}
 
 $(textareaPost).on("blur", function () {
     $(textareLengthContainer).removeAttr("style");

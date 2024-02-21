@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
+use function Termwind\render;
+
 class PersonalData extends Model
 {
     use HasFactory;
@@ -88,5 +90,17 @@ class PersonalData extends Model
         catch(\Exception $e){
             return redirect()->route("errorPage");
         }
+    }
+
+    //mostramos para poder editar el perfil del usuario
+    public function showEditPerfil(){
+        $user = Auth::user();
+
+        $personalData = PersonalData::where("PersonalDataID",$user->UserID)->first();
+
+        $username = $personalData->Nickname;
+        $name = $user->Name;
+
+        return view("app.settings.settingProfile",compact(["username","name"]));
     }
 }

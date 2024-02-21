@@ -40,12 +40,6 @@ body{
     padding-left: 10px;
 }
 
-.profile_picture_and_edit{
-    display: flex;
-    width: 100%;
-    justify-content: end;
-}
-
 .profile_picture_container{
     position: absolute;
     left: 3px;

@@ -111,5 +111,8 @@ Route::middleware(["AuthSession"])->group(function () {
     //permitimos guardar un posteo
     Route::post("/bookmarks/{username}/{encryptID}",[SavePost::class,"savePost"])->name("savePost");
 
+    //mostramos el perfil del usuario
     Route::get("/{username}",[PersonalData::class,"showProfile"])->name("showProfile");
+
+    Route::get("/settings/profile",[PersonalData::class,"showEditPerfil"])->name("editProfilesShow");
 });

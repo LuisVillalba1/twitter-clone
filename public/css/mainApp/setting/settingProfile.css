@@ -1,0 +1,242 @@
+:root{
+    --negro : rgb(0 0 0);
+    --blanco : rgb(255 255 255);
+    --gris : rgb(155 155 155);
+    --grisClaro : rgba(115, 114, 114, 0.9);
+    --celeste : rgb(72, 152, 232);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--blanco);
+}
+
+body{
+    background: var(--negro);   
+}
+
+.main_container{
+    position: relative;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit_cropper_container{
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: none;
+}
+
+.header_edit_cropper{
+    display: flex;
+    align-items: center;
+    position: relative;
+    padding: 0px 15px 10px 15px;
+}
+
+.close_edit_cropper{
+    padding-right: 10px;
+}
+
+.header_edit_cropper h3{
+    padding-right: 5px;
+}
+
+.save_edit_cropper{
+    position: absolute;
+    right: 15px;
+    padding: 7px 20px;
+    background: var(--blanco);
+    border-radius: 20px;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.save_edit_cropper p{
+    color: var(--negro);
+}
+
+.photo_container_cropper img{
+    width: 100%;
+    max-height: 400px;
+}
+
+.edit_profile_container{
+    background: rgba(20, 20, 20, 0.8);
+    top: 0;
+    min-height: 350px;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 20px;
+    padding: 20px 15px 10px 15px;
+    position: relative;
+}
+
+.header_edit{
+    display: flex;
+    align-items: center;
+}
+
+.redireck_profile{
+    padding-right: 10px;
+    font-size: 1.2em;
+}
+
+.save_edit{
+    position: absolute;
+    right: 15px;
+    top: 20px;
+    padding: 7px 20px;
+    background: var(--blanco);
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.save_edit p{
+    color: var(--negro);
+}
+
+#input_cover_photo,
+#input_profile_photo{
+    display: none;
+}
+
+.edit_content_container i{
+    color: var(--gris);
+}
+
+.img_cover_photo_edit{
+    min-height: 150px;
+    display: flex;
+    width: 100%;
+    position: relative;
+    cursor: pointer;
+}
+
+.img_cover_photo_edit i{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.img_cover_photo_edit{
+    margin-top: 20px;
+}
+
+.img_cover_photo_edit img{
+    height: 100%;
+    width: 100%;
+}
+
+.photo_edit_container{
+    display: flex;
+}
+
+.photo_profile_edit{
+    position: relative;
+    min-height: 64px;
+    min-width: 64px;
+}
+
+.photo_profile_edit{
+    display: flex;
+    justify-content: center;
+    background: var(--celeste);
+    border-radius: 48px;
+    max-width: 90px;
+    height: 90px;
+    overflow: hidden;
+}
+
+.profile_photo{
+    width: auto;
+    height: auto;
+}
+
+.photo_profile_edit i{
+    position: absolute;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+.personal_data_edit{
+    padding-top: 20px;
+}
+
+.personal_data_edit > div{
+    margin-bottom: 20px;
+}
+
+.input_container{
+    width: 100%;
+    border: 1px solid var(--gris);
+    border-radius: 4px;
+    position: relative;
+}
+
+.max_length_container{
+    display: none;
+    position: absolute;
+    bottom: 0;
+    right: 10px;
+}
+
+.max_length_container p{
+    color: var(--celeste);
+}
+
+.profile_picture_and_edit{
+    display: flex;
+    width: 100%;
+    justify-content: end;
+}
+
+.label_container{
+    display: none;
+}
+
+.label_container_show{
+    display: block;
+}
+
+.input_container div label{
+    font-size: 14px;
+    padding: 0px 0px 0 5px;
+}
+
+.label_show{
+    color: var(--celeste);
+}
+
+.input_container input{
+    width: 100%;
+    padding: 3px 8px 8px 5px;
+    font-size: 1.3em;
+    border: none;
+    outline: none;
+    background: transparent;
+}
+
+.input_contact_focus::placeholder{
+    color: var(--negro);
+}
+
+textarea{
+    resize: none;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 3px 8px 8px 5px;
+    font-size: 1.3em;
+}
