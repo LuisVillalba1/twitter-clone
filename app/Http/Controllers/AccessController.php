@@ -40,6 +40,7 @@ class AccessController extends Controller
 
         //chequeamos que la contraseña ingresada sea la misma que posee el usuario
         if(Hash::check($request->input("password"),$password)){
+            //autenticamos el usuario
             Auth::login($user);
             return route("mainApp");
         }

@@ -147,7 +147,6 @@ function sendForm(){
             window.location.href = response;
         },
         error: function(error){
-            console.log(error);
             let errors_container = $(".errors_form")
             $(errors_container).empty();
             $.each(error.responseJSON.errors, function (indexInArray, valueOfElement) {

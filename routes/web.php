@@ -13,6 +13,7 @@ use App\Models\Comment;
 use App\Models\Like;
 use App\Models\PersonalData;
 use App\Models\SavePost;
+use App\Models\User;
 use App\Models\UserPost;
 use App\Models\Visualization;
 use Illuminate\Support\Facades\Route;
@@ -114,5 +115,7 @@ Route::middleware(["AuthSession"])->group(function () {
     //mostramos el perfil del usuario
     Route::get("/{username}",[PersonalData::class,"showProfile"])->name("showProfile");
 
+    //Permitimos al usuario poder modificar ciertos valores de su perfil
     Route::get("/settings/profile",[PersonalData::class,"showEditPerfil"])->name("editProfilesShow");
+    Route::put("/settings/profile",[ProfileController::class,"editProfile"])->name("editProfile");
 });

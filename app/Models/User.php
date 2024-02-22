@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Http\Requests\settings\EditProfileRequest;
 use App\Mail\RecuperateAccountMail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Mail;
@@ -148,4 +149,5 @@ class User extends Model implements Authenticatable
             return response()->json(["error"=>$e->getMessage()],500);
         }
     }
+    
 }

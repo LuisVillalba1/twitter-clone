@@ -14,7 +14,10 @@ class GoogleController extends Controller
     public function create($user){
         try{
             //si el usuario existe lo redirigimos a la app main
-            $foundUser = User::where("Email",$user->email)->first();
+            $foundUser = User::
+            where("Email",$user->email)
+            ->with(["PersonalData"])
+            ->first();
 
             if($foundUser){
                 Auth::login($foundUser);
@@ -57,7 +60,10 @@ class GoogleController extends Controller
             $personalData->save();
 
             //buscamos el usuario con el email en concreto
-            $user = User::where("Email",session()->get("emailGoogle"))->first();
+            $user = User::
+            where("Email",session()->get("emailGoogle"))
+            ->with(["PersonalData"])
+            ->first();
 
             //le asignamos el nuevo personal data
             $user->PersonalDataID = $personalData->PersonalDataID;

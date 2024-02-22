@@ -52,7 +52,9 @@
                 <img class="profile_photo">
                 <i class="fa-solid fa-camera"></i>
             </div>
-            <div class="personal_data_edit">
+            <form class="personal_data_edit" method="POST" action={{route("editProfile")}}>
+                @method('PUT')
+                @csrf
                 <div class="input_container">
                     <div class="label_container">
                         <label for="name">Nombre</label>
@@ -61,10 +63,10 @@
                     <div class="max_length_container">
                         <p class="current_length"></p>
                         <p>/</p>
-                        <p class="max_length">20</p>
+                        <p class="max_length">15</p>
                     </div>
                 </div>
-                <p class="Errors_name"></p>
+                <p class="errors_name errorsForm"></p>
                 <div class="input_container">
                     <div class="label_container">
                         <label for="name">Biografia</label>
@@ -73,14 +75,14 @@
                     <div class="max_length_container">
                         <p class="current_length"></p>
                         <p>/</p>
-                        <p class="max_length">280</p>
+                        <p class="max_length">200</p>
                     </div>
                 </div>
-                <p class="Errors_bio"></p>
-            </div>
-            <p class="Errors_coverPhoto"></p>
-            <p class="Errors_profilePhoto"></p>
-            <p class="Errors"></p>
+                <p class="errors_bio errorsForm"></p>
+            </form>
+            <p class="errors_coverPhoto error_cover errorsForm"></p>
+            <p class="errors_profilePhoto error_perfil errorsForm"></p>
+            <p class="errors errorsForm"></p>
         </div>
     </div>
 @endsection

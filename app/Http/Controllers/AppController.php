@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\UserPost\NewPostRequest;
 use App\Models\MultimediaPost;
+use App\Models\PersonalData;
 use App\Models\UserPost;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +17,15 @@ class AppController extends Controller
 {
     //mostramos la main ap
     public function show(){
-        return view("app.main");
+        try{
+            $name = Auth::user()->Name;
+            $nickname =  Auth::user()->PersonalData->Nickname;
+
+            return view("app.main",compact(["name","nickname"]));
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
     }
 
     //mostramos la vista para crear un nuevo post

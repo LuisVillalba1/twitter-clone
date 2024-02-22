@@ -96,7 +96,7 @@
                   </div>
                 <div class="nav_owner_logo_container">
                     <div class="logo_icon_container">
-                        <a href="#" title="Cuenta">
+                        <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} title="Cuenta">
                             <i class="fa-solid fa-l"></i>
                         </a>
                     </div>

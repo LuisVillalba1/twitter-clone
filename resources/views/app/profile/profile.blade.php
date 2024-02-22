@@ -37,9 +37,9 @@
                         <h3>{{strtoupper($username[0])}}</h3>
                     </div>
                     @if ($edit)
-                        <div class="edit_container">
+                        <a class="edit_container" href={{route("editProfilesShow")}}>
                             <p>Editar perfil</p>
-                        </div>
+                        </a>
                     @endif
                 </div>
                 <div class="nickname_and_name_container">

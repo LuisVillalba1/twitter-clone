@@ -166,33 +166,39 @@ let cropper = null;
 
 //creamos una nueva url para la imagen
 function createFileReader(file,typePhoto){
-    let fileReader = new FileReader();
-
-    fileReader.addEventListener("load",e=>{
-        const fileUrl = fileReader.result;
-
-        //mostramos la imagen de perfil
-        if(typePhoto == "perfil"){
-            perfilPhoto = file;
-            return showProfilePhoto(fileUrl)
-        }
-
-        ocultChildrens();
-        //mostramos la imagen en el contenedor de edit
-        showEditImg(file.name,fileUrl,typePhoto);
-        $(".edit_cropper_container").css("display","block")
-
-        let img = document.querySelector(".cropper_photo")
-
-
-        if(typePhoto == "cover"){
-        //ocultamos el icono de la camara
-        $("#icon_camera_edit").css("display", "none");
-
-        showCrapperEdit(img,800,250)
-        }
-    })
-    fileReader.readAsDataURL(file);
+    try{
+        checkTypeFiles(file.type,typePhoto);
+        let fileReader = new FileReader();
+    
+        fileReader.addEventListener("load",e=>{
+            const fileUrl = fileReader.result;
+    
+            //mostramos la imagen de perfil
+            if(typePhoto == "perfil"){
+                perfilPhoto = file;
+                return showProfilePhoto(fileUrl)
+            }
+    
+            ocultChildrens();
+            //mostramos la imagen en el contenedor de edit
+            showEditImg(file.name,fileUrl,typePhoto);
+            $(".edit_cropper_container").css("display","block")
+    
+            let img = document.querySelector(".cropper_photo")
+    
+    
+            if(typePhoto == "cover"){
+            //ocultamos el icono de la camara
+            $("#icon_camera_edit").css("display", "none");
+    
+            showCrapperEdit(img,800,250)
+            }
+        })
+        fileReader.readAsDataURL(file);
+    }
+    catch(e){
+        $(`.error_${typePhoto}`).text(e.message)
+    }
 }
 //mostramos la foto editable
 function showEditImg(name,url,typeImg){
@@ -297,6 +303,51 @@ function getCroppedCanvas(){
     }, 'image/jpeg');
 }
 
+
+$(".save_edit").on("click",function(){
+    //obtenemos los datos de los formulario y ademas le sumamos las fotos correspondientes
+    let formData = new FormData($(".personal_data_edit")[0]);
+    if(coverPhoto != null){
+        formData.append("coverPhoto",coverPhoto)
+    }
+    if(perfilPhoto != null){
+        formData.append("profilePhoto",perfilPhoto);
+    }
+
+    sendForm(formData);
+})
+
+//enviamos el formulario
+function sendForm(formData){
+    $.ajax({
+        type: "POST",
+        url: $(".personalda_data_edit").attr("action"),
+        data : formData,
+        //el content type y procces data nos sirve para enviar imagenes
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            console.log(response)
+        },
+        error:function(error){
+            let errores = error.responseJSON.errors;
+            if(error.status == 422){
+                $.each(errores, function (indexInArray, valueOfElement) {
+                     $(`.errors_${indexInArray}`).text(valueOfElement)
+                });
+            }
+        }
+    });
+}
+
+//verificamos que la imagen subida tenga un formato correcto
+function checkTypeFiles(type,photo){
+    const validationTypes = ["image/jpeg","image/jpg","image/png"];
+
+    if(!validationTypes.includes(type)){ 
+        throw new Error("Archivo incorrecto, solo se permiten archivos jpeg,jpg y png");
+    }
+}
 
 
 

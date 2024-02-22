@@ -59,7 +59,11 @@ body{
     border: 1px solid var(--gris);
     border-radius: 20px;
     margin: 8px 20px 0px 0px;
+    cursor: pointer;
+    text-decoration: none;
 }
+
+
 
 .profile_picture_container h3{
     color: var(--negro);

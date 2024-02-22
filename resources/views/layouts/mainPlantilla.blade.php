@@ -15,8 +15,8 @@
                 <img src="https://img.freepik.com/foto-gratis/hombre-feliz-pie-playa_107420-9868.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705795200&semt=sph" alt="">
             </div>
             <div class="account_name_nickname">
-                <h3>Luis Villalba</h3>
-                <h5>@firstmotochorro</h5>
+                <h3>{{$name}}</h3>
+                <h5>{{"@".$nickname}}</h5>
             </div>
             <div class="follows_container">
                 <div class="follows">
@@ -31,7 +31,7 @@
         </div>
         <ul class="nav_links_container">
             <li class="nav_link_li">
-                <a href="#">
+                <a href={{route("showProfile",["username"=>$nickname])}}>
                     <div class="nav_link__icon_container">
                     <i class="fa-regular fa-user"></i>
     
@@ -209,7 +209,7 @@
                   </div>
                 <div class="nav_owner_logo_container">
                     <div class="logo_icon_container">
-                        <a href="#" title="Cuenta">
+                        <a href={{route("showProfile",["username"=>$nickname])}} title="Cuenta">
                             <i class="fa-solid fa-l"></i>
                         </a>
                     </div>
