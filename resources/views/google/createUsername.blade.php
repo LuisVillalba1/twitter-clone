@@ -1,4 +1,4 @@
-@extends('../layouts/plantilla')
+@extends('../layouts/editProfilePlantilla')
 
 @section('head')
 <meta charset="UTF-8">

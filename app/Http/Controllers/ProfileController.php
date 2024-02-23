@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\settings\EditProfileRequest;
+use App\Models\PersonalData;
+use App\Models\Profile;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,6 +65,30 @@ class ProfileController extends Controller
 
     //permitimos al usuario editar su perfil
     public function editProfile(EditProfileRequest $request){
-        return $request;
+        try{
+            //obtenemos el perfil del usuario
+            $profile = Profile::where("UserID",Auth::user()->UserID)->first();
+
+            if(!$profile){
+                throw new Exception("Perfil no encontrado");
+            }
+
+            //en caso de existir modificamos el nombre de usuario
+            if($request->name){
+                $userData = User::where("UserID",Auth::user()->UserID)->first();
+
+                $userData->Name = $request->name;
+
+                $userData->save();
+            }
+
+            //modificamos el perfil
+            (new Profile())->modifyProfile($profile,$request);
+
+            return response()->json(["response"=>"Se ha modificado los datos correctamente"]);
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>$e->getMessage()]);
+        }
     }
 }

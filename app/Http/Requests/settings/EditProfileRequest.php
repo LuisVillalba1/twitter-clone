@@ -25,7 +25,7 @@ class EditProfileRequest extends FormRequest
             "coverPhoto"=>["image","mimes:jpeg"],
             "profilePhoto"=>["image","mimes:jpeg,jpg,png"],
             "name"=>["string","min:3","max:15"],
-            "bio"=>["nullable","string","min:4","max:200"]
+            "bio"=>["nullable","string","max:200"]
         ];
     }
 }

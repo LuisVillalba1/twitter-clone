@@ -41,6 +41,10 @@ class User extends Model implements Authenticatable
         return $this->hasMany(UserPost::class,"UserID");
     }
 
+    public function ProfileData(){
+        return $this->hasOne(Profile::class,"ProfileID");
+    }
+
     //guardamos en los datos de session su nombre email y fecha de nacimiento
     public function safePersonalDate($request){
         Session::put("name",$request->input("name"));
@@ -76,6 +80,10 @@ class User extends Model implements Authenticatable
         $user->VerificationID = $verificationCodeID;
 
         $user->save();
+
+        //a partir del usuario creamos un nuevo profile
+
+        (new Profile())->createProfile($user->UserID);
 
         return $verificationCodeID;
     }

@@ -330,6 +330,7 @@ function sendForm(formData){
             console.log(response)
         },
         error:function(error){
+            console.log(error);
             let errores = error.responseJSON.errors;
             if(error.status == 422){
                 $.each(errores, function (indexInArray, valueOfElement) {

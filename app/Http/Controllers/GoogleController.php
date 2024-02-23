@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Register\Google\NicknameRequest;
 use App\Models\PersonalData;
+use App\Models\Profile;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -67,11 +68,17 @@ class GoogleController extends Controller
 
             //le asignamos el nuevo personal data
             $user->PersonalDataID = $personalData->PersonalDataID;
+            
 
             $user->save();
 
+            //creamos un nuevo perfil a partir del usuario
+
+            (new Profile())->createProfile($user->UserID);           
+
             //autenticamos el usuario y limpiamos todos los datos de session
             Auth::login($user);
+
 
             session()->flush();
 
