@@ -337,6 +337,9 @@ function sendForm(formData){
                      $(`.errors_${indexInArray}`).text(valueOfElement)
                 });
             }
+            if(error.status == 500){
+                $(".errors").text(errores);
+            }
         }
     });
 }

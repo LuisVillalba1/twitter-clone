@@ -7,10 +7,12 @@ use App\Http\Requests\settings\EditProfileRequest;
 use App\Models\PersonalData;
 use App\Models\Profile;
 use App\Models\User;
+use App\Models\UserPost;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 
@@ -66,6 +68,7 @@ class ProfileController extends Controller
     //permitimos al usuario editar su perfil
     public function editProfile(EditProfileRequest $request){
         try{
+            throw new Exception("asdklñgjsa");
             //obtenemos el perfil del usuario
             $profile = Profile::where("UserID",Auth::user()->UserID)->first();
 
@@ -88,7 +91,75 @@ class ProfileController extends Controller
             return response()->json(["response"=>"Se ha modificado los datos correctamente"]);
         }
         catch(\Exception $e){
-            return response()->json(["errors"=>$e->getMessage()]);
+            return response()->json(["errors"=>$e->getMessage()],500);
+        }
+    }
+
+    //mostramos el perfil del usuario
+    public function showProfile($username){
+        try{
+            return (new Profile())->showProfile($username,"profile");
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //mostramos para poder editar el perfil del usuario
+    public function showEditProfile(){
+        try{
+            $user = Auth::user();
+
+            //obtenemos el nickname del usuario
+            $personalData = PersonalData::
+            where("PersonalDataID",$user->UserID)
+            ->select("PersonalDataID","Nickname")
+            ->first();
+            
+            //los datos del perfil en caso de que existan
+            $profileData = Profile::where("ProfileID",$user->UserID)
+            ->select("Biography","CoverPhotoURL","ProfilePhotoURL","CoverPhotoName","ProfilePhotoName")
+            ->first();
+    
+            $username = $personalData->Nickname;
+
+            //obtenemos el nombre
+            $name = $user->Name;
+    
+            return view("app.settings.settingProfile",compact(["username","name","profileData"]));
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //obtenemos los post del usuario autenticado
+    public function getUserPosts($username){
+        try{
+            return (new User())->getUserPosts($username);
+        }
+        catch(\Exception $e){
+            return response()->json(["error"=>$e->getMessage()],500);
+        }
+    }
+
+    //mostramos la vista de respuestas
+    public function showAnswersUser($username){
+        try{
+            return (New Profile())->showProfile($username,"answers");
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //obtenemos todo aquel posteo que haya sido una respuesta a otro
+    public function getAnswersUser($username){
+        try{
+            return (new Profile())->getAnswers($username);
+        }
+        catch(\Exception $e){
+
         }
     }
 }

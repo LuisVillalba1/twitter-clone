@@ -12,6 +12,7 @@ use App\Http\Middleware\CheckFirstStepRegistration;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\PersonalData;
+use App\Models\Profile;
 use App\Models\SavePost;
 use App\Models\User;
 use App\Models\UserPost;
@@ -113,9 +114,17 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::post("/bookmarks/{username}/{encryptID}",[SavePost::class,"savePost"])->name("savePost");
 
     //mostramos el perfil del usuario
-    Route::get("/{username}",[PersonalData::class,"showProfile"])->name("showProfile");
+    Route::get("/{username}",[ProfileController::class,"showProfile"])->name("showProfile");
+
+    //obtenemos todos los posteos del usuario
+    Route::get("/{username}/posts",[ProfileController::class,"getUserPosts"])->name("getUserPosts");
+
+    //mostramos las respuestas de los usuarios
+    Route::get("/{username}/answers",[ProfileController::class,"showAnswersUser"])->name("answersUser");
+    Route::get("/{username}/answers/details",[ProfileController::class,"getAnswersUser"])->name("getAnswersUser");
 
     //Permitimos al usuario poder modificar ciertos valores de su perfil
-    Route::get("/settings/profile",[PersonalData::class,"showEditPerfil"])->name("editProfilesShow");
+    Route::get("/settings/profile",[ProfileController::class,"showEditProfile"])->name("editProfilesShow");
     Route::put("/settings/profile",[ProfileController::class,"editProfile"])->name("editProfile");
+
 });

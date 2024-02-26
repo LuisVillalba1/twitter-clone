@@ -98,7 +98,6 @@ function showPosts(info){
 
         //en caso de que ya no existan mas post dentemos la ejecucion
         if(posts.length == 0){
-            console.log("end");
             return
         }
         //iteramoc sobre cada post

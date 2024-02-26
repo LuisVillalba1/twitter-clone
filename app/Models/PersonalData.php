@@ -91,16 +91,4 @@ class PersonalData extends Model
             return redirect()->route("errorPage");
         }
     }
-
-    //mostramos para poder editar el perfil del usuario
-    public function showEditPerfil(){
-        $user = Auth::user();
-
-        $personalData = PersonalData::where("PersonalDataID",$user->UserID)->first();
-
-        $username = $personalData->Nickname;
-        $name = $user->Name;
-
-        return view("app.settings.settingProfile",compact(["username","name"]));
-    }
 }

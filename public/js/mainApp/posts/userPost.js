@@ -15,7 +15,6 @@ async function getPostData(){
     })
     $(".post_container").css("display", "block");
     //mostramos la informacion
-    console.log(data)
     showData(data);
     }
     catch(e){
@@ -84,7 +83,6 @@ async function showData(data){
 
 }
 
-//mostramos el posteo padre
 function showParentData(parentData){
     let username = parentData.user.personal_data.Nickname;
     let parentUser = $(".parent_user");
@@ -150,7 +148,6 @@ function showMultimediaParent(data){
     }
 }
 
-
 //mostramos el contido multimedia en caso de que exista
 function showMultimedia(data){
     for(let i in data){
@@ -184,7 +181,6 @@ function showCommenst(commentsData){
 
         //en caso de que ya no existan mas comentarios detenemos la ejecucion
         if(comments.length == 0){
-            console.log("end");
             return
         }
         //por cada comentarios mostramos la informacion correspondiente

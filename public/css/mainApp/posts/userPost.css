@@ -17,107 +17,8 @@ body{
     background: var(--negro);
 }
 
-
-.post_container{
-    padding: 10px 0;
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-}
-
-
-.user_data_container,
-.parent_data_container{
-    display: flex;
-}
-
 .response_container{
     display: none;
-}
-
-.response_container p:nth-child(1){
-    color: var(--grisClaro);
-}
-
-.response_post{
-    color: var(--celeste);
-    padding-left: 3px;
-}
-
-.parent_user{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.parent_lane{
-    height: 100%;
-    width: 1px;
-    background: var(--gris);
-}
-
-.owner_logo_container,
-.parent_user{
-    padding: 0px 5px;
-}
-
-.parent_post_content{
-    text-decoration: none;
-    width: 100%;
-    padding-bottom: 20px;
-}
-
-.parent_multimedia_container{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.owner_logo,
-.parent_img_container{
-    border-radius: 50%;
-    padding: 8px;
-    background: var(--celeste);
-}
-
-.user_nickname{
-    font-size: 1.1em;
-}
-
-.user_message_container{
-    padding: 7px 5px;
-    padding-left: 0;
-}
-
-.user_message_container p{
-    word-wrap: break-word;
-    font-size: 1.2em;
-    max-width: 95%;
-}
-
-.user_multimedia_container{
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 10px;
-}
-
-.multimedia_img_container{
-    width: 50%;
-    height: 150px;
-}
-
-.multimedia_img_container img{
-    width: 100%;
-    height: 100%;
-}
-
-.interaction_post_container{
-    width: 100%;
-    padding: 0 10px;
-    border-top: 1px solid var(--grisClaro);
 }
 
 .post_information{
@@ -157,42 +58,6 @@ body{
     color: var(--gris);
 }
 
-
-.interaction{
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 0px 5px;
-    align-items: center;
-}
-
-.interaction > *{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.interaction a{
-    text-decoration: none;
-}
-
-.count_interaction{
-    padding-left: 5px;
-}
-
-.likes_count{
-    padding-left: 0;
-}
-
-.heart_bg{
-    background: rgba(255, 192, 200, 0);
-    border-radius: 80%;
-    height: 30px;
-    width: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 
 .heart_icon{
     background: url("../../../imgs/heart.png");

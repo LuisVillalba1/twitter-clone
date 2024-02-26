@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\URL;
 
@@ -41,7 +42,7 @@ class User extends Model implements Authenticatable
         return $this->hasMany(UserPost::class,"UserID");
     }
 
-    public function ProfileData(){
+    public function Profile(){
         return $this->hasOne(Profile::class,"ProfileID");
     }
 
@@ -158,4 +159,58 @@ class User extends Model implements Authenticatable
         }
     }
     
+    //obtenemos todos los posteos del usuario autenticado
+    public function getUserPosts($userName){
+            $user = Auth::user();
+            $userID = $user->UserID;
+
+            //obtenemos el id del usuario
+            $personalData = PersonalData::where("Nickname",$userName)->first();
+        
+            //obtenemos su contenido multimedia
+            $posts =  UserPost::with([
+                "MultimediaPost",
+                //verificamos si el usuario logeado ya ha visualizado o likeado el post
+                "Likes"=>function($queryLike) use ($userID){
+                    $queryLike->where("NicknameID",$userID);
+                },
+                "Visualizations"=>function($queryVisualization) use ($userID){
+                    $queryVisualization->where("NicknameID",$userID);
+                },
+                //obtenemos datos del usuario correspondiente al post
+                "User"=>function($queryUser){
+                    $queryUser->select("UserID","PersonalDataID")
+                    ->with([
+                        "PersonalData"=>function($queryPersonal){
+                            $queryPersonal->select("PersonalDataID","Nickname");
+                        }
+                    ]);
+                },
+                "Comments"=>function($queryComments) use ($userID){
+                    $queryComments->where("UserID",$userID);
+                }
+            ])
+            //mostramos la cantidad de interacciones que contiene el post
+            ->withCount([
+                "Likes",
+                "Visualizations",
+                "Comments"
+            ])
+            ->where("ParentID",null)
+            ->where("UserID",$personalData->PersonalDataID)
+            ->orderBy("PostID","desc")
+            ->get();
+
+            foreach($posts as $post){
+                //mostramos los links para poder interactuar con cada post
+                $userName = $post->User->PersonalData->Nickname;
+                $idEncrypt = Crypt::encryptString($post->PostID);
+                $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
+                $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
+                $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+            }
+
+            return $posts;
+    }
+
 }

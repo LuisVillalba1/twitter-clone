@@ -45,11 +45,19 @@
             <input type="file" name="cover_photo" id="input_cover_photo">
             <input type="file" name="profile_photo" id="input_profile_photo">
             <div class="img_cover_photo_edit">
-                <img class="img_cover_photo">
+                @if ($profileData->CoverPhotoURL)
+                    <img class="img_cover_photo" src={{$profileData->CoverPhotoURL}} alt="coverPhoto" title={{$profileData->CoverPhotoName}}>
+                @else
+                    <img class="img_cover_photo">
+                @endif
                 <i class="fa-solid fa-camera" id="icon_camera_edit"></i>
             </div>
             <div class="photo_profile_edit">
-                <img class="profile_photo">
+                @if ($profileData->ProfilePhotoURL)
+                    <img class="profile_photo" src={{$profileData->ProfilePhotoURL}} alt="profilePhoto" title={{$profileData->ProfilePhotoName}}>
+                @else
+                    <img class="profile_photo">
+                @endif
                 <i class="fa-solid fa-camera"></i>
             </div>
             <form class="personal_data_edit" method="POST" action={{route("editProfile")}}>
@@ -71,7 +79,11 @@
                     <div class="label_container">
                         <label for="name">Biografia</label>
                     </div>
-                    <textarea name="bio" id="biografia" placeholder="Biografia" class="personal_data_input"></textarea>
+                    @if ($profileData->Biography)
+                        <textarea name="bio" id="biografia" placeholder="Biografia" class="personal_data_input">{{$profileData->Biography}} </textarea>
+                    @else
+                        <textarea name="bio" id="biografia" placeholder="Biografia" class="personal_data_input"></textarea>
+                    @endif
                     <div class="max_length_container">
                         <p class="current_length"></p>
                         <p>/</p>

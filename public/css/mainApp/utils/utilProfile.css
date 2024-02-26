@@ -1,0 +1,162 @@
+:root{
+    --negro : rgb(0 0 0);
+    --blanco : rgb(255 255 255);
+    --gris : rgb(155 155 155);
+    --grisClaro : rgba(115, 114, 114, 0.9);
+    --celeste : rgb(72, 152, 232);
+}
+
+@keyframes iconSelected{
+    to{
+        color: var(--celeste);
+    }
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--blanco);
+}
+
+.main_container{
+    min-height: 100vh;
+}
+
+body{
+    background: var(--negro);
+    position: relative;
+    min-height: 100vh;
+}
+
+.profile_cover_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(45, 45, 45, 0.8);
+    min-height: 150px;
+    max-height: 150px;
+}
+
+.profile_cover_container img{
+    width: 100%;
+    max-height: 150px;
+}
+
+.personal_data_container{
+    position: relative;
+    padding-left: 10px;
+}
+
+.profile_picture_container{
+    position: absolute;
+    left: 3px;
+    top: -35px;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--blanco);
+    border: 2px solid var(--negro);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.profile_picture_container img{
+    width: 100%;
+    height: 100%;
+}
+
+.profile_picture_container h3{
+    color: var(--negro);
+}
+
+.profile_cover_container i{
+    color: var(--grisClaro);
+}
+
+.edit_container{
+    padding: 5px 10px;
+    border: 1px solid var(--gris);
+    border-radius: 20px;
+    margin: 8px 20px 0px 0px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.nickname_and_name_container{
+    margin-top: 20px;
+}
+
+.nickname_and_name_container h3{
+    font-size: 1.2em;
+}
+
+.nickname_and_name_container h5{
+    color: var(--grisClaro);
+    font-size: 1.01em;
+}
+
+.init_in_app_container{
+    padding: 5px 0;
+    display: flex;
+}
+
+.init_in_app_container p{
+    padding-left: 5px;
+}
+
+.init_in_app_container p,
+.init_in_app_container i{
+    color: var(--grisClaro);
+}
+
+.follows_and_followers_container{
+    padding-top: 10px;
+    display: flex;
+}
+
+.follows_and_followers_container div{
+    display: flex;
+}
+
+.count_follows,
+.count_followers{
+    color: var(--blanco);
+}
+
+.follows_container :nth-child(2),
+.followers_container :nth-child(2)
+{
+    color: var(--grisClaro);
+    margin-left: 5px;
+}
+
+.locations{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--grisClaro);
+}
+
+
+.locations a{
+    text-decoration: none;
+}
+.posts_container{
+    padding-bottom: 35px;
+}
+
+@media screen and (min-width:485px){
+    .main_container{
+        display: flex;
+        justify-content: center;
+    }
+    .profile_container{
+        max-width: 700px; 
+        border-right: 1px solid var(--grisClaro);
+    }
+}

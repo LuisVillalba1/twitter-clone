@@ -6,24 +6,14 @@
     --celeste : rgb(72, 152, 232);
 }
 
-@keyframes iconSelected{
-    to{
-        color: var(--celeste);
-    }
-}
-
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    color: var(--blanco);
-}
-
-/**/
-.posts_location{
+.respuestas_location{
     border-bottom: 2.4px solid var(--celeste);
 }
-/**/
+
+
+.interaction_post_container{
+    border-bottom: 1px solid var(--grisClaro);
+}
 
 .heart_icon{
     background: url("../../../imgs/heart.png");

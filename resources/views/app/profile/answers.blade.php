@@ -12,10 +12,10 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilProfile.css">
-<link rel="stylesheet" href="../../css/mainApp/setting/settingProfile.css">
-<link rel="stylesheet" href="../../css/mainApp/profile/profile.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilPostsAnswers.css">
+<link rel="stylesheet" href="../../css/mainApp/profile/answers.css">
 
-<title>{{$profile->Nickname}} profile</title>
+<title>{{$profile->Nickname}} Respuestas</title>
 @endsection
 
 @section('content')
@@ -77,8 +77,8 @@
             </div>
         </div>
         <div class="locations">
-            <span class="posts_location">Posts</span>
-            <span class="respuestas_location"><a href="">Respuestas</a></span>
+            <span class="posts_location"><a href="#">Posts</a></span>
+            <span class="respuestas_location">Comentarios</span>
             <span class="me_gusta_location"><a href="#">Me gustas</a></span>
         </div>
         <div class="loader_container">
@@ -98,8 +98,6 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="module" src="../../js/mainApp/profile/profile.js"></script>
+    <script type="module" src="../../js/mainApp/profile/answers.js"></script>
 @endsection

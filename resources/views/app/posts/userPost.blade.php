@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilPostsAnswers.css">
 
 <title></title>
 @endsection

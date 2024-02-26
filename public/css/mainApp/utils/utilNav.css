@@ -53,7 +53,7 @@
         font-size: 1.6em;
     }
     
-    .nav_owner_logo_container{
+    .nav_owner_icon_container{
         width: 100%;
         display: flex;
         justify-content: center;
@@ -61,15 +61,26 @@
         position: absolute;
         bottom: 2px;
     }
-    
-    .logo_icon_container{
-        padding: 12px;
-        background: rgb(24, 77, 4);
-        border-radius: 40px;
+
+    .nav_owner_logo_container{
+        width: 100%;
+        display: none;
+        justify-content: center;
+        align-items: center;
+        position: absolute;
+        padding: 10px 5px;
+        right: 25px;
+        bottom: 5px;
     }
-    
-    .logo_icon_container i{
-        color: var(--blanco);
+
+    .logo_icon_container{
+        padding: 7px 20px;
+        background: var(--negro);
+        border-radius: 30px;
+        border: 1px solid var(--blanco);
+        font-size: 1.2em;
+        text-decoration: none;
+
     }
 }
 
@@ -99,5 +110,17 @@
         display: block;
         padding: 0px 20px;
         font-size: 1.3em;
+    }
+    .nav_owner_icon_container{
+        display: none;
+    }
+
+    .nav_owner_logo_container{
+        display: flex;
+    }
+
+    .nav_owner_logo_container a{
+        width: 100%;
+        text-align: center;
     }
 }

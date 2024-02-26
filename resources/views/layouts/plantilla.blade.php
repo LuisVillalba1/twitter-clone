@@ -93,13 +93,16 @@
                         <p class="nav_link_description">Premium</p>
                       </div>
                     </a>
-                  </div>
+                </div>
+                <div class="nav_owner_icon_container">
+                    <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} title="Cuenta">
+                        <i class="fa-solid fa-user"></i>
+                    </a>
+                </div>
                 <div class="nav_owner_logo_container">
-                    <div class="logo_icon_container">
-                        <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} title="Cuenta">
-                            <i class="fa-solid fa-l"></i>
-                        </a>
-                    </div>
+                    <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} class="logo_icon_container" title="Cuenta">
+                        Perfil
+                    </a>
                 </div>
             </div>
         </div>
