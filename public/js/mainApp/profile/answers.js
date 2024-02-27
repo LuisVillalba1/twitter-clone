@@ -42,6 +42,9 @@ function showAnswers(info){
             let postContainer = $("<div></div>");
             $(postContainer).addClass("current_post");
 
+            //obtenemos el link del usuario
+            let parentUserLink = currentPost.parent.linkUser;
+
             //mostramos la informacion del posteo padre
             $(postContainer).append(showParentData(currentPost.parent));
 
@@ -68,7 +71,7 @@ function showAnswers(info){
             
             //mostramos la imagen del usuario y el contenido del posteo
             $(userDataContainer).append(showImgUser(nickname));
-            $(userDataContainer).append(showContent(nickname,userResponse,message,multimedia));
+            $(userDataContainer).append(showContent(nickname,userResponse,message,multimedia,parentUserLink));
             
             let interactionContainer = utilsPosts.showInteraction(linkLike,linkComment,linkVisualization)
 
@@ -100,6 +103,7 @@ function showAnswers(info){
 //mostramos la informacion de los padres
 function showParentData(parentData){
     let username = parentData.user.personal_data.Nickname;
+    let linkUser = parentData.linkUser;
     let parentDataContainer = $("<div></div>");
     $(parentDataContainer).addClass("parent_data_container");
     
@@ -108,7 +112,7 @@ function showParentData(parentData){
     let linkParent = parentData.linkPost;
     let message = parentData.Message;
     let multimedia = parentData.multimedia_post;
-    $(parentDataContainer).append(showContentParent(linkParent,message,multimedia,username));
+    $(parentDataContainer).append(showContentParent(linkParent,message,multimedia,username,linkUser));
 
     return parentDataContainer;
 }
@@ -140,7 +144,7 @@ function showImgParent(username){
 }
 
 //mostramos el contenido del posto padre
-function showContentParent(linkParent,message,multimedia,nickname){
+function showContentParent(linkParent,message,multimedia,nickname,linkUser){
     let parentPostContent = $("<a></a>");
     $(parentPostContent).addClass("parent_post_content");
 
@@ -149,9 +153,10 @@ function showContentParent(linkParent,message,multimedia,nickname){
     //contenedor del nombre del usuario
     let parentNicknameContainer = $("<div></div>");
     $(parentNicknameContainer).addClass("parent_nickname_container");
-    let parentNickname = $("<p></p>")
+    let parentNickname = $("<a></a>")
     $(parentNickname).addClass("parent_nickname");
     $(parentNickname).text(nickname);
+    $(parentNickname).attr("href", linkUser);
 
     $(parentNicknameContainer).append(parentNickname);
 
@@ -225,7 +230,7 @@ function showImgUser(username){
 }
 
 //mostramos el contenido del posteo
-function showContent(username,userResponse,message,multimedia){
+function showContent(username,userResponse,message,multimedia,responseUserLink){
     let contentContainer = $("<div></div>");
     $(contentContainer).addClass("content");
 
@@ -243,10 +248,11 @@ function showContent(username,userResponse,message,multimedia){
     $(responseContainer).addClass("response_container");
     let responseText = $("<p></p>");
     $(responseText).text("En respuesta a ");
-    let responseUser = $("<p></p>");
+    let responseUser = $("<a></a>");
     $(responseUser).addClass("response_post");
     //mostramos a quien se ha respondido
     $(responseUser).text("@" +userResponse);
+    $(responseUser).attr("href", responseUserLink);
 
     $(responseContainer).append(responseText);
     $(responseContainer).append(responseUser);

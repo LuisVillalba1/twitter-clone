@@ -178,6 +178,7 @@ class Profile extends Model
             $postIDParent = $post->Parent->PostID;
 
             $post->Parent["linkPost"] = route("showPost",["username"=>$usernameParent,"encryptID"=>Crypt::encryptString($postIDParent)]);
+            $post->Parent["linkUser"] = route("showProfile",["username"=>$usernameParent]);
         }
 
         return $posts;

@@ -23,8 +23,13 @@
 }
 
 .response_post{
+    text-decoration: none;
     color: var(--celeste);
     padding-left: 3px;
+}
+
+.response_post:hover{
+    text-decoration: underline;
 }
 
 .parent_user{
@@ -32,6 +37,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.parent_nickname{
+    text-decoration: none;
+}
+
+.parent_nickname:hover{
+    text-decoration: underline;
 }
 
 .parent_lane{

@@ -31,6 +31,13 @@ use Laravel\Socialite\Facades\Socialite;
 |
 */
 
+
+
+Route::get("/error",function(){
+    return view("error.errorPage");
+})->name("errorPage");
+
+
 //register with google
 Route::get('/google-siging', function () {
     return Socialite::driver('google')->redirect();
@@ -79,13 +86,9 @@ Route::controller(RecuperateAccountController::class)->group(function(){
     Route::patch("/recuperateAccount/{id}","change")->name("changePasswordPatch");
 });
 
-Route::get("/error",function(){
-    return view("error.errorPage");
-})->name("errorPage");
-
 //main app
 Route::middleware(["AuthSession"])->group(function () {
-    Route::get("/home",[AppController::class,"show"])->name("mainApp");
+    Route::get("/home",[AppController::class,"show"])->name("mainApp")->where('home', '(\/$|^$)');
     //mostramos y permitimos crear un nuevo post
     Route::get("/home/createPost",[AppController::class,"showCreatePost"])->name("showCreatePost");
     Route::post("/home/createPost",[AppController::class,"createPost"])->name("createPost");
@@ -128,3 +131,7 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::put("/settings/profile",[ProfileController::class,"editProfile"])->name("editProfile");
 
 });
+
+Route::any('{any}', function () {
+    return redirect()->route("errorPage");
+})->where('any', '.*');
