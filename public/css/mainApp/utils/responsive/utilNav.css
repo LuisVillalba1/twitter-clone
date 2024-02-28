@@ -1,0 +1,123 @@
+.nav_responsive{
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    height: 100vh;
+    width: 70%;
+    max-width: 550px;
+    padding: 0px 10px 0px 10px;
+    background: var(--negro);
+    transform: translateX(-110%);
+}
+
+.nav_responsive_show{
+    transform: translateX(0);
+}
+
+.border_rigth_blur{
+    position: absolute;
+    width: 1px;
+    height: 100%;
+    right: 0;
+    top: 0;
+    filter: blur(1.2px);
+    background: var(--blanco);
+}
+
+.account_information{
+    padding: 10px 0px 20px 0px;
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+.account__logo_container{
+    padding-bottom: 5px;
+}
+
+.account_logo{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgb(1, 144, 1);
+}
+
+
+
+.account__logo_container img{
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+}
+
+.account_name_nickname h5{
+    padding-bottom: 5px;
+    color: var(--gris);
+    font-size: 1.03em;
+}
+
+.follows_container div{
+    display: flex;
+    width: 100%;
+}
+
+.follows_container p{
+    font-size: 1.1em;
+    padding-right: 4px;
+}
+
+.quantity{
+    color: var(--gris);
+}
+
+.nav_links_container{
+    list-style: none;
+}
+
+.nav_link_li{
+    padding: 10px 0;
+}
+
+.nav_link_li a{
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.nav_link__icon_container{
+    width: 50px;
+}
+
+.nav_link_li a i{
+    font-size: 1.3em;
+}
+
+.nav_link__text_container{
+    overflow: hidden;
+    margin-left: 10px;
+    width: 100%;
+}
+
+.nav_link__text_container h3{
+    font-size: 1.5em;
+    white-space: nowrap;
+    overflow: hidden;  
+}
+
+@media screen and (min-width:485px){
+    .nav_responsive_show{
+        display: none;
+    }
+}
+
+@media screen and (min-width:700px){
+    .main_container{
+        display: flex;
+        width: 100%;
+        justify-content: center;
+    }
+}

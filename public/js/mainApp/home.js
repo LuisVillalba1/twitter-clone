@@ -1,67 +1,9 @@
 import * as utilsPosts from "./utils/utilsPosts.js";
 import * as utilsIntersection from "./utils/utilsIntersection.js";
 
-
-const nav = $(".nav_responsive");
-const ownerLogoContainer = $(".owner_logo_container");
-
 const header = $("header");
 const mainContainer = $(".main_container");
 const footer = $("footer");
-
-
-const host = window.location.protocol + "//" + window.location.host
-
-function filterElements(){
-    let hijosBody = $("body").children().slice(0,-2);
-
-    $.each(hijosBody, function (indexInArray, valueOfElement) { 
-         if(!$(valueOfElement).hasClass("nav_responsive")){
-            $(valueOfElement).css("filter","blur(1px)");
-         }
-    });
-}
-
-function desfilterElements(){
-    let hijosBody = $("body").children().slice(0,-2);
-
-    $.each(hijosBody, function (indexInArray, valueOfElement) { 
-        console.log(valueOfElement);
-        if(!$(valueOfElement).hasClass("nav_responsive")){
-           $(valueOfElement).removeAttr("style");
-        }
-   });
-}
-
-
-//show nav y filtramos los elementos
-$(ownerLogoContainer).on("click", function (e) {
-    if(!document.startViewTransition){
-        $(nav).addClass("nav_responsive_show");
-        filterElements();
-        return;
-    }
-    document.startViewTransition(()=>{
-        $(nav).addClass("nav_responsive_show");
-        filterElements();
-    })
-});
-
-//ocult nav
-$(document.body).on("click", function (e) {
-    if($(nav).hasClass("nav_responsive_show") && e.target != nav[0] && !nav.has(e.target).length){
-        if(!document.startViewTransition){
-            $(nav).removeClass("nav_responsive_show");
-            desfilterElements();
-            return;
-        }
-        document.startViewTransition(()=>{
-            $(nav).removeClass("nav_responsive_show");
-            desfilterElements();
-        });
-
-    }
-});
 
 //obtenemos todas las publicaciones
 function getPublicPosts(){
@@ -71,6 +13,7 @@ function getPublicPosts(){
         url: $(".get_publics").attr("id"),
         success: function (response) {
             if(response.length > 0){
+                console.log(response);
                 showPosts(response)
             }
         },
@@ -124,11 +67,17 @@ function showPosts(info){
             let userDataContainer = $("<div></div>");
             $(userDataContainer).addClass("user_data_container");
         
+            //Obtenemos los links de las imagenes del usuario y el link del perfil
+            let userImg = currentPost.user.profile.ProfilePhotoURL;
+            let userImgName = currentPost.user.profile.ProfilePhotoName;
+
+            let linkProfile = currentPost.linkProfile;
+            
             //mostramos el logo del usuario
-            $(userDataContainer).append(utilsPosts.logoContainerShow(nickname));
+            $(userDataContainer).append(utilsPosts.logoContainerShow(nickname,userImg,userImgName));
             $(postContainer).append(userDataContainer);
             //mostramos el mensaje del usuario en caso de que exista
-            let postContent = utilsPosts.showNameAndMessage(nickname,message);
+            let postContent = utilsPosts.showNameAndMessage(nickname,message,linkProfile);
         
             $(userDataContainer).append(postContent);
         

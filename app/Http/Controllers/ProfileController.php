@@ -27,7 +27,7 @@ class ProfileController extends Controller
             'user' => $request->user(),
         ]);
     }
-
+    
     /**
      * Update the user's profile information.
      */
@@ -68,7 +68,6 @@ class ProfileController extends Controller
     //permitimos al usuario editar su perfil
     public function editProfile(EditProfileRequest $request){
         try{
-            throw new Exception("asdklñgjsa");
             //obtenemos el perfil del usuario
             $profile = Profile::where("UserID",Auth::user()->UserID)->first();
 
@@ -83,6 +82,9 @@ class ProfileController extends Controller
                 $userData->Name = $request->name;
 
                 $userData->save();
+
+                //actualizamos el usuario en la session
+                Auth::setUser($userData);
             }
 
             //modificamos el perfil

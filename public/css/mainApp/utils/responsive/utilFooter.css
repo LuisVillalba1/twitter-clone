@@ -9,6 +9,10 @@ footer{
     padding: 15px 30px 10px 30px;
 }
 
+footer a{
+    text-decoration: none;
+}
+
 footer i{
     font-size: 1.3em;
 }

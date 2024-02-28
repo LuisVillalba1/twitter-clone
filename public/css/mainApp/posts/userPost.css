@@ -43,6 +43,7 @@ body{
     display: flex;
     padding:10px; 
     border-top: 1px solid var(--grisClaro);
+    border-bottom: 1px solid var(--grisClaro);
 }
 
 .repost_and_likes_container div{
@@ -120,6 +121,7 @@ body{
     }
 
     .post_container{
+        width: 100%;
         max-width: 700px;
         border-right: 1px solid var(--grisClaro);
     }

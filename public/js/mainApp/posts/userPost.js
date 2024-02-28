@@ -16,6 +16,7 @@ async function getPostData(){
     $(".post_container").css("display", "block");
     //mostramos la informacion
     showData(data);
+    console.log(data);
     }
     catch(e){
         console.log(e);
@@ -35,15 +36,22 @@ async function showData(data){
         showParentData(data.parent)
     }
 
-    //mostramos datos del usuario y el mensaje del post
+    //mostramos datos del usuario como su nombre e imagen
     let userName = data.user.personal_data.Nickname;
-    let logo = userName[0].toUpperCase();
-    $(".logo").text(logo);
+    let urlImg = data.user.profile.ProfilePhotoURL;
+    let nameImg = data.user.profile.ProfilePhotoName;
 
+    showUserImg(userName,urlImg,nameImg);
+
+    //obtenemos el link del perfil
+    let linkProfile = data.linkProfile;
+    console.log(linkProfile)
     $(".user_nickname").text(userName);
+    $(".user_nickname").attr("href",linkProfile)
 
     let message = data.Message;
 
+    //mostramos el mensaje en caso de que exista
     if(message.length > 0){
         $(".user_message").text(message);
     }
@@ -83,26 +91,41 @@ async function showData(data){
 
 }
 
+function showUserImg(nickname,urlImg,nameImg){
+    if(urlImg && nameImg){
+        let img = $("<img></img>");
+        $(img).attr("src", urlImg);
+        $(img).attr("alt",nameImg);
+
+        $(".owner_logo").append(img);
+    }
+    else{
+        let logo = $("<h4></h4>");
+        $(logo).addClass("logo");
+        $(logo).text(nickname[0].toUpperCase());
+        $(".owner_logo").append(logo);
+    }
+}
+
 function showParentData(parentData){
+    //obteemos el nombre de usuario y la imagen del usuario
     let username = parentData.user.personal_data.Nickname;
+    let userImg = parentData.user.profile.ProfilePhotoURL;
+    let nameImg = parentData.user.profile.ProfilePhotoName;
+
+
     let parentUser = $(".parent_user");
 
     let parenImgContainer = $("<div></div>");
 
     $(parenImgContainer).addClass("parent_img_container");
 
-    let logo = $("<h4></h4>");
-
-    $(logo).addClass("logo");
-
-    $(logo).text(username[0].toUpperCase());
-
     let userLane = $("<div></div>");
 
     $(userLane).addClass("parent_lane");
 
     //mostramos el logo del usuario
-    $(parenImgContainer).append(logo);
+    $(parenImgContainer).append(showParentImg(username,userImg,nameImg));
     $(parentUser).append(parenImgContainer);
     $(parentUser).append(userLane);
 
@@ -120,14 +143,36 @@ function showParentData(parentData){
         showMultimediaParent(multimedia);
     }
 
-    showResponse(username)
+    let linkProfile = parentData.linkProfile;
+    console.log(linkProfile);
+
+    showResponse(username,linkProfile)
+}
+
+//en caso de que el usuario contenga una imagen la mostramos, si no mostramos la inicial de su nickname
+function showParentImg(name,imgUrl,nameImg){
+    if(imgUrl && nameImg){
+        let img = $("<img></img>");
+        $(img).attr("src", imgUrl);
+        $(img).attr("alt",nameImg);
+
+        return img;
+    }
+    else{
+        let logo = $("<h4></h4>");
+        $(logo).addClass(logo);
+        $(logo).text(name[0].toUpperCase());
+
+        return logo;
+    }
 }
 
 //en caso de que sea un comentario mostramos que se responde a cierto usuario
-function showResponse(nickname){
+function showResponse(nickname,linkProfile){
     $(".response_container").css("display", "flex");
     
     $(".response_post").text(`@` + nickname);
+    $(".response_post").attr("href",linkProfile);
 }
 
 function showMultimediaParent(data){
@@ -185,25 +230,32 @@ function showCommenst(commentsData){
         }
         //por cada comentarios mostramos la informacion correspondiente
         comments.forEach(currentComment=>{
+            //obtenemos el link del post y permitimos que el usuario pueda ir a ver el posteo
             let linkPost = currentComment.linkPost;
             let commentContainer = $("<a></a>");
             $(commentContainer).attr("href", linkPost);
             $(commentContainer).addClass("comment_post_constainer");
     
+            //obtenemos el nombre del usuario
             let nickname = currentComment.user.personal_data.Nickname;
-            let postID = currentComment.PostID;
 
             let userDataContainer = $("<div></div>");
             $(userDataContainer).addClass("user_data_container");
 
-            let nicknameNoSpaces = utilsPosts.deleteSpaces(nickname);
-            
+            //obtnemos el mensaje
             let message = currentComment.Message;
 
-            $(userDataContainer).append(utilsPosts.logoContainerShow(nickname));
+            //obtenemos tanto la imagen del usuario como el link del perfil
+            let userImg = currentComment.user.profile.ProfilePhotoURL;
+            let userImgName = currentComment.user.profile.ProfilePhotoName;
+
+            let linkProfile = currentComment.linkProfile;
+
+            //mostramos la imagen del usuario 
+            $(userDataContainer).append(utilsPosts.logoContainerShow(nickname,userImg,userImgName));
             $(commentContainer).append(userDataContainer);
             
-            let postContent = utilsPosts.showNameAndMessage(nickname,message);
+            let postContent = utilsPosts.showNameAndMessage(nickname,message,linkProfile);
             $(userDataContainer).append(postContent);
 
             let multimedia = currentComment.multimedia_post;

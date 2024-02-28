@@ -9,7 +9,7 @@ async function getBookmarks(){
             type: "get",
             url: window.location.href + "/details",
         });
-
+        console.log(data);
         showPosts(data);
     }
     catch(e){
@@ -60,12 +60,18 @@ function showPosts(info){
         
             let userDataContainer = $("<div></div>");
             $(userDataContainer).addClass("user_data_container");
-        
+            
+            //obtenemos la imagen del usuario
+            let userImg = currentPost.post.user.profile.ProfilePhotoURL;
+            let nameUserImg = currentPost.post.user.profile.ProfilePhotoName;
+
+            let linkProfile = currentPost.post.linkProfile;
+
             //mostramos el logo del usuario
-            $(userDataContainer).append(utilsPost.logoContainerShow(nickname));
+            $(userDataContainer).append(utilsPost.logoContainerShow(nickname,userImg,nameUserImg));
             $(postContainer).append(userDataContainer);
             //mostramos el mensaje del usuario en caso de que exista
-            let postContent = utilsPost.showNameAndMessage(nickname,message);
+            let postContent = utilsPost.showNameAndMessage(nickname,message,linkProfile);
         
             $(userDataContainer).append(postContent);
         

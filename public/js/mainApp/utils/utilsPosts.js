@@ -4,32 +4,42 @@ export function deleteSpaces(value){
 }
 
 //añadimos la imagen del usuario, por ahora solo sera la primera letra en mayuscula del nickname
-export function logoContainerShow(Name){
+export function logoContainerShow(Name,urlPhoto,photoName){
     let logoContainer = $("<div></div>");
     let imgContainer = $("<div></div>");
     $(logoContainer).addClass("owner_logo_container");
     $(imgContainer).addClass("owner_logo");
+    if(urlPhoto && photoName){
+        let img = $("<img></img>");
+        $(img).attr("src", urlPhoto);
+        $(img).attr("alt", photoName);
+        $(imgContainer).append(img);
+        console.log(img);
+    }
+    else{
+        let firstLetter = $("<h4></h4>");
+        $(firstLetter).text(Name[0].toUpperCase());
+    
+        $(imgContainer).append(firstLetter);
+    }
 
-    let firstLetter = $("<h4></h4>");
-    $(firstLetter).text(Name[0].toUpperCase());
-
-    $(imgContainer).append(firstLetter);
     $(logoContainer).append(imgContainer);
 
     return logoContainer;
 }
 
 //creamos los contenedores del nombre de usuario y mensaje
-export function showNameAndMessage(username,userMessage){
+export function showNameAndMessage(username,userMessage,linkProfile){
     let postContent = $("<div></div>");
     $(postContent).addClass("content");
     
 
     let nameContainer = $("<div></div>");
     $(nameContainer).addClass("user_nickname_container");
-    let name = $("<h5></h5>");
+    let name = $("<a></a>");
     $(name).addClass("user_nickname");
     $(name).text(username);
+    $(name).attr("href", linkProfile);
 
     $(nameContainer).append(name);
 

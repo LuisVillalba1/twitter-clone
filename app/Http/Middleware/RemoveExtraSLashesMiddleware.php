@@ -20,7 +20,7 @@ class RemoveExtraSLashesMiddleware
             //las barras de la uri y redirigimos al usuario a la ruta correspondiente
             return redirect(rtrim($request->getRequestUri(), '/'), 301);
         }
-
+        
         return $next($request);
     
     }

@@ -9,10 +9,9 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/utilFooter.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilProfile.css">
-<link rel="stylesheet" href="../../css/mainApp/setting/settingProfile.css">
 <link rel="stylesheet" href="../../css/mainApp/profile/profile.css">
 
 <title>{{$profile->Nickname}} profile</title>

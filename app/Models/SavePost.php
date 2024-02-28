@@ -42,6 +42,9 @@ class SavePost extends Model
                             ->with([
                                 "PersonalData"=>function($queryPersonal){
                                     $queryPersonal->select("PersonalDataID","Nickname");
+                                },
+                                "Profile"=>function($queryProfile){
+                                    $queryProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
                                 }
                             ]);
                         },

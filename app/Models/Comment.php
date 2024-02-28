@@ -147,6 +147,7 @@ class Comment extends Model
             $comment["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$commentID]);
             $comment["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$commentID]);
             $comment["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$commentID]);
+            $comment["linkProfile"] = route("showProfile",["username"=>$userName]);
         } 
     }
 }

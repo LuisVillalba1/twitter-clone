@@ -6,6 +6,7 @@ use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\GoogleRegister;
 use App\Http\Controllers\InitSession;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RecuperateAccountController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Middleware\CheckFirstStepRegistration;
@@ -88,7 +89,7 @@ Route::controller(RecuperateAccountController::class)->group(function(){
 
 //main app
 Route::middleware(["AuthSession"])->group(function () {
-    Route::get("/home",[AppController::class,"show"])->name("mainApp")->where('home', '(\/$|^$)');
+    Route::get("/home",[AppController::class,"show"])->name("mainApp");
     //mostramos y permitimos crear un nuevo post
     Route::get("/home/createPost",[AppController::class,"showCreatePost"])->name("showCreatePost");
     Route::post("/home/createPost",[AppController::class,"createPost"])->name("createPost");
@@ -98,7 +99,7 @@ Route::middleware(["AuthSession"])->group(function () {
 
     //likeamos un post
     Route::post("/likePost/{username}/{encryptID}",[Like::class,"likePost"])->name("likePost");
-
+    
     //realizamos la visualizacion de un post en concreto
     Route::post("/visualization/{username}/{encryptID}",[Visualization::class,"VisualizationPost"])->name("VisualizationPost");
 
@@ -106,13 +107,15 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/post/{username}/{encryptID}",[UserPost::class,"showPost"])->name("showPost");
     Route::get("/post/{username}/{encryptID}/details",[UserPost::class,"getPostData"])->name("getPostData");
 
+
     //permitimos al usuario comentar un posteo
     Route::get("/comment/{username}/{encryptID}",[Comment::class,"commentPostView"])->name("commentPostView");
     Route::post("/comment/{username}/{encryptID}",[Comment::class,"commentPost"])->name("commentPost");
-
+    
     //obtenemos los elementos guardados
     Route::get("/bookmarks",[SavePost::class,"showBookmarks"])->name("showBookmarks");
     Route::get("/bookmarks/details",[SavePost::class,"getBookmarks"])->name("getBookmarks");
+    
     //permitimos guardar un posteo
     Route::post("/bookmarks/{username}/{encryptID}",[SavePost::class,"savePost"])->name("savePost");
 
@@ -121,7 +124,7 @@ Route::middleware(["AuthSession"])->group(function () {
 
     //obtenemos todos los posteos del usuario
     Route::get("/{username}/posts",[ProfileController::class,"getUserPosts"])->name("getUserPosts");
-
+    
     //mostramos las respuestas de los usuarios
     Route::get("/{username}/answers",[ProfileController::class,"showAnswersUser"])->name("answersUser");
     Route::get("/{username}/answers/details",[ProfileController::class,"getAnswersUser"])->name("getAnswersUser");
@@ -130,8 +133,11 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/settings/profile",[ProfileController::class,"showEditProfile"])->name("editProfilesShow");
     Route::put("/settings/profile",[ProfileController::class,"editProfile"])->name("editProfile");
 
+    //perimitimos al usuario ver sus notificaciones
+    Route::get("/user/notifications",[NotificationController::class,"showNotifications"])->name("notificationView");
+
 });
 
-Route::any('{any}', function () {
-    return redirect()->route("errorPage");
-})->where('any', '.*');
+// Route::any('{any}', function () {
+//     return redirect()->route("errorPage");
+// })->where('any', '.*');

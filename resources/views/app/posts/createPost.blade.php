@@ -23,7 +23,11 @@
                 <div class="new_post_content_container">
                     <div class="owner_logo_container">
                         <div class="owner_logo">
-                            <h4>L</h4>
+                            @if ($profilePhoto[0])
+                                <img src={{$profilePhoto[0]}} alt={{$profilePhoto[1]}}>
+                            @else
+                                <h4>{{ucfirst($nickname[0])}}</h4>
+                            @endif
                         </div>
                     </div>
                     <div class="new_post_content">

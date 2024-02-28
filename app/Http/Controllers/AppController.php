@@ -18,10 +18,13 @@ class AppController extends Controller
     //mostramos la main ap
     public function show(){
         try{
-            $name = Auth::user()->Name;
-            $nickname =  Auth::user()->PersonalData->Nickname;
+            //obtenemos ciertos datos de la aunteticacion del usuario
+            $user = Auth::user();
+            $name = $user->Name;
+            $nickname =  $user->PersonalData->Nickname;
+            $profilePhoto = [$user->Profile->ProfilePhotoURL,$user->Profile->ProfilePhotoName];
 
-            return view("app.main",compact(["name","nickname"]));
+            return view("app.main",compact(["name","nickname","profilePhoto"]));
         }
         catch(\Exception $e){
             return redirect()->route("errorPage");
@@ -30,7 +33,12 @@ class AppController extends Controller
 
     //mostramos la vista para crear un nuevo post
     public function showCreatePost(){
-        return view("app.posts.createPost");
+        //obtenemos el nombre y la imagen en caso de que contenga del usuario autenticado
+        $user = Auth::user();
+        $nickname =  $user->PersonalData->Nickname;
+        $profilePhoto = [$user->Profile->ProfilePhotoURL,$user->Profile->ProfilePhotoName];
+        
+        return view("app.posts.createPost",compact(["nickname","profilePhoto"]));
     }
 
     //creamos un nuevo post

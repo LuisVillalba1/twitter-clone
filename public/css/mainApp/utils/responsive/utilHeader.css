@@ -1,0 +1,23 @@
+header{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 15px 10px 15px;
+    border-bottom: 1px solid var(--gris);
+}
+
+header div{
+    padding: 8px 9px;
+    border-radius: 50%;
+}
+
+header i{
+    color: var(--blanco);
+    font-size: 1.32em;
+}
+
+@media screen and (min-width:485px){
+    header{
+        display: none;
+    }
+}

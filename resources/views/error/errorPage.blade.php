@@ -1,4 +1,4 @@
-@extends("../layouts/plantilla")
+@extends("../layouts/errorPlantilla")
 
 @section('head')
 <meta charset="UTF-8">

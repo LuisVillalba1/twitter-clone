@@ -60,8 +60,17 @@ body{
 
 .owner_logo{
     background: rgb(4, 108, 4);
-    padding: 9px;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
+    overflow: hidden;
+}
+
+.owner_logo img{
+    width: 100%;
 }
 
 .owner_logo h4{

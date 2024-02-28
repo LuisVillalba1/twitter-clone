@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/utilFooter.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilSave.css">
 <link rel="stylesheet" href="../../css/mainApp/posts/bookmarks/bookmarks.css">

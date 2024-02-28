@@ -88,12 +88,15 @@ class UserPost extends Model
                 ->with([
                     "PersonalData"=>function($queryPersonal){
                         $queryPersonal->select("PersonalDataID","Nickname");
+                    },
+                    "Profile"=>function($queryProfile){
+                        $queryProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
                     }
                 ]);
             },
             "Comments"=>function($queryComments) use ($userID){
                 $queryComments->where("UserID",$userID);
-            }
+            },
         ])
         //mostramos la cantidad de interacciones que contiene el post
         ->withCount([
@@ -113,6 +116,7 @@ class UserPost extends Model
             $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
             $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
             $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+            $post["linkProfile"] = route("showProfile",["username"=>$userName]);
         }
 
         return $posts;
@@ -144,6 +148,7 @@ class UserPost extends Model
         $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
         $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
         $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        $post["linkProfile"] = route("showProfile",["username"=>$userName]);
 
         return $post;
     }
@@ -180,6 +185,9 @@ class UserPost extends Model
                 ->with([
                     "PersonalData"=>function($queryPersonal){
                         $queryPersonal->select("PersonalDataID","Nickname");
+                    },
+                    "Profile"=>function($queryProfile){
+                        $queryProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
                     }
                 ]);
             },
@@ -194,6 +202,9 @@ class UserPost extends Model
                         ->with([
                             "PersonalData"=>function($parentPersonal){
                                 $parentPersonal->select("PersonalDataID","Nickname");
+                            },
+                            "Profile"=>function($parentProfile){
+                                $parentProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
                             }
                         ]);
                     },
@@ -217,6 +228,9 @@ class UserPost extends Model
                             "PersonalData"=>function($queryPersonalComment){
                                 $queryPersonalComment->select("PersonalDataID","Nickname");
                             },
+                            "Profile"=>function($parentProfile){
+                                $parentProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
+                            }
                         ]);
                     },
                     "Likes"=>function($queryLikeComment) use ($userID){
@@ -243,6 +257,7 @@ class UserPost extends Model
             $postIDParent = $post->Parent->PostID;
 
             $post->Parent["linkPost"] = route("showPost",["username"=>$usernameParent,"encryptID"=>Crypt::encryptString($postIDParent)]);
+            $post->Parent["linkProfile"] = route("showProfile",["username"=>$usernameParent]);
         }
         //por cada comentario establecemos los links para interactuar
         (new Comment())->setLinksInteraction($post->Comments);

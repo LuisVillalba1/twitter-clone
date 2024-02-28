@@ -80,6 +80,10 @@ class Profile extends Model
 
             $profile->CoverPhotoURL = $coverPhotoData[1];
             $profile->CoverPhotoName = $coverPhotoData[0];
+
+            //modificamos los valores de la imagen de perfil del usuario auntenticado
+            Auth::user()->Profile->CoverPhotoURL = $coverPhotoData[1];
+            Auth::user()->Profile->CoverPhotoName = $coverPhotoData[0];
         }
 
         if($data->profilePhoto){

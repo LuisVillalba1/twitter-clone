@@ -11,9 +11,9 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/utilComments.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/utilFooter.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/utilPostsAnswers.css">
+
 
 <title></title>
 @endsection
@@ -52,16 +52,16 @@
                 <div class="user_data_container">
                     <div class="owner_logo_container">
                         <div class="owner_logo">
-                            <h4 class="logo"></h4>
+                            
                         </div>
                     </div>
                     <div class="content">
                         <div class="user_nickname_container">
-                            <p class="user_nickname"></p>
+                            <a class="user_nickname"></a>
                         </div>
                         <div class="response_container">
                             <p>En respuesta a </p>
-                            <p class="response_post"></p>
+                            <a class="response_post"></a>
                         </div>
                         <div class="user_message_container">
                             <p class="user_message"></p>

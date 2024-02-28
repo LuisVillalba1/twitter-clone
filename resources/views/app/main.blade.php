@@ -9,6 +9,8 @@
 <link rel="stylesheet" href="./css/mainApp/home.css">
 <link rel="stylesheet" href="./css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="./css/mainApp/utils/utilPost.css">
+<link rel="stylesheet" href="./css/mainApp/utils/responsive/utilHeader.css">
+<link rel="stylesheet" href="./css/mainApp/utils/responsive/utilNav.css">
 
 <title>Twitter</title>
 @endsection
@@ -78,17 +80,10 @@
         </div>
 @endsection
 
-@section('footer')
-
-<i class="fa-solid fa-house"></i>
-<i class="fa-solid fa-magnifying-glass"></i>
-<i class="fa-regular fa-bell"></i>
-<i class="fa-solid fa-envelope"></i>
-@endsection
-
 @section('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="module" src="./js/mainApp/home.js"></script>
 <script src="./js/mainApp/posts/createPost.js"></script>
+<script src="./js/mainApp/utils/responsive/utilNav.js"></script>
 <script src="./js/mainApp/homeDragAndDrop.js"></script>
 @endsection

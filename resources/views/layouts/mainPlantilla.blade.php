@@ -12,7 +12,13 @@
         <div class="border_rigth_blur"></div>
         <div class="account_information">
             <div class="account__logo_container">
-                <img src="https://img.freepik.com/foto-gratis/hombre-feliz-pie-playa_107420-9868.jpg?size=626&ext=jpg&ga=GA1.1.1412446893.1705795200&semt=sph" alt="">
+                @if ($profilePhoto)
+                    <img src={{$profilePhoto[0]}} alt={{$profilePhoto[1]}}>
+                @else
+                    <div class="account_logo">
+                        <h3>{{ucfirst($nickname[0])}}</h3>
+                    </div>
+                @endif
             </div>
             <div class="account_name_nickname">
                 <h3>{{$name}}</h3>
@@ -222,7 +228,10 @@
         @yield("content")
     </div>
     <footer>
-        @yield("footer")
+        <a href={{route("mainApp")}}><i class="fa-solid fa-house"></i></a>
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <a href={{route("notificationView")}}><i class="fa-regular fa-bell"></i></a>
+        <i class="fa-solid fa-envelope"></i>
     </footer>
 </body>
 @yield("scripts")
