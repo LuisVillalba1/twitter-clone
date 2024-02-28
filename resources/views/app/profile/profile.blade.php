@@ -6,6 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
 <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
 <meta name="view-transition" content="same-origin" />
+<link rel="stylesheet" href="../../css/mainApp/utils/fonts/ubuntuFont.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
@@ -58,6 +59,11 @@
                     <h3>{{$profile->user->Name}}</h3>
                     <h5>{{"@".$profile->Nickname}}</h5>
                 </div>
+                @if ($profile->user->Profile->Biography)
+                    <div class="biography_container">
+                        <p class="biography_content">{{$profile->user->Profile->Biography}}</p>
+                    </div>
+                @endif
                 <div class="init_in_app_container">
                     <i class="fa-regular fa-calendar-days"></i>
                     <p>Se ha unido el </p>

@@ -56,7 +56,7 @@ class Profile extends Model
             return view("app.profile." . $typeProfileContent,compact(["profile","created","edit"]));
         }
         //si no mostramos el perfil del usuario
-        return view("app.profile.".$typeProfileContent,compact(["username","name","created"]));
+        return view("app.profile.".$typeProfileContent,compact(["profile,created"]));
     }
 
     //creamos un nuevo perfil

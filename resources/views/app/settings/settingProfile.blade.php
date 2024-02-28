@@ -8,6 +8,7 @@
 <meta name="view-transition" content="same-origin" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/fonts/ubuntuFont.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilFooter.css">

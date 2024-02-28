@@ -90,7 +90,7 @@ class ProfileController extends Controller
             //modificamos el perfil
             (new Profile())->modifyProfile($profile,$request);
 
-            return response()->json(["response"=>"Se ha modificado los datos correctamente"]);
+            return redirect()->route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])->getTargetUrl();
         }
         catch(\Exception $e){
             return response()->json(["errors"=>$e->getMessage()],500);

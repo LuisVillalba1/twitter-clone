@@ -44,7 +44,7 @@ body{
 }
 
 .new_post{
-    padding: 10px 0;
+    padding: 5px 0;
     width: 100%;
 }
 
@@ -93,7 +93,7 @@ body{
     background: transparent;
     border: none;
     outline: none;
-    font-size: 1.3em;
+    font-size: 1.1em;
     padding: 8px 5px 6px 8px;
     scrollbar-width: 0px;
     line-height: 20px;

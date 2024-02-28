@@ -11,7 +11,7 @@ body::-webkit-scrollbar{
 }
 
 .posts_container{
-    padding: 10px 10px;
+    padding: 10px 0;
     display: flex;
     width: 100%;
     flex-direction: column;
@@ -27,6 +27,7 @@ body::-webkit-scrollbar{
     border-bottom: 0.4px solid var(--grisClaro);
     text-decoration: none;
     flex-direction: column;
+    padding: 0 7px;
 }
 
 .parent_data_container{
@@ -60,6 +61,7 @@ body::-webkit-scrollbar{
 .parent_lane{
     height: 100%;
     width: 1px;
+    margin-top: 2px;
     background: var(--gris);
 }
 

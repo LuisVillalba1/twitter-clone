@@ -37,6 +37,7 @@
 .post_to_comment_content p{
     word-wrap: break-word;
     max-width: 95%;
+    font-size: 1em;
 }
 
 .post_to_comment_content_container{

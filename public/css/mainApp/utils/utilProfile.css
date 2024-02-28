@@ -42,6 +42,7 @@ body{
 .profile_cover_container img{
     width: 100%;
     max-height: 150px;
+    height: 150px;
 }
 
 .personal_data_container{
@@ -103,6 +104,14 @@ body{
 .nickname_and_name_container h5{
     color: var(--grisClaro);
     font-size: 1.01em;
+}
+
+.biography_container{
+    padding: 15px 0;
+}
+
+.biography_content{
+    font-size: 1.02em;
 }
 
 .init_in_app_container{

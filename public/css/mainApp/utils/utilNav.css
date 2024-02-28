@@ -86,10 +86,10 @@
 
 @media screen and (min-width:1085px){
     .nav_container{
-        min-width: 195.3px;
+        min-width: 205.48px;
     }
     .nav{
-        width: max-content;
+        width: max-content
     }
     .nav_icon_container a{
         width: 100%;

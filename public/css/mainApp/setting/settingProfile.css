@@ -48,6 +48,10 @@ body{
     padding-right: 10px;
 }
 
+#close_edit_photo_cropper{
+    cursor: pointer;
+}
+
 .header_edit_cropper h3{
     padding-right: 5px;
 }
@@ -243,7 +247,7 @@ textarea{
     border: none;
     outline: none;
     padding: 3px 8px 8px 5px;
-    font-size: 1.3em;
+    font-size: 1.15em;
 }
 
 .errorsForm{
