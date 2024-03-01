@@ -1,3 +1,5 @@
+import {createErrorAlert} from "./error/errorAlert.js"
+
 //eliminamos los espacios de un string
 export function deleteSpaces(value){
     return value.replace(/ /g, "_");
@@ -14,7 +16,6 @@ export function logoContainerShow(Name,urlPhoto,photoName){
         $(img).attr("src", urlPhoto);
         $(img).attr("alt", photoName);
         $(imgContainer).append(img);
-        console.log(img);
     }
     else{
         let firstLetter = $("<h4></h4>");
@@ -175,7 +176,7 @@ export function countIcon(data,interactionContainer){
 }
 
 //likeamos el post
-export async function likePost(likeContainer,likesCount){
+export async function likePost(likeContainer,likesCount,containerAddError){
     let heartContainer = $(likeContainer).children(".heart_bg");
     let hearstIcon = $(heartContainer).children(".heart_icon")
 
@@ -184,12 +185,12 @@ export async function likePost(likeContainer,likesCount){
             e.preventDefault();
             let padre = $(e.target).closest(".like_container");
             let action = $(padre).attr("action");
-            let response = await sendLike(action);
+            let response = await sendLike(action,containerAddError);
             if(response){
                 $(e.target).css("animation","like-anim 0.5s steps(28) forwards");
                 sumValue(likesCount)
             }
-            else{
+            else if(response == false){
                 $(e.target).removeAttr("style");
                 subtractValue(likesCount)
             }
@@ -208,7 +209,7 @@ function subtractValue(name){
 }
 
 //enviamos el like
-async function sendLike(action){
+async function sendLike(action,container){
     try {
         const response = await $.ajax({
             type: "POST",
@@ -216,7 +217,7 @@ async function sendLike(action){
         });
         return response
     } catch (error) {
-        console.log(error.responseJSON.message);
+        createErrorAlert(error.responseJSON.errors,container)
     }
 }
 
@@ -274,20 +275,20 @@ export function showVisualizations(visualizationsCount){
     $(informationContainer).append(visualizationCountContainer);
 }
 
-export function savePost(saveFormContainer,saveCount){
+export function savePost(saveFormContainer,saveCount,containerError){
     let saveContainer = $(saveFormContainer).children(".save_bg");
     let iconSave = $(saveContainer).children(".save_icon")
 
     $(saveFormContainer).on("click", async function (e) {
         e.preventDefault();
         let action = $(saveFormContainer).attr("action");
-        let response = await sendSavePost(action);
+        let response = await sendSavePost(action,containerError);
 
         if(response){
             iconSave.css("animation","save-anim 0.5s steps(20) forwards")
             sumValue(saveCount)
         }
-        else{
+        else if(response == false){
             $(iconSave).removeAttr("style");
             subtractValue(saveCount);
         }
@@ -295,7 +296,7 @@ export function savePost(saveFormContainer,saveCount){
 }
 
 
-async function sendSavePost(action){
+async function sendSavePost(action,containerError){
     try {
         const response = await $.ajax({
             type: "POST",
@@ -303,7 +304,7 @@ async function sendSavePost(action){
         });
         return response
     } catch (error) {
-        console.log(error.responseJSON.message);
+        createErrorAlert(error.responseJSON.errors,containerError);
     }
 }
 

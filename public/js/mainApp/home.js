@@ -1,9 +1,12 @@
 import * as utilsPosts from "./utils/utilsPosts.js";
 import * as utilsIntersection from "./utils/utilsIntersection.js";
+import {createErrorAlert} from "./utils/error/errorAlert.js";
 
 const header = $("header");
 const mainContainer = $(".main_container");
 const footer = $("footer");
+
+const allPost = $(".posts_container");
 
 //obtenemos todas las publicaciones
 function getPublicPosts(){
@@ -13,19 +16,17 @@ function getPublicPosts(){
         url: $(".get_publics").attr("id"),
         success: function (response) {
             if(response.length > 0){
-                console.log(response);
                 showPosts(response)
             }
         },
         error: function(e){
-            console.log(e);
+            createErrorAlert(e.responseJSON.error,allPost);
         }
     });
 }
 
 getPublicPosts();
 
-const allPost = $(".posts_container");
 
 function showPosts(info){
     //la idea es mostrar los posts de 6 en 6
@@ -103,7 +104,7 @@ function showPosts(info){
         
             utilsPosts.postYetInteraction(interactionContainer,currentPost)
             utilsPosts.postYetLiked(likeContainer,currentPost.likes);
-            utilsPosts.likePost(likeContainer,likesCount);
+            utilsPosts.likePost(likeContainer,likesCount,allPost);
         
             utilsPosts.countIcon(currentPost,interactionContainer);
         })

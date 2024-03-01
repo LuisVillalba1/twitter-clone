@@ -65,7 +65,7 @@ class Like extends Model
 
         }
         catch(\Exception $e){
-            return response()->json(["error"=>$e->getMessage()],404);
+            return response()->json(["errors"=>"Ha ocurrido un error al likear/dislikear el posteo"],404);
         }
     }
 }

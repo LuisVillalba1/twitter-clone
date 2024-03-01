@@ -7,6 +7,7 @@
 <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
 <meta name="view-transition" content="same-origin" />
 <link rel="stylesheet" href="../../css/mainApp/utils/fonts/ubuntuFont.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/error/errorAlert.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="../../css/mainApp/posts/userPost.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilComments.css">

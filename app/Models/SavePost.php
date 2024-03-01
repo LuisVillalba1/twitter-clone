@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use PhpParser\Node\Expr\Throw_;
 
 class SavePost extends Model
 {
@@ -79,7 +81,7 @@ class SavePost extends Model
 
         }
         catch(\Exception $e){
-            return response()->json(["errors"=>"Ha ocurrido un error"],500);
+            return response()->json(["errors"=>"Ha ocurrido un error al obtener los elementos guardados"],500);
         }
         
     }
@@ -125,7 +127,7 @@ class SavePost extends Model
             return $this->checkSavePost($postID);
         }
         catch(\Exception $e){
-            return response()->json("Ha ocurrido un error inesperado");
+            return response()->json(["errors"=>"Ha ocurrido un error al guardar/quitar de guardados el posteo"],500);
         }
     }
 

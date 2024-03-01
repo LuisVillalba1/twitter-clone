@@ -2,18 +2,20 @@
 import * as utilsIntersection from "../../utils/utilsIntersection.js";
 import * as utilsPost from "../../utils/utilsPosts.js";
 import { ocultLoader } from "../../utils/utilLoader.js";
+import {createErrorAlert} from "../../utils/error/errorAlert.js"
 
+const savesPostContainer = $(".saves_posts_container");
 async function getBookmarks(){
     try{
         const data = await $.ajax({
             type: "get",
             url: window.location.href + "/details",
         });
-        console.log(data);
         showPosts(data);
     }
     catch(e){
-        console.log(e)
+        console.log(e);
+        createErrorAlert(e.responseJSON.errors,savesPostContainer)
     }
     finally{
         ocultLoader();
@@ -102,10 +104,10 @@ function showPosts(info){
         
             utilsPost.postYetInteraction(interactionContainer,currentPost.post)
             utilsPost.postYetLiked(likeContainer,currentPost.post.likes);
-            utilsPost.likePost(likeContainer,likesCount);
+            utilsPost.likePost(likeContainer,likesCount,savesPostContainer);
 
             animateSave(saveIcon);
-            utilsPost.savePost(saveContainer,saveCount);
+            utilsPost.savePost(saveContainer,saveCount,savesPostContainer);
         
             utilsPost.countIcon(currentPost.post,interactionContainer);
         })

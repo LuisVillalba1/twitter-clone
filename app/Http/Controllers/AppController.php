@@ -58,7 +58,7 @@ class AppController extends Controller
             return redirect()->route("mainApp")->getTargetUrl();
         }
         catch(\Exception $e){
-            return response()->json(["error"=>$e->getMessage()],500);
+            return response()->json(["errors"=>"Ha ocurrido un error al realizar la publicacion, por favor intentelo mas tarde"],500);
         }
     }
 
@@ -68,7 +68,7 @@ class AppController extends Controller
             return (new UserPost())->getAllPublics();
         }
         catch(\Exception $e){
-            return response()->json(["error",$e->getMessage()],500);
+            return response()->json(["error"=>"Ha ocurrido un error al obtener las publicaciones"],500);
         }
     }
 }

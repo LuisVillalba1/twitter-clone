@@ -97,7 +97,6 @@ class Comment extends Model
 
     public function commentPost(NewPostRequest $request,$userName,$encryptID){
         try{
-
         $postID = Crypt::decryptString($encryptID);
 
         //obtenemos el post junto a su interactionID
@@ -132,7 +131,7 @@ class Comment extends Model
         return redirect()->route("mainApp")->getTargetUrl();
         }
         catch(\Exception $e){
-            return response()->json(["errors"=>$e->getMessage()],500);
+            return response()->json(["errors"=>"Ha ocurrido un error al comentar el posteo,por favor intentelo mas tarde."],500);
         }
 
     }

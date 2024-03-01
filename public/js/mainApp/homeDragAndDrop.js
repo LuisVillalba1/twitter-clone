@@ -147,11 +147,18 @@ function sendForm(){
             window.location.href = response;
         },
         error: function(error){
+            console.log(error);
+            //mostramos los errores en caso de que existan
             let errors_container = $(".errors_form")
             $(errors_container).empty();
+            let parrafo = $("<p></p>");
+            $(parrafo).css("color","red");
+            if(error.status == 500){
+                $(parrafo).text(error.responseJSON.errors);
+                return $(errors_container).append(parrafo);
+            }
+            //en caso de que sean varios errores iteramos sobre estos y los mostramos
             $.each(error.responseJSON.errors, function (indexInArray, valueOfElement) {
-                let parrafo = $("<p></p>");
-                $(parrafo).css("color","red");
                 $(parrafo).text(valueOfElement[0]); 
                 $(errors_container).append(parrafo);
             });

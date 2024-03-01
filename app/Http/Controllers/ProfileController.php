@@ -141,7 +141,7 @@ class ProfileController extends Controller
             return (new User())->getUserPosts($username);
         }
         catch(\Exception $e){
-            return response()->json(["error"=>$e->getMessage()],500);
+            return response()->json(["errors"=>"Ha ocurrido un error al cargar los posteos del usuario"],500);
         }
     }
 
@@ -161,7 +161,7 @@ class ProfileController extends Controller
             return (new Profile())->getAnswers($username);
         }
         catch(\Exception $e){
-
+            return response()->json(["errors"=>"Ha ocurrido un error al obtener las respuestas"],500);
         }
     }
 }

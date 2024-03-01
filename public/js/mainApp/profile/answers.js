@@ -1,5 +1,8 @@
 import * as utilsPosts from "../utils/utilsPosts.js";
 import * as utilsIntersection from "../utils/utilsIntersection.js";
+import {createErrorAlert} from "../utils/error/errorAlert.js"
+
+const profileContainer = $(".profile_container")
 
 function getAnswers(){
     $.ajax({
@@ -10,7 +13,7 @@ function getAnswers(){
             console.log(response)
         },
         error:function(error){
-            console.log(error);
+            createErrorAlert(error.responseJSON.errors,profileContainer)
         }
     });
     $(".loader_container").css("display","none")
@@ -87,7 +90,7 @@ function showAnswers(info){
         
             utilsPosts.postYetInteraction(interactionContainer,currentPost)
             utilsPosts.postYetLiked(likeContainer,currentPost.likes);
-            utilsPosts.likePost(likeContainer,likesCount);
+            utilsPosts.likePost(likeContainer,likesCount,profileContainer);
         
             utilsPosts.countIcon(currentPost,interactionContainer);            
          })

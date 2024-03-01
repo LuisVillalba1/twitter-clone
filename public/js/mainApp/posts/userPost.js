@@ -1,7 +1,9 @@
 import * as utilsPosts from "../utils/utilsPosts.js";
 import * as utilsIntersection from "../utils/utilsIntersection.js"
+import {createErrorAlert} from "../utils/error/errorAlert.js";
 
 const loaderContainer = $(".loader_container");
+const postContainer = $(".post_container");
 
 //obtenemos la informacion del post
 async function getPostData(){
@@ -13,13 +15,14 @@ async function getPostData(){
         type : "GET",
         url : link
     })
-    $(".post_container").css("display", "block");
+    $(".post_container").css("display", "flex");
     //mostramos la informacion
     showData(data);
     console.log(data);
     }
     catch(e){
         console.log(e);
+        createErrorAlert(e.responseJSON.errors,$(".post_container"))
     }
     //una ves finalizada la peticion ocultamos el loader
     finally{
@@ -69,13 +72,13 @@ async function showData(data){
         let child = i;
 
         if($(child).hasClass("like_container")){
-            utilsPosts.likePost(child)
+            utilsPosts.likePost(child,null,postContainer)
             utilsPosts.postYetLiked(child,data.likes);
         }
         if($(child).hasClass("save_container")){
             $(child).attr("method", "POST");
             $(child).attr("action", data.linkSave);
-            utilsPosts.savePost(child);
+            utilsPosts.savePost(child,null,postContainer);
             utilsPosts.postYetSave(child,data.safes);
         }
     }
@@ -276,7 +279,7 @@ function showCommenst(commentsData){
 
             utilsPosts.postYetInteraction(interaction_container,currentComment);
             utilsPosts.postYetLiked(likeContainer,currentComment.likes);
-            utilsPosts.likePost(likeContainer);
+            utilsPosts.likePost(likeContainer,null,postContainer);
 
             utilsPosts.countIcon(currentComment,interaction_container);
         })

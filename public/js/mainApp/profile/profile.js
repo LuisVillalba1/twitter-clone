@@ -1,8 +1,11 @@
 import * as utilsPosts from "../utils/utilsPosts.js";
 import * as utilsIntersection from "../utils/utilsIntersection.js";
+import {createErrorAlert} from "../utils/error/errorAlert.js"
 
 //seteamos el link de respuestas
 $(".respuestas_location").children().attr("href",window.location.href + "/answers")
+
+const profileContainer = $(".profile_container");
 
 //obtenemos los posteos correspondientes
 function getUserPost(){
@@ -13,7 +16,7 @@ function getUserPost(){
            showPosts(response)
         },
         error: function(error){
-            console.log(error)
+            createErrorAlert(error.responseJSON.errors,profileContainer);
         }
     });
     //ocultamos el loader
@@ -95,7 +98,7 @@ function showPosts(info){
         
             utilsPosts.postYetInteraction(interactionContainer,currentPost)
             utilsPosts.postYetLiked(likeContainer,currentPost.likes);
-            utilsPosts.likePost(likeContainer,likesCount);
+            utilsPosts.likePost(likeContainer,likesCount,profileContainer);
         
             utilsPosts.countIcon(currentPost,interactionContainer);
         })

@@ -31,6 +31,8 @@ body{
     border-right: 1px solid var(--grisClaro);
     display: flex;
     flex-direction: column;
+    align-items: center;
+    position: relative;
 }
 
 .heart_icon{

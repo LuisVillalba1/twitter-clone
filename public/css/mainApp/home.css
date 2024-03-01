@@ -44,6 +44,7 @@ body{
     border-radius: 32px;
     border: 1px solid rgba(0, 0, 0, 0.1); /* Agregar sombra al borde del círculo */
     box-shadow: 1px 1px 10px 2px rgba(255, 255, 255, 0.3);
+    z-index: 5;
 }
 
 .create_post_main{
