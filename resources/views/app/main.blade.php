@@ -85,7 +85,6 @@
 @section('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="module" src="./js/mainApp/home.js"></script>
-<script src="./js/mainApp/error/errorAlert.js"></script>
 <script src="./js/mainApp/posts/createPost.js"></script>
 <script src="./js/mainApp/utils/responsive/utilNav.js"></script>
 <script src="./js/mainApp/homeDragAndDrop.js"></script>

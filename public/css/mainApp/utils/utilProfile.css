@@ -103,6 +103,14 @@ body{
     text-decoration: none;
 }
 
+.follow_user_container{
+    padding: 5px 10px;
+    border: 1px solid var(--gris);
+    border-radius: 20px;
+    margin: 15px 20px 0px 0px;
+    cursor: pointer;
+}
+
 .nickname_and_name_container{
     margin-top: 20px;
 }

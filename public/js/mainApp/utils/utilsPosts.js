@@ -215,8 +215,10 @@ async function sendLike(action,container){
             type: "POST",
             url: action
         });
+        console.log(response);
         return response
     } catch (error) {
+        console.log(error);
         createErrorAlert(error.responseJSON.errors,container)
     }
 }

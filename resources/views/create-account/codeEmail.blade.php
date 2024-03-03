@@ -55,38 +55,6 @@
 
 @section('scripts')
 <script>
-//     document.addEventListener('DOMContentLoaded', function() {
-//   const codeInputs = document.querySelectorAll('.code-input');
-
-//   codeInputs.forEach((input, index) => {
-//     input.addEventListener('input', function() {
-//       const value = this.value;
-
-//       // Si el valor es un número y no está vacío
-//       if (/^\d$/.test(value)) {
-//         // Rellenar el siguiente input si existe
-//         const nextIndex = index + 1;
-//         if (nextIndex < codeInputs.length) {
-//           codeInputs[nextIndex].focus();
-//           codeInputs[nextIndex].value = value;
-//         }
-//       }
-//     });
-
-//     // Evitar la entrada manual y saltar al siguiente input al presionar una tecla numérica
-//     input.addEventListener('keydown', function(e) {
-//       const key = e.key;
-//       if (/^\d$/.test(key)) {
-//         e.preventDefault();
-//         const nextIndex = index + 1;
-//         if (nextIndex < codeInputs.length) {
-//           codeInputs[nextIndex].focus();
-//           codeInputs[nextIndex].value = key;
-//         }
-//       }
-//     });
-//   });
-// });
 </script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../js/singup/singup3.step.js"></script>

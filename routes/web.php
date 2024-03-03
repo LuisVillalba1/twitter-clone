@@ -129,6 +129,9 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/{username}/answers",[ProfileController::class,"showAnswersUser"])->name("answersUser");
     Route::get("/{username}/answers/details",[ProfileController::class,"getAnswersUser"])->name("getAnswersUser");
 
+    Route::get("/{username}/likes",[ProfileController::class,"showLikesUser"])->name("likesUser");
+    Route::get("/{username}/likes/details",[ProfileController::class,"getLikesUser"])->name("getLikesUser");
+
     //Permitimos al usuario poder modificar ciertos valores de su perfil
     Route::get("/settings/profile",[ProfileController::class,"showEditProfile"])->name("editProfilesShow");
     Route::put("/settings/profile",[ProfileController::class,"editProfile"])->name("editProfile");

@@ -1,8 +1,15 @@
 import * as utilsPosts from "../utils/utilsPosts.js";
 import * as utilsIntersection from "../utils/utilsIntersection.js";
 import {createErrorAlert} from "../utils/error/errorAlert.js"
+import { setLinks } from "../utils/utilProfile.js";
 
-const profileContainer = $(".profile_container")
+const profileContainer = $(".profile_container");
+
+const postsLocation = $(".posts_location");
+const likesLocations = $(".me_gusta_location");
+
+setLinks(postsLocation,null);
+setLinks(likesLocations,"likes")
 
 function getAnswers(){
     $.ajax({
@@ -10,7 +17,6 @@ function getAnswers(){
         url: window.location.href + "/details",
         success: function (response) {
             showAnswers(response)
-            console.log(response)
         },
         error:function(error){
             createErrorAlert(error.responseJSON.errors,profileContainer)
@@ -73,7 +79,11 @@ function showAnswers(info){
             $(userDataContainer).addClass("user_data_container");
             
             //mostramos la imagen del usuario y el contenido del posteo
-            $(userDataContainer).append(showImgUser(nickname));
+
+            let imgUser = currentPost.user.profile.ProfilePhotoURL;
+            let imgName = currentPost.user.profile.ProfilePhotoName
+
+            $(userDataContainer).append(showImgUser(nickname,imgUser,imgName));
             $(userDataContainer).append(showContent(nickname,userResponse,message,multimedia,parentUserLink));
             
             let interactionContainer = utilsPosts.showInteraction(linkLike,linkComment,linkVisualization)
@@ -110,7 +120,10 @@ function showParentData(parentData){
     let parentDataContainer = $("<div></div>");
     $(parentDataContainer).addClass("parent_data_container");
     
-    $(parentDataContainer).append(showImgParent(username));
+    let imgUser = parentData.user.profile.ProfilePhotoURL;
+    let imgName = parentData.user.profile.ProfilePhotoName;
+
+    $(parentDataContainer).append(showImgParent(username,imgUser,imgName));
 
     let linkParent = parentData.linkPost;
     let message = parentData.Message;
@@ -121,7 +134,7 @@ function showParentData(parentData){
 }
 
 //creamos los contenedores para mostrar la imagen del padre del post
-function showImgParent(username){
+function showImgParent(username,imgUrl,imgName){
     let firsLetterUser = username[0].toUpperCase();
     let parentUser = $("<div></div>");
     $(parentUser).addClass("parent_user");
@@ -130,16 +143,26 @@ function showImgParent(username){
 
     $(parentImgContainer).addClass("parent_img_container");
 
-    let logo = $("<h4></h4>");
+    if(imgUrl && imgName){
+        let img = $("<img></img>");
+        $(img).attr("src", imgUrl);
+        $(img).attr("alt",imgName);
 
-    $(logo).addClass("logo");
+        $(parentImgContainer).append(img);
+    }
+    else{
+        let logo = $("<h4></h4>");
 
-    $(logo).text(firsLetterUser);
+        $(logo).addClass("logo");
+    
+        $(logo).text(firsLetterUser);
+
+        $(parentImgContainer).append(logo);
+    }
 
     let userLane = $("<div></div>");
     $(userLane).addClass("parent_lane");
 
-    $(parentImgContainer).append(logo);
     $(parentUser).append(parentImgContainer);
     $(parentUser).append(userLane);
 
@@ -213,7 +236,7 @@ function showMultimedia(data,container){
 }
 
 //mostramos la imagen del usuario
-function showImgUser(username){
+function showImgUser(username,imgUrl,imgName){
     let firsLetterUser = username[0].toUpperCase();
     let logoContainer = $("<div></div>");
     $(logoContainer).addClass("owner_logo_container");
@@ -221,13 +244,23 @@ function showImgUser(username){
     let ownerLogo = $("<div></div>");
     $(ownerLogo).addClass("owner_logo");
 
-    let logo = $("<h4></h4>");
-    $(logo).addClass("logo");
+    if(imgUrl && imgName){
+        let img = $("<img></img>");
+        $(img).attr("src", imgUrl);
+        $(img).attr("alt",imgName);
 
-    $(logo).text(firsLetterUser);
-
-    $(ownerLogo).append(logo);
-    $(logoContainer).append(ownerLogo);
+        $(ownerLogo).append(img);
+        $(logoContainer).append(ownerLogo);
+    }
+    else{
+        let logo = $("<h4></h4>");
+        $(logo).addClass("logo");
+    
+        $(logo).text(firsLetterUser);
+    
+        $(ownerLogo).append(logo);
+        $(logoContainer).append(ownerLogo);
+    }
 
     return logoContainer;
 }

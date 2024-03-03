@@ -183,6 +183,9 @@ class User extends Model implements Authenticatable
                     ->with([
                         "PersonalData"=>function($queryPersonal){
                             $queryPersonal->select("PersonalDataID","Nickname");
+                        },
+                        "Profile"=>function ($queryProfile){
+                            $queryProfile->select("ProfileID","UserID","ProfilePhotoURL","ProfilePhotoName");
                         }
                     ]);
                 },

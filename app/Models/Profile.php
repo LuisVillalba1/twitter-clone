@@ -55,8 +55,9 @@ class Profile extends Model
             $edit = true;
             return view("app.profile." . $typeProfileContent,compact(["profile","created","edit"]));
         }
+        $edit = false;
         //si no mostramos el perfil del usuario
-        return view("app.profile.".$typeProfileContent,compact(["profile,created"]));
+        return view("app.profile.".$typeProfileContent,compact(["profile","created","edit"]));
     }
 
     //creamos un nuevo perfil
@@ -135,6 +136,9 @@ class Profile extends Model
                 ->with([
                     "PersonalData"=>function($queryPersonal){
                         $queryPersonal->select("PersonalDataID","Nickname");
+                    },
+                    "Profile"=>function ($queryProfile){
+                        $queryProfile->select("ProfileID","UserID","ProfilePhotoURL","ProfilePhotoName");
                     }
                 ]);
             },
@@ -151,6 +155,9 @@ class Profile extends Model
                         ->with([
                             "PersonalData"=>function($parentPersonal){
                                 $parentPersonal->select("PersonalDataID","Nickname");
+                            },
+                            "Profile"=>function ($queryProfile){
+                                $queryProfile->select("ProfileID","UserID","ProfilePhotoURL","ProfilePhotoName");
                             }
                         ]);
                     },

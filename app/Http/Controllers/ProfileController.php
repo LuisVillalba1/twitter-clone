@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\settings\EditProfileRequest;
+use App\Models\Like;
 use App\Models\PersonalData;
 use App\Models\Profile;
 use App\Models\User;
@@ -162,6 +163,26 @@ class ProfileController extends Controller
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener las respuestas"],500);
+        }
+    }
+
+    //mostramos la vista de los megustas de cierto usuario
+    public function showLikesUser($username){
+        try{
+            return (new Profile())->showProfile($username,"likes");
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //obtenemos los posteos likeados
+    public function getLikesUser($username){
+        try{
+            return (new Like())->getLikesPosts($username);
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>"Ha ocurrido un erro al obtener los posteos likeados, por favor intentelo mas tarde."],500);
         }
     }
 }

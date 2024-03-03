@@ -42,11 +42,12 @@ class PersonalData extends Model
 
     //segun un nombre de usuario checkeamos si existe o no 
     public function checkUsername($userName){
-        $user = PersonalData::where("Nickname",$userName)->first();
+        $personalData = PersonalData::where("Nickname",$userName)->first();
 
-        if(!$user){
+        if(!$personalData){
             return redirect()->route("errorPage");
         }
+        return $personalData;
     }
 
     //mostramos el perfil del usuario

@@ -1,4 +1,5 @@
-@extends('../layouts/plantilla')
+
+@extends('../layouts/emailPlantilla')
 
 @section('head')
 <meta charset="UTF-8">

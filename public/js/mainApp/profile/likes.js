@@ -3,34 +3,36 @@ import * as utilsIntersection from "../utils/utilsIntersection.js";
 import {createErrorAlert} from "../utils/error/errorAlert.js";
 import { setLinks } from "../utils/utilProfile.js";
 
-//seteamos el link de respuestas
-$(".respuestas_location").children().attr("href",window.location.href + "/answers")
-$(".me_gusta_location").children().attr("href",window.location.href + "/likes")
+const allPost = $(".posts_container")
 
 const profileContainer = $(".profile_container");
 
+const postsLocation = $(".posts_location");
+const answersLocations = $(".respuestas_location");
 
-//obtenemos los posteos correspondientes
-function getUserPost(){
+setLinks(postsLocation,null);
+setLinks(answersLocations,"answers")
+
+//obtenemos todas las publicaciones a la cual se ha dado like
+function getLikes(){
     $.ajax({
         type: "GET",
-        url: window.location.href + "/posts",
+        url: window.location.href + "/details",
         success: function (response) {
-           showPosts(response)
+            showPosts(response);
         },
-        error: function(error){
-            createErrorAlert(error.responseJSON.errors,profileContainer);
+        error:function(error){
+            console.log(error);
+            createErrorAlert(error.responseJSON.errors,profileContainer)
         }
     });
-    //ocultamos el loader
-    $(".loader_container").css("display", "none");
+    $(".loader_container").css("display","none")
 }
 
-const allPost = $(".posts_container");
 
-getUserPost();
+getLikes();
 
-//mostramos los posteos
+
 function showPosts(info){
     //la idea es mostrar los posts de 6 en 6
     let currentIndex = 0;

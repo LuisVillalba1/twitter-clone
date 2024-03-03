@@ -14,9 +14,10 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilProfile.css">
-<link rel="stylesheet" href="../../css/mainApp/profile/profile.css">
+<link rel="stylesheet" href="../../css/mainApp/utils/utilPostsAnswers.css">
+<link rel="stylesheet" href="../../css/mainApp/profile/likes.css">
 
-<title>{{$profile->Nickname}} profile</title>
+<title>{{$profile->Nickname}} Me gustas</title>
 @endsection
 
 @section('content')
@@ -50,14 +51,10 @@
                         <h3>{{strtoupper($profile->Nickname[0])}}</h3>
                     </div>
                     @endif
-                    @if ($edit == true)
+                    @if ($edit)
                         <a class="edit_container" href={{route("editProfilesShow")}}>
                             <p>Editar perfil</p>
                         </a>
-                    @else
-                        <div class="follow_user_container">
-                            <p>Seguir</p>
-                        </div>
                     @endif
                 </div>
                 <div class="nickname_and_name_container">
@@ -65,9 +62,9 @@
                     <h5>{{"@".$profile->Nickname}}</h5>
                 </div>
                 @if ($profile->user->Profile->Biography)
-                    <div class="biography_container">
-                        <p class="biography_content">{{$profile->user->Profile->Biography}}</p>
-                    </div>
+                <div class="biography_container">
+                    <p class="biography_content">{{$profile->user->Profile->Biography}}</p>
+                </div>
                 @endif
                 <div class="init_in_app_container">
                     <i class="fa-regular fa-calendar-days"></i>
@@ -87,9 +84,9 @@
             </div>
         </div>
         <div class="locations">
-            <span class="posts_location">Posts</span>
-            <span class="respuestas_location"><a href="">Respuestas</a></span>
-            <span class="me_gusta_location"><a href="#">Me gustas</a></span>
+            <span class="posts_location"><a href="#">Posts</a></span>
+            <span class="respuestas_location"><a href="#">Comentarios</a></span>
+            <span class="me_gusta_location">Me gustas</span>
         </div>
         <div class="loader_container">
             <div class="loader"></div>
@@ -108,8 +105,6 @@
 @endsection
 
 @section('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script type="module" src="../../js/mainApp/profile/profile.js"></script>
+    <script type="module" src="../../js/mainApp/profile/likes.js"></script>
 @endsection
