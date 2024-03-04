@@ -116,6 +116,3 @@ function showPosts(info){
     }
     showMorePosts(currentIndex,postPerPage)
 }
-
-
-

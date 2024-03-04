@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\notiTest;
 use App\Http\Requests\UserPost\NewPostRequest;
 use App\Models\MultimediaPost;
 use App\Models\PersonalData;

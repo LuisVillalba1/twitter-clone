@@ -35,8 +35,9 @@ class Like extends Model
             $newLike->save();
 
             //creamos una notificacion el para el propietario del posteo
-            (new PostsNotification())->createNotification($postID,$userID,"Like",$nickname);
-
+            if(Auth::user()->PersonalData->Nickname != $nickname){
+                (new PostsNotification())->createNotification($postID,$userID,"Like",$nickname);
+            }
             return true;
         }
 

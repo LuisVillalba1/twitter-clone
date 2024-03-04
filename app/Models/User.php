@@ -46,6 +46,10 @@ class User extends Model implements Authenticatable
         return $this->hasOne(Profile::class,"ProfileID");
     }
 
+    public function PostNotification(){
+        return $this->hasMany(PostsNotification::class,"UserID");
+    }
+
     //guardamos en los datos de session su nombre email y fecha de nacimiento
     public function safePersonalDate($request){
         Session::put("name",$request->input("name"));

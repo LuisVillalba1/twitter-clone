@@ -9,22 +9,19 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Auth;
 
-class notificationEvent implements ShouldBroadcast
+class notiTest implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * Create a new event instance.
      */
-    public $notification;
-    public $nickname;
+    public $data;
 
-    public function __construct($notification,$nickname)
+    public function __construct()
     {
-        $this->notification = $notification;
-        $this->nickname = $nickname;
+        $this->data = "sadñgksda";
     }
 
     /**
@@ -35,7 +32,7 @@ class notificationEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new Channel('notification.' . $this->nickname),
+            new Channel("mandioca"),
         ];
     }
 }

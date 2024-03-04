@@ -18,7 +18,7 @@ return new class extends Migration
 
             //propietario de la notificacion
             $table->unsignedBigInteger("UserID");
-            $table->foreign("UseriD")
+            $table->foreign("UserID")
             ->references("UserID")
             ->on("users")
             ->onDelete("CASCADE")

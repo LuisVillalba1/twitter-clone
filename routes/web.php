@@ -13,6 +13,7 @@ use App\Http\Middleware\CheckFirstStepRegistration;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\PersonalData;
+use App\Models\PostsNotification;
 use App\Models\Profile;
 use App\Models\SavePost;
 use App\Models\User;
@@ -140,6 +141,7 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/user/notifications",[NotificationController::class,"showNotifications"])->name("notificationView");
 
 });
+
 
 // Route::any('{any}', function () {
 //     return redirect()->route("errorPage");

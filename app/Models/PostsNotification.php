@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\notificationEvent;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,6 +14,18 @@ class PostsNotification extends Model
     use HasFactory;
 
     protected $primaryKey = "PostNotificationID";
+
+    public function User(){
+        return $this->belongsTo(User::class,"UserID");
+    }
+
+    public function Post(){
+        return $this->belongsTo(UserPost::class,"PostID");
+    }
+
+    public function ActionUser(){
+        return $this->belongsTo(User::class,"ActionUserID");
+    }
 
     //verificamos si ya exista la notificacion
     public function checkExistNotification($postID,$action){
@@ -50,9 +63,52 @@ class PostsNotification extends Model
             }
     
             $newNotification->save();
+
+            $data = $this->getNotificationData($newNotification->PostNotificationID,$username);
+
+            $this->sendNotification($data,$username);
+
         }
         catch(\Exception $e){
             throw new Exception($e->getMessage());
         }
     }
+
+    public function getNotificationData($PostNotificationID,$username){
+        $data = $this::
+            select("Action","PostNotificationID","UserID")
+            ->with([
+                "User"=>function ($queryUser){
+                    $queryUser
+                    ->select("UserID","PersonalDataID")
+                    ->with([
+                        "personalData"=>function ($queryPersonal){
+                            $queryPersonal->select("PersonalDataID","Nickname");
+                        }
+                    ]);
+                },
+                "ActionUser"=>function($querAction){
+                    $querAction
+                    ->select("UserID","PersonalDataID")
+                    ->with([
+                        "personalData"=>function ($queryPersonal){
+                            $queryPersonal->select("PersonalDataID","Nickname");
+                        }
+                    ]);
+                }
+            ])
+            ->where("PostNotificationID",$PostNotificationID)
+            ->first();
+
+        return $data;
+    }
+
+    //enviamos la notificacion
+    public function sendNotification($data,$username){
+        //tenemos que convertir la informacion a un array obligatoriamente osino, se serializa las relaciones y se cargan completamente
+        $dataArray = $data->toArray();
+        broadcast(new notificationEvent($dataArray,$username))->toOthers();
+    }
 }
+
+

@@ -83,9 +83,13 @@
 @endsection
 
 @section('scripts')
+<script>
+    {!! Vite::content('resources/js/app.js') !!}
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script type="module" src="./js/mainApp/home.js"></script>
 <script src="./js/mainApp/posts/createPost.js"></script>
 <script src="./js/mainApp/utils/responsive/utilNav.js"></script>
 <script src="./js/mainApp/homeDragAndDrop.js"></script>
+<script src="./js/mainApp/utils/socket/echo.js"></script>
 @endsection

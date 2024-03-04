@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -17,6 +18,8 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
 
-broadcast::channel("notification",function($user){
-
+broadcast::channel("notification.{nickname}",function($user,$nickname){
+    
+    //verificamos si el usuario esta utenticado
+    return Auth::user()->PersonalData->Nickname == $nickname;
 });
