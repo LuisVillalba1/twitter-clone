@@ -71,10 +71,6 @@ body{
 }
 
 
-footer i{
-    font-size: 1.3em;
-}
-
 @keyframes like-anim{
     to{
         background-position: right;

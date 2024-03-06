@@ -233,21 +233,6 @@ body::-webkit-scrollbar{
     justify-content: center;
 }
 
-footer{
-    border-top: 1px solid var(--grisClaro);
-    background: var(--negro);
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    padding: 15px 30px 10px 30px;
-}
-
-footer i{
-    font-size: 1.3em;
-}
-
 @keyframes like-anim{
     to{
         background-position: right;
@@ -255,9 +240,6 @@ footer i{
 }
 
 @media screen and (min-width:485px){
-    footer{
-        display: none;
-    }
     .posts_container{
         max-width: 720px;
     }

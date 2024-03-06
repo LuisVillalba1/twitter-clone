@@ -17,6 +17,11 @@ footer i{
     font-size: 1.3em;
 }
 
+.count_notification_container_footer{
+    top: -12px;
+    right: -8px;
+}
+
 @media screen and (min-width:485px){    
     footer{
         display: none;

@@ -16,6 +16,7 @@
 body{
     background: var(--negro);
     position: relative;
+    min-height: 100vh;
 }
 
 .notifications_container{
@@ -32,11 +33,69 @@ body{
     font-size: 1.2em;
 }
 
+
 .notifications{
     display: flex;
     flex-direction: column;
     width: 100%;
 }
+
+.notification{
+    padding: 5px 15px;
+    display: flex;
+    width: 100%;
+    border-bottom: 1px solid var(--grisClaro);
+}
+
+.action_container{
+    min-height: 50px;
+    margin-right: 8px;
+    padding-top: 3px;
+}
+
+.action_container i{
+    color: rgb(255 0 0);
+    font-size: 1.2em;
+}
+
+
+.img_user{
+    min-height: 30px;
+    width: 30px;
+    border-radius: 20px;
+    background: var(--celeste);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.img_user_img{
+    width: 100%;
+}
+
+
+.message_container{
+    padding-top: 3px;
+}
+
+.message_container p{
+    font-size: 1.12em;
+}
+
+.post_data_container{
+    padding: 5px 0;
+}
+
+.post_data_container *{
+    color: var(--grisClaro);
+}
+
+.post_data_container p{
+    font-size: 1.11em;
+}
+
+
 
 @media screen and (min-width:485px){
     .main_container{
@@ -46,5 +105,8 @@ body{
     }
     .header_notifications h3{
         font-size: 1.4em;
+    }
+    .notifications_container{
+        border-right: 1px solid var(--grisClaro);
     }
 }

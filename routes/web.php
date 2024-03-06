@@ -139,10 +139,11 @@ Route::middleware(["AuthSession"])->group(function () {
 
     //perimitimos al usuario ver sus notificaciones
     Route::get("/user/notifications",[NotificationController::class,"showNotifications"])->name("notificationView");
+    Route::get("/user/notifications/details",[NotificationController::class,"getNotifications"])->name("getNotifications");
 
 });
 
 
-// Route::any('{any}', function () {
-//     return redirect()->route("errorPage");
-// })->where('any', '.*');
+Route::any('{any}', function () {
+    return redirect()->route("errorPage");
+})->where('any', '.*');

@@ -45,6 +45,9 @@ return new class extends Migration
 
             //que tipo de accion se realizo, ya sea un like,comentario, repost etc
             $table->string("Action");
+            
+            //para verificar si se ha visualizado o la notificacion
+            $table->boolean("Visualizated")->nullable();
             $table->timestamps();
         });
     }

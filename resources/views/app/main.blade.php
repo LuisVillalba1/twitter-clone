@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="./css/mainApp/utils/utilPost.css">
 <link rel="stylesheet" href="./css/mainApp/utils/responsive/utilHeader.css">
 <link rel="stylesheet" href="./css/mainApp/utils/responsive/utilNav.css">
+<link rel="stylesheet" href="./css/mainApp/utils/responsive/utilFooter.css">
 
 <title>Twitter</title>
 @endsection

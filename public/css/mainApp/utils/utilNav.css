@@ -10,6 +10,26 @@
     display: none;
 }
 
+.notification_container{
+    position: relative
+}
+
+.count_notification_container{
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: -4px;
+    border-radius: 50%;
+    padding: 1px 3px;
+    background: red;
+    min-height: 10px;
+    min-width: 10px;
+}
+
+.count_notification{
+    color: var(--blanco);
+}
+
 @media screen and (min-width:485px){
     .nav_container{
         position: relative;

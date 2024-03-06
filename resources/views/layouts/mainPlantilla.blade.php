@@ -16,7 +16,7 @@
         <div class="border_rigth_blur"></div>
         <div class="account_information">
             <div class="account__logo_container">
-                @if ($profilePhoto)
+                @if ($profilePhoto[0])
                     <img src={{$profilePhoto[0]}} alt={{$profilePhoto[1]}}>
                 @else
                     <div class="account_logo">
@@ -159,8 +159,11 @@
                 </div>
                 <div class="nav_icon_container">
                     <a href={{route("notificationView")}} title="Notificaciones">
-                        <div class="nav_icon_link_container">
+                        <div class="nav_icon_link_container notification_container">
                             <i class="fa-regular fa-bell"></i>
+                            <div class="count_notification_container">
+                                <p class="count_notification"></p>
+                            </div>
                         </div>
                         <div class="nav_link_description_container">
                             <p class="nav_link_description">Notificaciones</p>
@@ -234,7 +237,12 @@
     <footer>
         <a href={{route("mainApp")}}><i class="fa-solid fa-house"></i></a>
         <i class="fa-solid fa-magnifying-glass"></i>
-        <a href={{route("notificationView")}}><i class="fa-regular fa-bell"></i></a>
+        <a href={{route("notificationView")}} class="notification_container">
+            <i class="fa-regular fa-bell"></i>
+            <div class="count_notification_container count_notification_container_footer">
+                <p class="count_notification"></p>
+            </div>
+        </a>
         <i class="fa-solid fa-envelope"></i>
     </footer>
 </body>
