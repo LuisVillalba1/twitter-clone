@@ -221,6 +221,7 @@ class User extends Model implements Authenticatable
     }
 
     //recibimos un posteo y le agregamos el nickname junto a las fotos de su perfil
+    //tambien le agregamos el link del posteo correspondiente
     public function addUserContent($id){
         $userLikeData = User::
         select("UserID","PersonalDataID")

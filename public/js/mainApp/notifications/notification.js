@@ -5,8 +5,7 @@ function getNotifications(){
         type: "get",
         url: window.location.href + "/details",
         success: function (response) {
-            console.log(response)
-            // showNotifications(response)
+            showNotifications(response)
         },
         error : function(error){
             console.log(error)
@@ -22,51 +21,89 @@ const notificationsContainer = $(".notifications")
 
 getNotifications();
 
+//por cada notificacion vamos a obtener informacion de comentarios y likes
 function showNotifications(data){
     for(let i of data){
-        //creamos el contenedor de la notificacion
-        let newNotification = $("<a></a>");
-        $(newNotification).addClass("notification");
-
-        $(newNotification).attr("href", i.LinkPost);
-        
-        let username = i.action_user.personal_data.Nickname;
-        let photoUser = i.action_user.profile.ProfilePhotoURL;
-        let photoUserName = i.action_user.profile.ProfilePhotoName
-
-        let action = i.Action;
-        let post = i.post;
-
-        //contenedor que contendra la foto del usuario en caso de que sea un comentario,o un corazon si es un like
-        let containerType = $("<div></div>");
-        $(containerType).addClass("action_container");
-
-        //contenedor que contendra el contenido de la notificacion
-        let mainNotificationContainer = $("<div></div>");
-        $(mainNotificationContainer).addClass("notification_content_container");
-
+        let messageUniq = "";
         let message = "";
-        if(action != "Like"){
-            //en caso de ser un comentario mostramos la foto del usuario
-            message = "Ha comentado tu posteo"
-            commentNotification(photoUser,photoUserName,username,containerType,mainNotificationContainer);
-            $(mainNotificationContainer).append(showContent(message,username,post));
+        //obtenemos los datos de los comentarios
+        if(i.LastUserComment){
+            messageUniq = "ha comentado tu posteo";
+            message = "han comentado tu posteo";
+            showNotification(i,i.LastUserComment,"Comment",i.SumComments,messageUniq,message)
         }
-        else{
-            //en caso de ser un mensaje agregamos el corazon junto al contenido del posteo
-            message = "indicó que le gusta tu posteo"
-            likeNotification(photoUser,photoUserName,username,containerType,mainNotificationContainer)
-            $(mainNotificationContainer).append(showContent(message,username,post));
+        //obtenemos los datos de los likes
+        if(i.LastUserLike){
+            messageUniq = "ha indicado que le gusta tu posteo";
+            message = "han indico que le gusta tu posteo";
+            showNotification(i,i.LastUserLike,"Likes",i.SumLikes,messageUniq,message);
         }
-        $(newNotification).append(containerType);
-        $(newNotification).append(mainNotificationContainer);
-        $(notificationsContainer).append(newNotification);
+    }
+}
+
+function showNotification(allContent,content,typeContent,countActions,uniqActiontext,actionTex){
+    //creamos el contenedor de la notificacion
+    let newNotification = $("<a></a>");
+    $(newNotification).addClass("notification");
+    $(newNotification).attr("href", content.Link);
+
+    //obtenemos el link del posteo y el usuario que reliazo el ultimo like
+    let linkPost = content.Link;
+    let nickname = content.personal_data.Nickname;
+
+    //le añadimos el link del posteo
+    $(newNotification).addClass("href",linkPost);
+
+    //contenedor que contendra la imagen correspondiente,de un corazon en caso de que sea un like,o la del usuario si es un comentario
+    let containerAction = $("<div></div>");
+    $(containerAction).addClass("action_container");
+
+    //contenedor del contenido de la notificacion
+    let mainNotificationContainer = $("<div></div>");
+    $(mainNotificationContainer).addClass("notification_content_container");
+
+    //creamos el mensaje de la notificacion esta varia de la cantidad de personas que interactuaron con el posteo
+    let message = ` ${uniqActiontext}`;
+    if(countActions == 2){
+        message = ` y ${countActions - 1} persona mas ${actionTex}`;
+    }
+    if(countActions > 2){
+        message = ` y ${countActions} personas mas ${actionTex}`
+    }
+    //obtenemos las imagenes del usuario
+    let userPhoto = content.profile.ProfilePhotoURL;
+    let userPhotoName = content.profile.ProfilePhotoName;
+
+    //creamos un objeto con el contenido del posteo
+    let post = {
+        Message : allContent.Message,
+        multimedia_post : [{
+            Url : allContent.Multimedia
+        }
+        ]
     }
 
+    //en caso de que sea un comentario lo mostramos de la manera correspondiente
+    if(typeContent == "Comment"){
+        //mostramos la imagen,en caso de que posea, del usuario
+        commentNotification(userPhoto,userPhotoName,nickname,containerAction)
+        //mostramos el contenido del posteo con el cual se interactuo
+        $(mainNotificationContainer).append(showContent(message,nickname,post))
+    }
+    else{
+        //mostramos el corazon junto a la imagen del usuario
+        likeNotification(userPhoto,userPhotoName,nickname,containerAction,mainNotificationContainer);
+        //mostramos el contenido del posteo
+        $(mainNotificationContainer).append(showContent(message,nickname,post));
+    }
+
+    newNotification.append(containerAction);
+    newNotification.append(mainNotificationContainer);
+    notificationsContainer.append(newNotification);
 }
 
 //en caso de que sea un comentario mostramos la notificacion de la forma deseada
-function commentNotification(photo,photoName,nickname,containerType,mainContentContainer){
+function commentNotification(photo,photoName,nickname,containerType){
     $(containerType).append(showImgComment(photo,photoName,nickname));
 }
 
@@ -89,7 +126,8 @@ function showImgComment(photo,photoName,nickname){
     let imgUser = $("<div></div>");
     $(imgUser).addClass("img_user");
     let paragraph = $("<p></p>");
-    $(paragraph).text(nickname[0].toUpperCase());
+    let firstLetter = nickname[0].toUpperCase();
+    $(paragraph).text(firstLetter);
 
     $(imgUser).append(paragraph);
     $(imgContainer).append(imgUser);
@@ -99,6 +137,7 @@ function showImgComment(photo,photoName,nickname){
 
 //mostramos la notificacion en caso de que la accion haya sido de like
 function likeNotification(photo,photoName,nickname,containerType,mainNotificationContainer){
+    //agregamos el corazon y la imagen del usuario en caos de que posea
     $(containerType).append(showHeart());
     $(mainNotificationContainer).append(showImgLike(photo,photoName,nickname))
 }
@@ -106,7 +145,6 @@ function likeNotification(photo,photoName,nickname,containerType,mainNotificatio
 function showImgLike(photo,photoName,nickname){
     let imgContainer = $("<div></div>");
     $(imgContainer).addClass("img_like_user");
-    //si es un comentario mostramos la foto del usuario
     if(photo && photoName){
         //mostramos la imagen del usuario
         let img = $("<img></img>");
@@ -121,8 +159,8 @@ function showImgLike(photo,photoName,nickname){
     let imgUser = $("<div></div>");
     $(imgUser).addClass("img_user");
     let paragraph = $("<p></p>");
+    let firstLetter = nickname[0];
     $(paragraph).text(nickname[0].toUpperCase());
-
     $(imgUser).append(paragraph);
     $(imgContainer).append(imgUser);
 
@@ -153,6 +191,7 @@ function showContent(message,nickname,post){
 
     $(content).append(messageContainer);
 
+    //mostramos el contenido del posteo con el cual se ha interactuado
     $(content).append(showPostContent(post,postDataContainer))
 
     return content;
@@ -181,21 +220,25 @@ function showMessagePost(message){
     return messageContainer;
 }
 
+//en caso de que el posteo tenga imagenes relacionadas, mostramos los link de las mismas
 function showLinkImgPost(multimedias){
     let multimediaContainer = $("<div></div>");
     $(multimediaContainer).addClass("multimedia_post_container");
     for(let i of multimedias){
-        let linkImg = i.ProfilePhotoURL;
-        let paragraph = $("<p></p>");
-        $(paragraph).text(`${linkImg}`);
-
-        $(multimediaContainer).append(paragraph);
+        if(i.Url){
+            let linkImg = i.Url;
+            let paragraph = $("<p></p>");
+            $(paragraph).text(`${linkImg}`);
+    
+            $(multimediaContainer).append(paragraph);
+        }
     }
     return multimediaContainer;
 }
 
 const linkProfileContainer = $(".logo_icon_container");
 
+//obtenemos el nombre del usuario 
 function getNickname(){
     let linkProfile = $(linkProfileContainer).attr("href");
 
@@ -203,49 +246,50 @@ function getNickname(){
     return username[username.length - 1];
 }
 
+//canala para recibir cada ves que se obtiene una nueva notificacion
 Echo.channel(`notification.${getNickname()}`).
 listen("notificationEvent",(e)=>{
-    console.log(e);
+    //mostramos la nueva notificacion
     showNewNotification(e.notification);
 })
 
 //mostramos la nueva notificacion obtenida en tiempo real
 function showNewNotification(i){
-            //creamos el contenedor de la notificacion
-            let newNotification = $("<a></a>");
-            $(newNotification).addClass("notification");
+    //creamos el contenedor de la notificacion
+    let newNotification = $("<a></a>");
+    $(newNotification).addClass("notification");
     
-            $(newNotification).attr("href", i.LinkPost);
+    $(newNotification).attr("href", i.LinkPost);
             
-            let username = i.action_user.personal_data.Nickname;
-            let photoUser = i.action_user.profile.ProfilePhotoURL;
-            let photoUserName = i.action_user.profile.ProfilePhotoName
+    let username = i.action_user.personal_data.Nickname;
+    let photoUser = i.action_user.profile.ProfilePhotoURL;
+    let photoUserName = i.action_user.profile.ProfilePhotoName
     
-            let action = i.Action;
-            let post = i.post;
+    let action = i.Action;
+    let post = i.post;
     
-            //contenedor que contendra la foto del usuario en caso de que sea un comentario,o un corazon si es un like
-            let containerType = $("<div></div>");
-            $(containerType).addClass("action_container");
+    //contenedor que contendra la foto del usuario en caso de que sea un comentario,o un corazon si es un like
+    let containerType = $("<div></div>");
+    $(containerType).addClass("action_container");
     
-            //contenedor que contendra el contenido de la notificacion
-            let mainNotificationContainer = $("<div></div>");
-            $(mainNotificationContainer).addClass("notification_content_container");
+    //contenedor que contendra el contenido de la notificacion
+    let mainNotificationContainer = $("<div></div>");
+    $(mainNotificationContainer).addClass("notification_content_container");
     
-            let message = "";
-            if(action != "Like"){
-                //en caso de ser un comentario mostramos la foto del usuario
-                message = "Ha comentado tu posteo"
-                commentNotification(photoUser,photoUserName,username,containerType,mainNotificationContainer);
-                $(mainNotificationContainer).append(showContent(message,username,post));
-            }
-            else{
-                //en caso de ser un mensaje agregamos el corazon junto al contenido del posteo
-                message = "indicó que le gusta tu posteo"
-                likeNotification(photoUser,photoUserName,username,containerType,mainNotificationContainer)
-                $(mainNotificationContainer).append(showContent(message,username,post));
-            }
-            $(newNotification).append(containerType);
-            $(newNotification).append(mainNotificationContainer);
-            $(notificationsContainer).prepend(newNotification);
+    let message = "";
+    if(action != "Like"){
+        //en caso de ser un comentario mostramos la foto del usuario
+        message = "Ha comentado tu posteo"
+        commentNotification(photoUser,photoUserName,username,containerType,mainNotificationContainer);
+        $(mainNotificationContainer).append(showContent(message,username,post));
+    }
+    else{
+        //en caso de ser un mensaje agregamos el corazon junto al contenido del posteo
+        message = "indicó que le gusta tu posteo"
+        likeNotification(photoUser,photoUserName,username,containerType,mainNotificationContainer)
+        $(mainNotificationContainer).append(showContent(message,username,post));
+    }
+    $(newNotification).append(containerType);
+    $(newNotification).append(mainNotificationContainer);
+    $(notificationsContainer).prepend(newNotification);
 }

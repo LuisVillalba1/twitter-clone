@@ -31,17 +31,18 @@ class NotificationController extends Controller
     //obtenemos las notificaciones del usuario autenticado que aun no han sido vizualizadas
     public function getNotifications(){
         try{
+            $userID = Auth::user()->UserID;
             $notifications = 
             DB::table('posts_notifications as p')
             ->select("p.PostID","up.Message",
             DB::raw('(SELECT Url from multimedia_posts where PostID = p.PostID LIMIT 1) as Multimedia'),
-            DB::raw('(SELECT ActionUserID from posts_notifications WHERE Action = "Like" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1) AS LastUserLike'),
-            DB::raw('COUNT(CASE WHEN Action = "Like" THEN 1 END) AS SumLikes'),
-            DB::raw('(SELECT ActionUserID from posts_notifications WHERE Action = "Comment" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1) AS LastUserComment'),
+            DB::raw('(SELECT CONCAT(ActionUserID,"-",LinkPost) from posts_notifications WHERE Action = "Like" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1) AS LastUserLike'),
+            DB::raw('COUNT(CASE WHEN Action = "Like" AND ActionUserID THEN 1 END) AS SumLikes'),
+            DB::raw('(SELECT CONCAT(ActionUserID,"-",LinkPost) from posts_notifications WHERE Action = "Comment" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1) AS LastUserComment'),
             DB::raw('COUNT(CASE WHEN Action = "Comment" THEN 1 END) AS SumComments')
             )
             ->join("user_posts as up","p.PostID","=","up.PostID")
-            ->where("p.UserID", Auth::user()->UserID)
+            ->where("p.UserID", $userID)
             ->groupBy("p.PostID")
             ->get();
 
@@ -57,8 +58,17 @@ class NotificationController extends Controller
     //vamos a obtener un array de posteos, por cada uno vamos a agregarle la informacion del ultimo usuario que likeo y comento
     public function userNotificationContent($postNotifications){
         foreach($postNotifications as $postNotification){
-            $postNotification->LastUserLike = (new User())->addUserContent($postNotification->LastUserLike);
-            $postNotification->LastUserComment = (new User())->addUserContent($postNotification->LastUserComment);
+            //vamos recibir el id junto al link del posteo,utilizamos explode para separarlos
+            if($postNotification->LastUserLike){
+                $actionLikeData = explode("-",$postNotification->LastUserLike);
+                $postNotification->LastUserLike = (new User())->addUserContent($actionLikeData[0]);
+                $postNotification->LastUserLike->Link= $actionLikeData[1];
+            }
+            if($postNotification->LastUserComment){
+                $actionCommentData = explode("-",$postNotification->LastUserComment);
+                $postNotification->LastUserComment = (new User())->addUserContent($actionCommentData[0]);
+                $postNotification->LastUserComment->Link= $actionCommentData[1];
+            }
         }
 
         return $postNotifications;

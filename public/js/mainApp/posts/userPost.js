@@ -52,7 +52,7 @@ async function showData(data){
     let message = data.Message;
 
     //mostramos el mensaje en caso de que exista
-    if(message.length > 0){
+    if(message && message.length > 0){
         $(".user_message").text(message);
     }
     let multimedia = data.multimedia_post;
