@@ -100,13 +100,6 @@
     </div>
 @endsection
 
-@section('footer')
-<i class="fa-solid fa-house"></i>
-<i class="fa-solid fa-magnifying-glass"></i>
-<i class="fa-regular fa-bell"></i>
-<i class="fa-solid fa-envelope"></i>
-@endsection
-
 @section('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js"></script>

@@ -220,4 +220,22 @@ class User extends Model implements Authenticatable
             return $posts;
     }
 
+    //recibimos un posteo y le agregamos el nickname junto a las fotos de su perfil
+    public function addUserContent($id){
+        $userLikeData = User::
+        select("UserID","PersonalDataID")
+        ->with([
+            "personalData"=>function ($queryPersonal){
+                $queryPersonal->select("PersonalDataID","Nickname");
+            },
+            "Profile"=>function ($queryProfile){
+                $queryProfile->select("ProfileID","UserID","ProfilePhotoURL","ProfilePhotoName");
+            }
+        ])
+        ->where("UserID",$id)
+        ->first();
+
+        return $userLikeData;
+    }
+
 }

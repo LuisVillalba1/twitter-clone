@@ -39,12 +39,9 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href={{route("notificationView")}} title="Notificaciones">
-                        <div class="nav_icon_link_container notification_container">
+                    <a href="#" title="Notificaciones">
+                        <div class="nav_icon_link_container">
                             <i class="fa-regular fa-bell"></i>
-                            <div class="count_notification_container">
-                                <p class="count_notification"></p>
-                            </div>
                         </div>
                         <div class="nav_link_description_container">
                             <p class="nav_link_description">Notificaciones</p>
@@ -115,21 +112,9 @@
         </div>
         @yield("content")
     </div>
-    <footer>
-        <a href={{route("mainApp")}}><i class="fa-solid fa-house"></i></a>
-        <i class="fa-solid fa-magnifying-glass"></i>
-        <a href={{route("notificationView")}} class="notification_container">
-            <i class="fa-regular fa-bell"></i>
-            <div class="count_notification_container count_notification_container_footer">
-                <p class="count_notification"></p>
-            </div>
-        </a>
-        <i class="fa-solid fa-envelope"></i>
-    </footer>
 </body>
 <script>
     {!! Vite::content('resources/js/app.js') !!}
 </script>
 @yield("scripts")
-<script src="{{ asset('js/mainApp/utils/socket/echo.js') }}"></script>
 </html>

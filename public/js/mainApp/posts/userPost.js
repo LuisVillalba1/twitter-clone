@@ -18,10 +18,8 @@ async function getPostData(){
     $(".post_container").css("display", "flex");
     //mostramos la informacion
     showData(data);
-    console.log(data);
     }
     catch(e){
-        console.log(e);
         createErrorAlert(e.responseJSON.errors,$(".post_container"))
     }
     //una ves finalizada la peticion ocultamos el loader
@@ -48,7 +46,6 @@ async function showData(data){
 
     //obtenemos el link del perfil
     let linkProfile = data.linkProfile;
-    console.log(linkProfile)
     $(".user_nickname").text(userName);
     $(".user_nickname").attr("href",linkProfile)
 
@@ -147,7 +144,6 @@ function showParentData(parentData){
     }
 
     let linkProfile = parentData.linkProfile;
-    console.log(linkProfile);
 
     showResponse(username,linkProfile)
 }

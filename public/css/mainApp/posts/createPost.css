@@ -58,6 +58,11 @@ body{
     padding: 3px 5px;
 }
 
+.post_to_comment_logo .owner_logo {
+    width: 35px;
+    height: 65px;
+}
+
 .owner_logo{
     background: rgb(4, 108, 4);
     width: 35px;

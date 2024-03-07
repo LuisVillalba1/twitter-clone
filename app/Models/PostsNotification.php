@@ -41,17 +41,17 @@ class PostsNotification extends Model
     }
 
     //creamos una nueva notificacion
-    public function createNotification($postID,$userID,$action,$username){
+    public function createNotificationLike($postID,$userID,$username){
         try{
             $authUser = Auth::user();
             //verificamos si ya existe el posteo y en caso de que exista obtenemos el link del posteo
-            $linkPost = $this->checkExistNotification($postID,$action);
+            $linkPost = $this->checkExistNotification($postID,"Like");
     
             $newNotification = new PostsNotification();
             $newNotification->UserID = $userID;
             $newNotification->PostID = $postID;
             $newNotification->ActionUserID = $authUser->UserID;
-            $newNotification->Action = $action;
+            $newNotification->Action = "Like";
     
             //agregamos el link del posteo correspondiente y guardamos la notificacion
             if($linkPost){
@@ -64,8 +64,10 @@ class PostsNotification extends Model
     
             $newNotification->save();
 
-            $data = $this->getNotificationData($newNotification->PostNotificationID,$username);
+            //obtenemos la informacion de la notificacion
+            $data = $this->getNotificationData($newNotification->PostNotificationID);
 
+            //se la enviamos al usuario
             $this->sendNotification($data,$username);
 
         }
@@ -74,9 +76,37 @@ class PostsNotification extends Model
         }
     }
 
-    public function getNotificationData($PostNotificationID,$username){
-        $data = $this::
-            select("Action","PostNotificationID","UserID")
+    //vamos a recibir el id del posteo que se comento junto al id del usuario,
+    public function createNotificationComment($postUserID,$userID,$username,$commentID,$commentUser){
+        try{
+            $authUser = Auth::user();
+
+            $newNotification = new PostsNotification();
+            $newNotification->UserID = $userID;
+            $newNotification->PostID = $postUserID;
+            $newNotification->ActionUserID = $authUser->UserID;
+            $newNotification->Action = "Comment";
+
+            $idEncrypt = Crypt::encryptString($commentID);
+            $newNotification->LinkPost = route("showPost",["username"=>$commentUser,"encryptID"=>$idEncrypt]);
+
+            $newNotification->save();
+
+            //obtenemos la informacion de la notificacion
+            $data = $this->getNotificationData($newNotification->PostNotificationID);
+
+            //se la enviamos al usuario
+            $this->sendNotification($data,$username);
+
+        }
+        catch(\Exception $e){
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function getNotificationData($PostNotificationID){
+        $data = PostsNotification::
+            select("Action","PostNotificationID","UserID","LinkPost","ActionUserID","PostID")
             ->with([
                 "User"=>function ($queryUser){
                     $queryUser
@@ -87,15 +117,30 @@ class PostsNotification extends Model
                         }
                     ]);
                 },
-                "ActionUser"=>function($querAction){
-                    $querAction
+                //obtenemos datos del usuario que ha realizado la interaccion
+                "ActionUser"=>function ($queryUser){
+                    $queryUser
                     ->select("UserID","PersonalDataID")
                     ->with([
-                        "personalData"=>function ($queryPersonal){
-                            $queryPersonal->select("PersonalDataID","Nickname");
+                        "personalData"=>function($queryPersonalData){
+                            $queryPersonalData->select("PersonalDataID","Nickname");
+                        },
+                        "Profile"=>function($queryProfile){
+                            $queryProfile->select("ProfileID","UserID","ProfilePhotoURL","ProfilePhotoName");
+                        }
+                    ]);
+                },
+                //obtenemos ciertos datos como el mensage y el contenido multimedia del posteo
+                "Post"=>function ($queryPost){
+                    $queryPost
+                    ->select("PostID","Message")
+                    ->with([
+                        "MultimediaPost"=>function ($queryMultimedia){
+                            $queryMultimedia->select("MultimediaID","Name","Url");
                         }
                     ]);
                 }
+                            
             ])
             ->where("PostNotificationID",$PostNotificationID)
             ->first();
@@ -109,6 +154,7 @@ class PostsNotification extends Model
         $dataArray = $data->toArray();
         broadcast(new notificationEvent($dataArray,$username))->toOthers();
     }
+
 }
 
 

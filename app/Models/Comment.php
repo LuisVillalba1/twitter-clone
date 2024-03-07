@@ -124,9 +124,10 @@ class Comment extends Model
         if($images){
             //en caso de que existan imagenes, asignamos el contenido multimedia al comentario
             $this->createMultimediaComment($images,$commentID);
-
-            return redirect()->route("mainApp")->getTargetUrl();
         }
+
+        //creamos la nueva notificacion para el usuario y se la enviamos
+        (new PostsNotification())->createNotificationComment($postID,$user->PersonalDataID,$userName,$commentID,Auth::user()->PersonalData->Nickname);
 
         return redirect()->route("mainApp")->getTargetUrl();
         }

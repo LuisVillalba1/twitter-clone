@@ -97,13 +97,6 @@
     </div>
 @endsection
 
-@section('footer')
-<i class="fa-solid fa-house"></i>
-<i class="fa-solid fa-magnifying-glass"></i>
-<i class="fa-regular fa-bell"></i>
-<i class="fa-solid fa-envelope"></i>
-@endsection
-
 @section('scripts')
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script type="module" src="../../js/mainApp/profile/likes.js"></script>

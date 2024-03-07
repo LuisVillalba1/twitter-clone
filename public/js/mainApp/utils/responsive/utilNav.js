@@ -15,7 +15,6 @@ function desfilterElements(){
     let hijosBody = $("body").children().slice(0,-2);
 
     $.each(hijosBody, function (indexInArray, valueOfElement) { 
-        console.log(valueOfElement);
         if(!$(valueOfElement).hasClass("nav_responsive")){
            $(valueOfElement).removeAttr("style");
         }

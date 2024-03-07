@@ -45,6 +45,7 @@ body{
     display: flex;
     width: 100%;
     border-bottom: 1px solid var(--grisClaro);
+    text-decoration: none;
 }
 
 .action_container{

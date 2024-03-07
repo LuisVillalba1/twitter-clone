@@ -246,5 +246,8 @@
         <i class="fa-solid fa-envelope"></i>
     </footer>
 </body>
+<script>
+    {!! Vite::content('resources/js/app.js') !!}
+</script>
 @yield("scripts")
 </html>

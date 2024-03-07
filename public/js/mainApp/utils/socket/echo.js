@@ -2,6 +2,7 @@
 
 const linkProfileContainer = $(".logo_icon_container");
 
+
 //seteamos la cantidad actual de notificaciones
 function setCurrentNotifications(){
     //obtenemos los contenedores

@@ -1,3 +1,4 @@
+
 //obtenemos las notificaciones
 function getNotifications(){
     $.ajax({
@@ -5,13 +6,16 @@ function getNotifications(){
         url: window.location.href + "/details",
         success: function (response) {
             console.log(response)
-            showNotifications(response)
+            // showNotifications(response)
         },
         error : function(error){
             console.log(error)
         }
     });
 }
+
+//eliminamos la cantidadad de notificaciones
+localStorage.removeItem("notificationCount");
 
 //contenedor de todas las notificaciones
 const notificationsContainer = $(".notifications")
@@ -21,8 +25,10 @@ getNotifications();
 function showNotifications(data){
     for(let i of data){
         //creamos el contenedor de la notificacion
-        let newNotification = $("<div></div>");
+        let newNotification = $("<a></a>");
         $(newNotification).addClass("notification");
+
+        $(newNotification).attr("href", i.LinkPost);
         
         let username = i.action_user.personal_data.Nickname;
         let photoUser = i.action_user.profile.ProfilePhotoURL;
@@ -62,7 +68,6 @@ function showNotifications(data){
 //en caso de que sea un comentario mostramos la notificacion de la forma deseada
 function commentNotification(photo,photoName,nickname,containerType,mainContentContainer){
     $(containerType).append(showImgComment(photo,photoName,nickname));
-
 }
 
 //en el caso de que haya sido un comentario la notificacion mostramos al costado la foto del usuario
@@ -187,4 +192,60 @@ function showLinkImgPost(multimedias){
         $(multimediaContainer).append(paragraph);
     }
     return multimediaContainer;
+}
+
+const linkProfileContainer = $(".logo_icon_container");
+
+function getNickname(){
+    let linkProfile = $(linkProfileContainer).attr("href");
+
+    let username = linkProfile.split("/");
+    return username[username.length - 1];
+}
+
+Echo.channel(`notification.${getNickname()}`).
+listen("notificationEvent",(e)=>{
+    console.log(e);
+    showNewNotification(e.notification);
+})
+
+//mostramos la nueva notificacion obtenida en tiempo real
+function showNewNotification(i){
+            //creamos el contenedor de la notificacion
+            let newNotification = $("<a></a>");
+            $(newNotification).addClass("notification");
+    
+            $(newNotification).attr("href", i.LinkPost);
+            
+            let username = i.action_user.personal_data.Nickname;
+            let photoUser = i.action_user.profile.ProfilePhotoURL;
+            let photoUserName = i.action_user.profile.ProfilePhotoName
+    
+            let action = i.Action;
+            let post = i.post;
+    
+            //contenedor que contendra la foto del usuario en caso de que sea un comentario,o un corazon si es un like
+            let containerType = $("<div></div>");
+            $(containerType).addClass("action_container");
+    
+            //contenedor que contendra el contenido de la notificacion
+            let mainNotificationContainer = $("<div></div>");
+            $(mainNotificationContainer).addClass("notification_content_container");
+    
+            let message = "";
+            if(action != "Like"){
+                //en caso de ser un comentario mostramos la foto del usuario
+                message = "Ha comentado tu posteo"
+                commentNotification(photoUser,photoUserName,username,containerType,mainNotificationContainer);
+                $(mainNotificationContainer).append(showContent(message,username,post));
+            }
+            else{
+                //en caso de ser un mensaje agregamos el corazon junto al contenido del posteo
+                message = "indicó que le gusta tu posteo"
+                likeNotification(photoUser,photoUserName,username,containerType,mainNotificationContainer)
+                $(mainNotificationContainer).append(showContent(message,username,post));
+            }
+            $(newNotification).append(containerType);
+            $(newNotification).append(mainNotificationContainer);
+            $(notificationsContainer).prepend(newNotification);
 }
