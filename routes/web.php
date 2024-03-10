@@ -96,7 +96,10 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::post("/home/createPost",[AppController::class,"createPost"])->name("createPost");
 
     //mostramos todos los posts de los usuarios
+    //obtenemos los posteos aun no vistos
     Route::get("/home/getPosts",[AppController::class,"getUsersPosts"])->name("getUsersPosts");
+    //obtenemos los posteos visualizados
+    Route::get("/home/getPosts/visualizated",[AppController::class,"getPostsVisualizated"])->name("getPostsVisualizated");
 
     //likeamos un post
     Route::post("/likePost/{username}/{encryptID}",[Like::class,"likePost"])->name("likePost");

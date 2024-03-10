@@ -106,7 +106,12 @@ class UserPost extends Model
             "Comments"
         ])
         ->where("ParentID",null)
+        //query para verificar que el posteo no haya sido aun visualizado por el usuario auntenticado
+        ->whereDoesntHave("Visualizations", function ($queryVisualization) use ($userID) {
+            $queryVisualization->where("NicknameID", $userID);
+        })
         ->orderBy("PostID","desc")
+        ->limit(10)
         ->get();
 
         foreach($posts as $post){
@@ -119,6 +124,58 @@ class UserPost extends Model
             $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
             $post["linkProfile"] = route("showProfile",["username"=>$userName]);
         }
+
+        return $posts;
+    }
+
+    //obtenemos los posteos que ya se han visualizados
+    public function getPostsVisualized(){
+        $userID = Auth::user()->UserID;
+        $posts = Visualization::
+        with([
+            "PostInteraction"=>function($queryPosts) use ($userID){
+                $queryPosts
+                ->with([
+                    "MultimediaPost",
+                    //verificamos si el usuario logeado ya ha visualizado o likeado el post
+                    "Likes"=>function($queryLike) use ($userID){
+                        $queryLike->where("NicknameID",$userID);
+                    },
+                    "Visualizations"=>function($queryVisualization) use ($userID){
+                        $queryVisualization->where("NicknameID",$userID);
+                    },
+                    //obtenemos datos del usuario correspondiente al post
+                    "User"=>function($queryUser){
+                        $queryUser->select("UserID","PersonalDataID")
+                        ->with([
+                            "PersonalData"=>function($queryPersonal){
+                                $queryPersonal->select("PersonalDataID","Nickname");
+                            },
+                            "Profile"=>function($queryProfile){
+                                $queryProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
+                            }
+                        ]);
+                    },
+                    "Comments"=>function($queryComments) use ($userID){
+                        $queryComments->where("UserID",$userID);
+                    },
+                ])
+                //mostramos la cantidad de interacciones que contiene el post
+                ->withCount([
+                    "Likes",
+                    "Visualizations",
+                    "Comments"
+                ]);
+            }
+        ])
+        //solo obtenemos aquelos posteos que no tengan un parent id
+        ->whereHas("PostInteraction",function($queryPostWhere){
+            $queryPostWhere->where("ParentID",null);
+        })
+        ->where("NicknameID",$userID)
+        ->limit(15)
+        ->orderBy("created_at","desc")
+        ->get();
 
         return $posts;
     }

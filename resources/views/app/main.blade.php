@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="./css/mainApp/utils/responsive/utilHeader.css">
 <link rel="stylesheet" href="./css/mainApp/utils/responsive/utilNav.css">
 <link rel="stylesheet" href="./css/mainApp/utils/responsive/utilFooter.css">
+<link rel="stylesheet" href="./css/mainApp/utils/utilLoader.css">
 
 <title>Twitter</title>
 @endsection

@@ -11,7 +11,6 @@ export function createIntersectionObserver(postsNames,visualization,callback){
         //verificamos la interseccion de cada post
         let observer = new IntersectionObserver(entries=>chekIntersection(entries,isLastPost,observer,visualization,callback),{});
         observer.observe(post)
-
     })
 }
 
@@ -42,10 +41,11 @@ function sendVisualization(url){
         type: "POST",
         url: url,
         success: function (response) {
-            // console.log(response);
+            console.log(response);
         },
         error : function(error){
             console.log(error)
         }
     });
 }
+

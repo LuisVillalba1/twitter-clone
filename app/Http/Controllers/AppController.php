@@ -63,13 +63,22 @@ class AppController extends Controller
         }
     }
 
-    //obtenemos los post de los usuarios
+    //obtenemos los post de los usuarios que aun no han sido visualizados por el usuario autenticado
     public function getUsersPosts(){
         try{
             return (new UserPost())->getAllPublics();
         }
         catch(\Exception $e){
             return response()->json(["error"=>"Ha ocurrido un error al obtener las publicaciones"],500);
+        }
+    }
+
+    public function getPostsVisualizated(){
+        try{
+            return (new UserPost())->getPostsVisualized();
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>$e->getMessage()],500);
         }
     }
 }
