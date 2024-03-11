@@ -74,7 +74,7 @@ class Like extends Model
     }
 
     //obtenemos todos los posts likeados por un usuario
-    public function getLikesPosts($username){
+    public function getLikesPosts($username,$minID){
         $user = Auth::user();
 
         $userID = $user->UserID;
@@ -83,64 +83,60 @@ class Like extends Model
         $personalData = PersonalData::where("Nickname",$username)->first();
 
 
-        $likePosts = UserPost::
-        select("PostID","UserID","ParentID","Message")
+        $likes = Like::
+        select("LikeID", "PostID", "NicknameID")
         ->with([
-            "MultimediaPost",
-            //verificamos si el usuario logeado ya ha visualizado o likeado el post
-            "Likes"=>function($queryLike) use ($userID){
-                $queryLike->where("NicknameID",$userID);
-            },
-            "Visualizations"=>function($queryVisualization) use ($userID){
-                $queryVisualization->where("NicknameID",$userID);
-            },
-            "User"=>function ($queryUser){
-                $queryUser
-                ->select("UserID","PersonalDataID")
-                ->with([
-                    "PersonalData"=>function($queryPersonal){
-                        $queryPersonal->select("PersonalDataID","Nickname");
+            "Post" => function ($queryPost) use ($userID) {
+                $queryPost->with([
+                    "MultimediaPost",
+                    "Likes" => function ($queryLike) use ($userID) {
+                        $queryLike->where("NicknameID", $userID);
                     },
-                    "Profile"=>function ($queryProfile){
-                        $queryProfile->select("ProfileID","UserID","ProfilePhotoURL","ProfilePhotoName");
-                    }
-                ]);
-            },
-            "Comments"=>function($queryComments) use ($userID){
-                $queryComments->where("UserID",$userID);
-            },
+                    "Visualizations" => function ($queryVisualization) use ($userID) {
+                        $queryVisualization->where("NicknameID", $userID);
+                    },
+                    "User" => function ($queryUser) {
+                        $queryUser
+                            ->select("UserID", "PersonalDataID")
+                            ->with([
+                                "PersonalData" => function ($queryPersonal) {
+                                    $queryPersonal->select("PersonalDataID", "Nickname");
+                                },
+                                "Profile" => function ($queryProfile) {
+                                    $queryProfile->select("ProfileID", "UserID", "ProfilePhotoURL", "ProfilePhotoName");
+                                }
+                            ]);
+                    },
+                    "Comments" => function ($queryComments) use ($userID) {
+                        $queryComments->where("UserID", $userID);
+                    },
+                ])
+                    ->withCount([
+                        "Likes",
+                        "Visualizations",
+                        "Comments"
+                    ]);
+            }
         ])
-        //mostramos la cantidad de interacciones que contiene el post
-        ->withCount([
-            "Likes",
-            "Visualizations",
-            "Comments"
-        ])        
-        //obtenemos todos los posteos likeados por el usuario
-        ->whereHas('Likes', function($queryLikes) use ($personalData) {
-            $queryLikes
-            ->where("NicknameID", $personalData->PersonalDataID);
+        ->where("NicknameID", $personalData->PersonalDataID)
+        ->when($minID > 0, function ($query) use ($minID) {
+            $query->where("LikeID", "<", $minID);
         })
+        ->orderBy("LikeID","desc")
+        ->limit(15)
         ->get();
 
-        foreach($likePosts as $post){
-            //mostramos los links para poder interactuar con cada post
-            $userName = $post->User->PersonalData->Nickname;
-            $idEncrypt = Crypt::encryptString($post->PostID);
-            $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
-            $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
-            $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
-            $post["linkProfile"] = route("showProfile",["username"=>$username]);
-
-            if($post->Parent){
-                //seteamos los link de los padres
-                $usernameParent = $post->Parent->User->PersonalData->Nickname;
-                $postIDParent = $post->Parent->PostID;
-                $post->Parent["linkPost"] = route("showPost",["username"=>$usernameParent,"encryptID"=>Crypt::encryptString($postIDParent)]);
-                $post->Parent["linkUser"] = route("showProfile",["username"=>$usernameParent]);
-            }
+        foreach($likes as $post){
+             //mostramos los links para poder interactuar con cada post
+             $post = $post->Post;
+             $userName = $post->User->PersonalData->Nickname;
+             $idEncrypt = Crypt::encryptString($post->PostID);
+             $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
+             $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
+             $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+             $post["linkProfile"] = route("showProfile",["username"=>$username]);
         }
-
-        return $likePosts;
+        
+        return $likes;
     }
 }

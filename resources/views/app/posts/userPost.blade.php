@@ -31,9 +31,6 @@
                     <h3>Post</h3>
                 </div>
             </div>
-            <div class="loader_container">
-                <div class="loader"></div>
-            </div>
             <div class="current_post">
                 <div class="parent_data_container">
                     <div class="parent_user">

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\Content\MinID;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -112,7 +113,7 @@ class Profile extends Model
         return [$imageName,$newUrl];
     }
 
-    public function getAnswers($username){
+    public function getAnswers($username,$minID){
         $user = Auth::user();
 
         $userID = $user->UserID;
@@ -173,7 +174,11 @@ class Profile extends Model
         ])
         ->whereNotNull('ParentID')
         ->where("UserID",$personalData->PersonalDataID)
+        ->when($minID > 0 ,function ($query) use ($minID){
+            $query->where("PostID", "<" , $minID);
+        })
         ->orderBy("PostID","desc")
+        ->limit(15)
         ->get();
 
         foreach($posts as $post){

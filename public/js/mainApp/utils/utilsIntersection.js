@@ -1,6 +1,6 @@
 //seleccionamos todos los posts
 //nuestra funcion va recibir un callback la cual mostrara mas post en caso de que ya se haya visto el ultimo
-export function createIntersectionObserver(postsNames,visualization,callback){
+export function createIntersectionObserver(postsNames,visualization,getID,callback){
     //obtenemos todos los post
     let posts = document.querySelectorAll(postsNames);
 
@@ -9,13 +9,13 @@ export function createIntersectionObserver(postsNames,visualization,callback){
         //verificamos cuando el ultimo post ha sido interceptado
         let isLastPost = index == posts.length - 1;
         //verificamos la interseccion de cada post
-        let observer = new IntersectionObserver(entries=>chekIntersection(entries,isLastPost,observer,visualization,callback),{});
+        let observer = new IntersectionObserver(entries=>chekIntersection(entries,isLastPost,observer,visualization,getID,callback),{});
         observer.observe(post)
     })
 }
 
 //obtenemos el post visualizado
-function chekIntersection(e,isLastPost,observer,visualizationValue,callback){
+function chekIntersection(e,isLastPost,observer,visualizationValue,getID,callback){
     //obtenemos el post que se ha visualidado
     let data = e[0];
     let post = data.target;
@@ -30,6 +30,10 @@ function chekIntersection(e,isLastPost,observer,visualizationValue,callback){
     //si se observa el ultimo post detenemos el observer y mostramos mas posts en caso de que existan
     if(isLastPost && data.isIntersecting){
         observer.disconnect()
+        if(getID){
+            let id = $(post).attr("id");
+            return callback(parseInt(id))
+        }
         callback()
         return
     }
@@ -41,7 +45,7 @@ function sendVisualization(url){
         type: "POST",
         url: url,
         success: function (response) {
-            console.log(response);
+            
         },
         error : function(error){
             console.log(error)

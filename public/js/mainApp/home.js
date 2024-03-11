@@ -39,7 +39,7 @@ getPublicPosts();
 //mostramos los posteos no visualizados
 function showPosts(posts){
     createPostContent(posts)
-    utilsIntersection.createIntersectionObserver(".post",true,getPublicPosts)
+    utilsIntersection.createIntersectionObserver(".post",true,false,getPublicPosts)
 }
 
 //iteramos sobre cada posteo y creamos los contenedores

@@ -91,9 +91,6 @@
             <span class="respuestas_location"><a href="">Respuestas</a></span>
             <span class="me_gusta_location"><a href="#">Me gustas</a></span>
         </div>
-        <div class="loader_container">
-            <div class="loader"></div>
-        </div>
         <div class="posts_container">
 
         </div>

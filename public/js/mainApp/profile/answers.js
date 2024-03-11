@@ -1,7 +1,8 @@
 import * as utilsPosts from "../utils/utilsPosts.js";
 import * as utilsIntersection from "../utils/utilsIntersection.js";
-import {createErrorAlert} from "../utils/error/errorAlert.js"
+import { createLoader } from "../utils/createLoader.js";
 import { setLinks } from "../utils/utilProfile.js";
+import { createErrorAlert } from "../utils/error/errorAlert.js";
 
 const profileContainer = $(".profile_container");
 
@@ -11,106 +12,102 @@ const likesLocations = $(".me_gusta_location");
 setLinks(postsLocation,null);
 setLinks(likesLocations,"likes")
 
-function getAnswers(){
-    $.ajax({
-        type: "GET",
-        url: window.location.href + "/details",
-        success: function (response) {
-            showAnswers(response)
-        },
-        error:function(error){
-            createErrorAlert(error.responseJSON.errors,profileContainer)
-        }
-    });
-    $(".loader_container").css("display","none")
-}
-
-getAnswers();
-
 const allPost = $(".posts_container");
 
+async function getAnswers(id){
+    $(".profile_container").append(createLoader)
+    try{
+        const response = await $.ajax({
+            type: "post",
+            url: window.location.href + "/details",
+            data :{
+                Id : id
+            }
+        })
+        showAnswers(response)
+    }
+    catch(e){
+        if(e.responseJSON){
+            return createErrorAlert(e.responseJSON.errors,profileContainer)
+        }
+        createErrorAlert(e,profileContainer)
+    }
+    finally{
+        $(".loader_container").remove();
+    }
+}
+
+await getAnswers(0);
+
+
 function showAnswers(info){
-     //la idea es mostrar los posts de 6 en 6
-     let currentIndex = 0;
-     let postPerPage = 6;
- 
-     //mostramos los posts
-     function showMorePosts(currentIndex,postPerPage){
-         //obtenemos de 6 en 6 los posts
-         let max = Math.min(currentIndex + postPerPage,info.length);
- 
-         let posts = info.slice(currentIndex,max);
- 
-         //en caso de que ya no existan mas post dentemos la ejecucion
-         if(posts.length == 0){
-             return
-         }
-         //iteramoc sobre cada post
-         posts.forEach(currentPost=>{
-            //creamos el contenedor del posteo
-            let postContainer = $("<div></div>");
-            $(postContainer).addClass("current_post");
+    if(!info || info.length == 0){
+        return
+    }
+    let lastID = info[info.length - 1].PostID;
+        //iteramoc sobre cada post
+        info.forEach(currentPost=>{
+        //creamos el contenedor del posteo
+        let postContainer = $("<a></a>");
+        $(postContainer).addClass("current_post");
+        $(postContainer).attr("id",currentPost.PostID);
 
-            //obtenemos el link del usuario
-            let parentUserLink = currentPost.parent.linkUser;
+        //obtenemos el link del usuario
+        let parentUserLink = currentPost.parent.linkUser;
 
-            //mostramos la informacion del posteo padre
-            $(postContainer).append(showParentData(currentPost.parent));
+        //mostramos la informacion del posteo padre
+        $(postContainer).append(showParentData(currentPost.parent));
 
-            //obtenemos el nombre de a quien se responde
-            let userResponse = currentPost.parent.user.personal_data.Nickname;
+        //obtenemos el nombre de a quien se responde
+        let userResponse = currentPost.parent.user.personal_data.Nickname;
 
-            //obtenemos todos los links para las interacciones y mostrar el post
-            let linkPost = currentPost.linkPost;
-            let linkLike = currentPost.linkLike;
-            let linkVisualization = currentPost.linkVisualization;
-            let linkComment = currentPost.linkComment;
+        //obtenemos todos los links para las interacciones y mostrar el post
+        let linkPost = currentPost.linkPost;
+        let linkLike = currentPost.linkLike;
+        let linkVisualization = currentPost.linkVisualization;
+        let linkComment = currentPost.linkComment;
          
-            let nickname = currentPost.user.personal_data.Nickname;
-            let postID = currentPost.PostID;
+        let nickname = currentPost.user.personal_data.Nickname;
+        let postID = currentPost.PostID;
             
-            //obtenemos el mensaje y el contenido multimedia de la respuesta
-            let message = currentPost.Message;
-            let multimedia = currentPost.multimedia_post;
+        //obtenemos el mensaje y el contenido multimedia de la respuesta
+        let message = currentPost.Message;
+        let multimedia = currentPost.multimedia_post;
             
-            //creamos el contenedor que va conteneder la informacion del usuario
-            let userDataContainer = $("<a></a>");
-            $(userDataContainer).data("href", linkPost);
-            $(userDataContainer).addClass("user_data_container");
+        //creamos el contenedor que va conteneder la informacion del usuario
+        let userDataContainer = $("<a></a>");
+        $(userDataContainer).data("href", linkPost);
+        $(userDataContainer).addClass("user_data_container");
             
-            //mostramos la imagen del usuario y el contenido del posteo
+        //mostramos la imagen del usuario y el contenido del posteo
 
-            let imgUser = currentPost.user.profile.ProfilePhotoURL;
-            let imgName = currentPost.user.profile.ProfilePhotoName
+        let imgUser = currentPost.user.profile.ProfilePhotoURL;
+        let imgName = currentPost.user.profile.ProfilePhotoName
 
-            $(userDataContainer).append(showImgUser(nickname,imgUser,imgName));
-            $(userDataContainer).append(showContent(nickname,userResponse,message,multimedia,parentUserLink));
+        $(userDataContainer).append(showImgUser(nickname,imgUser,imgName));
+        $(userDataContainer).append(showContent(nickname,userResponse,message,multimedia,parentUserLink));
             
-            let interactionContainer = utilsPosts.showInteraction(linkLike,linkComment,linkVisualization)
+        let interactionContainer = utilsPosts.showInteraction(linkLike,linkComment,linkVisualization)
 
-            $(postContainer).append(userDataContainer);
-            $(postContainer).append(interactionContainer);
+        $(postContainer).append(userDataContainer);
+        $(postContainer).append(interactionContainer);
            
-            //agregamos todos los post al contenedor principal
-            $(allPost).append(postContainer);
+        //agregamos todos los post al contenedor principal
+        $(allPost).append(postContainer);
 
-            //Obtenemos el contenedor del like y la suma de likes que contiene el mismo
-            let likeContainer = $(interactionContainer).children(".like_container");
-            let likesCount = $(likeContainer).children().children(".likes_count")
+        //Obtenemos el contenedor del like y la suma de likes que contiene el mismo
+        let likeContainer = $(interactionContainer).children(".like_container");
+        let likesCount = $(likeContainer).children().children(".likes_count")
         
-            utilsPosts.postYetInteraction(interactionContainer,currentPost)
-            utilsPosts.postYetLiked(likeContainer,currentPost.likes);
-            utilsPosts.likePost(likeContainer,likesCount,profileContainer);
+        utilsPosts.postYetInteraction(interactionContainer,currentPost)
+        utilsPosts.postYetLiked(likeContainer,currentPost.likes);
+        utilsPosts.likePost(likeContainer,likesCount,profileContainer);
         
-            utilsPosts.countIcon(currentPost,interactionContainer);            
-         })
-        //aumentamos el indice luego de mostrar los posts
-        currentIndex += postPerPage
+        utilsPosts.countIcon(currentPost,interactionContainer);            
+        })
         //verificamos si el ultimo post mostrado es interceptado
-        //utilizamos bind para poder llamar a esta funcion callback dentro de createIntersectionObserver con los argumentos necesarios
-        utilsIntersection.createIntersectionObserver(".current_post",false,showMorePosts.bind(null,currentIndex,postPerPage))
-     }
-     showMorePosts(currentIndex,postPerPage)
+        //volvemos a solicitar mas respuestas una ves que se haya visualizado el ultimo
+        utilsIntersection.createIntersectionObserver(".current_post",false,true,getAnswers)
 }
 
 //mostramos la informacion de los padres

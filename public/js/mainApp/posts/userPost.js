@@ -1,16 +1,16 @@
 import * as utilsPosts from "../utils/utilsPosts.js";
 import * as utilsIntersection from "../utils/utilsIntersection.js"
 import {createErrorAlert} from "../utils/error/errorAlert.js";
+import { createLoader } from "../utils/createLoader.js";
 
-const loaderContainer = $(".loader_container");
 const postContainer = $(".post_container");
 
 //obtenemos la informacion del post
 async function getPostData(){
     let link = window.location.href + "/details";
+    $(postContainer).append(createLoader())
     try{
     //mientras se obtiene la informacion mostramos el loader
-    $(loaderContainer).css("display", "flex");
     let data = await $.ajax({
         type : "GET",
         url : link
@@ -24,7 +24,7 @@ async function getPostData(){
     }
     //una ves finalizada la peticion ocultamos el loader
     finally{
-        $(loaderContainer).css("display", "none");
+        $(".loader_container").remove()
     }
 }
 
@@ -86,8 +86,7 @@ async function showData(data){
     utilsPosts.showRepostAndLikes(data.likes_count,data.likes_count);
     utilsPosts.showVisualizations(data.visualizations_count);
 
-    let comments = data.comments
-    showCommenst(comments)
+    await getComments(0);
 
 }
 
@@ -211,80 +210,86 @@ function showMultimedia(data){
     }
 }
 
+//obtnemos los comentarios
+async function getComments(id){
+    $(postContainer).append(createLoader())
+    try{
+        const response = await $.ajax({
+            type : "Post",
+            url : window.location.href + "/comments",
+            data : {
+                "Id" : id
+            },
+        })
+        showCommenst(response);
+    }
+    catch(e){
+        console.log(e);
+    }
+    finally{
+        $(".loader_container").remove()
+    }
+}
+
 const commentsContainer = $(".comments_post_container");
 function showCommenst(commentsData){
-    //mostramos los comentarios de 6 en 6
-    let currentIndex = 0;
-    let commentPerPage = 6;
-
-    function showMoreComments(currentIndex,commentPerPage){
-        //obtenemos de 6 en 6 los comentarios
-        let max = Math.min(currentIndex + commentPerPage,commentsData.length);
-
-        let comments = commentsData.slice(currentIndex,max);
-
-        //en caso de que ya no existan mas comentarios detenemos la ejecucion
-        if(comments.length == 0){
-            return
-        }
-        //por cada comentarios mostramos la informacion correspondiente
-        comments.forEach(currentComment=>{
-            //obtenemos el link del post y permitimos que el usuario pueda ir a ver el posteo
-            let linkPost = currentComment.linkPost;
-            let commentContainer = $("<a></a>");
-            $(commentContainer).attr("href", linkPost);
-            $(commentContainer).addClass("comment_post_constainer");
-    
-            //obtenemos el nombre del usuario
-            let nickname = currentComment.user.personal_data.Nickname;
-
-            let userDataContainer = $("<div></div>");
-            $(userDataContainer).addClass("user_data_container");
-
-            //obtnemos el mensaje
-            let message = currentComment.Message;
-
-            //obtenemos tanto la imagen del usuario como el link del perfil
-            let userImg = currentComment.user.profile.ProfilePhotoURL;
-            let userImgName = currentComment.user.profile.ProfilePhotoName;
-
-            let linkProfile = currentComment.linkProfile;
-
-            //mostramos la imagen del usuario 
-            $(userDataContainer).append(utilsPosts.logoContainerShow(nickname,userImg,userImgName));
-            $(commentContainer).append(userDataContainer);
-            
-            let postContent = utilsPosts.showNameAndMessage(nickname,message,linkProfile);
-            $(userDataContainer).append(postContent);
-
-            let multimedia = currentComment.multimedia_post;
-
-            if(multimedia && multimedia.length > 0){
-                $(postContent).append(utilsPosts.showMultimedia(multimedia));
-            }
-
-            //obtenemos todas las interacciones
-            let interaction_container = utilsPosts.showInteraction(currentComment.linkLike,currentComment.linkComment,currentComment.linkVisualization);
-
-            $(commentContainer).append(userDataContainer);
-            $(commentContainer).append(interaction_container);
-
-            $(commentsContainer).append(commentContainer);
-
-            let likeContainer = (interaction_container).children(".like_container");
-
-            utilsPosts.postYetInteraction(interaction_container,currentComment);
-            utilsPosts.postYetLiked(likeContainer,currentComment.likes);
-            utilsPosts.likePost(likeContainer,null,postContainer);
-
-            utilsPosts.countIcon(currentComment,interaction_container);
-        })
-        currentIndex += commentPerPage;
-        //verificamos que el ultimo comentario sea visible para mostrar mas
-        utilsIntersection.createIntersectionObserver(".comment_post_constainer",true,showMoreComments.bind(null,currentIndex,commentPerPage))
+    if(!commentsData || commentsData.length == 0){
+        return
     }
+    commentsData.forEach(currentComment=>{
+        //obtenemos el link del post y permitimos que el usuario pueda ir a ver el posteo
+        let linkPost = currentComment.linkPost;
+        let commentContainer = $("<a></a>");
+        $(commentContainer).attr("href", linkPost);
+        $(commentContainer).attr("id",currentComment.PostID);
+        $(commentContainer).addClass("comment_post_constainer");
 
-    showMoreComments(currentIndex,commentPerPage);
+        //obtenemos el nombre del usuario
+        let nickname = currentComment.user.personal_data.Nickname;
+
+        let userDataContainer = $("<div></div>");
+        $(userDataContainer).addClass("user_data_container");
+
+        //obtnemos el mensaje
+        let message = currentComment.Message;
+
+        //obtenemos tanto la imagen del usuario como el link del perfil
+        let userImg = currentComment.user.profile.ProfilePhotoURL;
+        let userImgName = currentComment.user.profile.ProfilePhotoName;
+
+        let linkProfile = currentComment.linkProfile;
+
+        //mostramos la imagen del usuario 
+        $(userDataContainer).append(utilsPosts.logoContainerShow(nickname,userImg,userImgName));
+        $(commentContainer).append(userDataContainer);
+        
+        let postContent = utilsPosts.showNameAndMessage(nickname,message,linkProfile);
+        $(userDataContainer).append(postContent);
+
+        let multimedia = currentComment.multimedia_post;
+
+        if(multimedia && multimedia.length > 0){
+            $(postContent).append(utilsPosts.showMultimedia(multimedia));
+        }
+
+        //obtenemos todas las interacciones
+        let interaction_container = utilsPosts.showInteraction(currentComment.linkLike,currentComment.linkComment,currentComment.linkVisualization);
+
+        $(commentContainer).append(userDataContainer);
+        $(commentContainer).append(interaction_container);
+
+        $(commentsContainer).append(commentContainer);
+
+        let likeContainer = (interaction_container).children(".like_container");
+
+        utilsPosts.postYetInteraction(interaction_container,currentComment);
+        utilsPosts.postYetLiked(likeContainer,currentComment.likes);
+        utilsPosts.likePost(likeContainer,null,postContainer);
+
+        utilsPosts.countIcon(currentComment,interaction_container);
+    })
+    //verificamos que el ultimo comentario sea visible para mostrar mas
+    utilsIntersection.createIntersectionObserver(".comment_post_constainer",true,true,getComments)
 }
 
 

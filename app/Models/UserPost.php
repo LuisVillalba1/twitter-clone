@@ -115,14 +115,7 @@ class UserPost extends Model
         ->get();
 
         foreach($posts as $post){
-            //mostramos los links para poder interactuar con cada post
-            $userName = $post->User->PersonalData->Nickname;
-            $idEncrypt = Crypt::encryptString($post->PostID);
-            $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
-            $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
-            $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
-            $post["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
-            $post["linkProfile"] = route("showProfile",["username"=>$userName]);
+            $this->setLinksInteraction($post,false);
         }
 
         return $posts;
@@ -177,6 +170,11 @@ class UserPost extends Model
         ->orderBy("created_at","desc")
         ->get();
 
+        //seteamos los links para interacciones
+        foreach($posts as $visualization){
+            $this->setLinksInteraction($visualization->PostInteraction,false);
+        }
+
         return $posts;
     }
 
@@ -198,10 +196,12 @@ class UserPost extends Model
         }
     }
 
-    public function setLinksInteraction($post){
+    public function setLinksInteraction($post,$getSave){
         $userName = $post->User->PersonalData->Nickname;
         $idEncrypt = Crypt::encryptString($post->PostID);
-        $post["linkSave"] = route("savePost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        if($getSave){
+            $post["linkSave"] = route("savePost",["username"=>$userName,"encryptID"=>$idEncrypt]);
+        }
         $post["linkLike"] = route("likePost",["username"=>$userName,"encryptID"=>$idEncrypt]) ?? null;
         $post["linkVisualization"] = route("VisualizationPost",["username"=>$userName,"encryptID"=>$idEncrypt]);
         $post["linkComment"] = route("commentPostView",["username"=>$userName,"encryptID"=>$idEncrypt]);
@@ -269,37 +269,6 @@ class UserPost extends Model
                     "MultimediaPost"
                 ]);
             },
-            //mostramos todos los comentarios que tuvo el post
-            "Comments"=>function($comments) use ($userID){
-                $comments
-                ->select()
-                //por cada comentario mostramos la cantidad de visualizaciones,likes y comentarios que tiene el mismo
-                ->withCount([
-                    "Visualizations",
-                    "Likes",
-                    "Comments"
-                ])
-                ->with([
-                    "user"=>function($queryUserComment){
-                        $queryUserComment->select("UserID","PersonalDataID")
-                        ->with([
-                            "PersonalData"=>function($queryPersonalComment){
-                                $queryPersonalComment->select("PersonalDataID","Nickname");
-                            },
-                            "Profile"=>function($parentProfile){
-                                $parentProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
-                            }
-                        ]);
-                    },
-                    "Likes"=>function($queryLikeComment) use ($userID){
-                        $queryLikeComment->where("NicknameID",$userID);
-                    },
-                    "Visualizations"=>function($queryVisualizationComment) use ($userID){
-                        $queryVisualizationComment->where("NicknameID",$userID);
-                    },
-                    "MultimediaPost"
-                ]);
-            },
         ])
         ->withCount([
             "Likes",
@@ -320,7 +289,7 @@ class UserPost extends Model
         //por cada comentario establecemos los links para interactuar
         (new Comment())->setLinksInteraction($post->Comments);
 
-        return $this->setLinksInteraction($post);
+        return $this->setLinksInteraction($post,true);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener el post"],500);

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\Content\MinID;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -26,14 +27,16 @@ class SavePost extends Model
     }
 
     //obtenemos todos los post que ha guardado el usuario
-    public function getBookmarks(){
+    public function getBookmarks(MinID $request){
         try{
             $user = Auth::user();
+            $minID = $request->Id;
 
             $userID = $user->UserID;
 
             $safesPost = SavePost::
             where("UserID",$userID)
+            ->where("SaveID" ,">", $minID)
             ->with([
                 "Post"=>function($queryPost) use ($userID){
                     $queryPost->with([
@@ -69,12 +72,13 @@ class SavePost extends Model
                 }
             ])
             ->orderBy("SaveID","desc")
+            ->limit(15)
             ->get();
 
             //seteamos todos los links para interactuar
 
             foreach($safesPost as $safePost){
-                (new UserPost())->setLinksInteraction($safePost->Post);
+                (new UserPost())->setLinksInteraction($safePost->Post,true);
             }
 
             return $safesPost;

@@ -164,7 +164,7 @@ class User extends Model implements Authenticatable
     }
     
     //obtenemos todos los posteos del usuario autenticado
-    public function getUserPosts($userName){
+    public function getUserPosts($userName,$minID){
             $user = Auth::user();
             $userID = $user->UserID;
 
@@ -204,8 +204,13 @@ class User extends Model implements Authenticatable
                 "Comments"
             ])
             ->where("ParentID",null)
+            //en caso de que el min id sea distinto de 0 devolvemos los posteos mas antiguos por cada interaccion
+            ->when($minID > 0 ,function ($query) use ($minID){
+                $query->where("PostID", "<" ,$minID);
+            })
             ->where("UserID",$personalData->PersonalDataID)
             ->orderBy("PostID","desc")
+            ->limit(15)
             ->get();
 
             foreach($posts as $post){

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Requests\Content\MinID;
 use App\Http\Requests\UserPost\NewPostRequest;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -138,6 +139,64 @@ class Comment extends Model
 
     }
 
+    //obtenemos los comentarios de un posteo, minPostID lo utilizaremos para cuando se quieran recibir nuevos comentarios
+    public function getPostsComments($username,$encryptID,MinID $request){
+        try{
+            $minPostID = $request->Id;
+
+            //verificamos si existe el posteo y el usuario
+            $postID = Crypt::decryptString($encryptID);
+            (new UserPost())->checkPostID($postID);
+            (new PersonalData())->checkUsername($username);
+            
+            //obtenemos el id el usuario autenticado
+            $userID = Auth::user()->UserID;
+
+            $comments = UserPost::
+            select()
+            //obtenemos la cantidad de visualizaciones,likes y comentarios
+            ->withCount([
+                "Visualizations",
+                "Likes",
+                "Comments"
+            ])
+            //a su ves informacion del usuario que realizo el comentario
+            ->with([
+                "user"=>function($queryUserComment){
+                    $queryUserComment->select("UserID","PersonalDataID")
+                    ->with([
+                        "PersonalData"=>function($queryPersonalComment){
+                            $queryPersonalComment->select("PersonalDataID","Nickname");
+                        },
+                        "Profile"=>function($parentProfile){
+                            $parentProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
+                        }
+                    ]);
+                },
+                //tambien obtenemos si el usuario autenticado likeo o visualizo el comentario
+                "Likes"=>function($queryLikeComment) use ($userID){
+                    $queryLikeComment->where("NicknameID",$userID);
+                },
+                "Visualizations"=>function($queryVisualizationComment) use ($userID){
+                    $queryVisualizationComment->where("NicknameID",$userID);
+                },
+                //obtenemos el contenido multimedia del posteo
+                "MultimediaPost"
+            ])
+            ->where("ParentID",$postID)
+            ->where("PostID", '>',$minPostID)
+            ->limit(15)
+            ->get();
+
+            $this->setLinksInteraction($comments);
+
+            return $comments;
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>$e->getMessage()],500);
+        }
+    }
+
     //por cada comentario obtenemos los links para para interacciones
     public function setLinksInteraction($comments){
         foreach($comments as $comment){
@@ -151,4 +210,5 @@ class Comment extends Model
             $comment["linkProfile"] = route("showProfile",["username"=>$userName]);
         } 
     }
+
 }
