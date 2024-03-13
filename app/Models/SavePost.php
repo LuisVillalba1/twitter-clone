@@ -27,16 +27,14 @@ class SavePost extends Model
     }
 
     //obtenemos todos los post que ha guardado el usuario
-    public function getBookmarks(MinID $request){
+    public function getBookmarks(){
         try{
             $user = Auth::user();
-            $minID = $request->Id;
 
             $userID = $user->UserID;
 
             $safesPost = SavePost::
             where("UserID",$userID)
-            ->where("SaveID" ,">", $minID)
             ->with([
                 "Post"=>function($queryPost) use ($userID){
                     $queryPost->with([
@@ -72,8 +70,7 @@ class SavePost extends Model
                 }
             ])
             ->orderBy("SaveID","desc")
-            ->limit(15)
-            ->get();
+            ->simplePaginate(15);
 
             //seteamos todos los links para interactuar
 

@@ -138,10 +138,11 @@ class ProfileController extends Controller
     }
 
     //obtenemos los post del usuario autenticado
-    public function getUserPosts($username,MinID $request){
+    public function getUserPosts($username){
         try{
-            $minId = $request->Id;
-            return (new User())->getUserPosts($username,$minId);
+            //verificamos primero que exista el usuario
+            (new PersonalData())->checkUsername($username);
+            return (new User())->getUserPosts($username);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al cargar los posteos del usuario"],500);
@@ -159,9 +160,11 @@ class ProfileController extends Controller
     }
 
     //obtenemos todo aquel posteo que haya sido una respuesta a otro
-    public function getAnswersUser($username,MinID $request){
+    public function getAnswersUser($username){
         try{
-            return (new Profile())->getAnswers($username,$request->Id);
+            //verificamos que exista el usuario y obtenemos las respuestas de este
+            (new PersonalData())->checkUsername($username);
+            return (new Profile())->getAnswers($username);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener las respuestas"],500);
@@ -179,9 +182,9 @@ class ProfileController extends Controller
     }
 
     //obtenemos los posteos likeados
-    public function getLikesUser($username,MinID $request){
+    public function getLikesUser($username){
         try{
-            return (new Like())->getLikesPosts($username,$request->Id);
+            return (new Like())->getLikesPosts($username);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener los posteos likeado"],500);

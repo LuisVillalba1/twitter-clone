@@ -5,17 +5,16 @@ import { ocultLoader } from "../../utils/utilLoader.js";
 import {createErrorAlert} from "../../utils/error/errorAlert.js"
 
 const savesPostContainer = $(".saves_posts_container");
-async function getBookmarks(id){
-    console.log(id)
+async function getBookmarks(url){
     try{
-        const data = await $.ajax({
-            type: "Post",
-            url: window.location.href + "/details",
-            data : {
-                Id : id
-            }
+        const response = await $.ajax({
+            type: "get",
+            url: url,
         });
-        showPosts(data);
+        if(!response.data){
+            return 
+        }
+        showPosts(response.data,response.next_page_url);
     }
     catch(e){
         console.log(e);
@@ -27,10 +26,7 @@ async function getBookmarks(id){
 }
 
 
-function showPosts(info){
-    if(!info || info.length == 0){
-        return 
-    }
+function showPosts(info,url){
     //obtenemos el id del primer posteo guardado
     let firstId = info[0].SaveID;
     info.forEach(currentPost=>{
@@ -98,8 +94,7 @@ function showPosts(info){
     
         utilsPost.countIcon(currentPost.post,interactionContainer);
     })
-    console.log($(".post"))
-    utilsIntersection.createIntersectionObserver(".post",false,false,getBookmarks.bind(null,firstId))
+    utilsIntersection.createIntersectionObserver(".post",false,false,getBookmarks.bind(null,url))
 }
 
 function showInteraction(data){
@@ -147,4 +142,4 @@ function animateSave(icon){
     $(icon).css("animation","save-anim 0.5s steps(20) forwards");
 }
 
-await getBookmarks(0)
+await getBookmarks(window.location.href + "/details")

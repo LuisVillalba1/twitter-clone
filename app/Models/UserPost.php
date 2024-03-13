@@ -111,8 +111,7 @@ class UserPost extends Model
             $queryVisualization->where("NicknameID", $userID);
         })
         ->orderBy("PostID","desc")
-        ->limit(10)
-        ->get();
+        ->simplePaginate(35);
 
         foreach($posts as $post){
             $this->setLinksInteraction($post,false);
@@ -166,9 +165,8 @@ class UserPost extends Model
             $queryPostWhere->where("ParentID",null);
         })
         ->where("NicknameID",$userID)
-        ->limit(15)
         ->orderBy("created_at","desc")
-        ->get();
+        ->simplePaginate(15);
 
         //seteamos los links para interacciones
         foreach($posts as $visualization){

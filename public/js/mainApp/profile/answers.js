@@ -14,17 +14,17 @@ setLinks(likesLocations,"likes")
 
 const allPost = $(".posts_container");
 
-async function getAnswers(id){
+async function getAnswers(url){
     $(".profile_container").append(createLoader)
     try{
         const response = await $.ajax({
-            type: "post",
-            url: window.location.href + "/details",
-            data :{
-                Id : id
-            }
+            type: "get",
+            url: url,
         })
-        showAnswers(response)
+        if(!response.data){
+            return
+        }
+        showAnswers(response.data,response.next_page_url)
     }
     catch(e){
         if(e.responseJSON){
@@ -37,13 +37,10 @@ async function getAnswers(id){
     }
 }
 
-await getAnswers(0);
+await getAnswers(window.location.href + "/details");
 
 
-function showAnswers(info){
-    if(!info || info.length == 0){
-        return
-    }
+function showAnswers(info,url){
     let lastID = info[info.length - 1].PostID;
         //iteramoc sobre cada post
         info.forEach(currentPost=>{
@@ -107,7 +104,7 @@ function showAnswers(info){
         })
         //verificamos si el ultimo post mostrado es interceptado
         //volvemos a solicitar mas respuestas una ves que se haya visualizado el ultimo
-        utilsIntersection.createIntersectionObserver(".current_post",false,true,getAnswers)
+        utilsIntersection.createIntersectionObserver(".current_post",false,false,getAnswers.bind(null,url))
 }
 
 //mostramos la informacion de los padres

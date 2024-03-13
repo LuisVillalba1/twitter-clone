@@ -7,20 +7,20 @@ const header = $("header");
 const mainContainer = $(".main_container");
 const footer = $("footer");
 
+let contador = 1;
 
 const allPost = $(".posts_container");
 
 //obtenemos todas las publicaciones
-function getPublicPosts(){
+function getPublicPosts(url){
     //mostramos un el loader
-    $(allPost).append(createLoader());
     //obtenemos las publicaciones aun no vistas por el usuario
     $.ajax({
         type: "get",
-        url: $(".get_publics").attr("id"),
+        url: url,
         success: function (response) {
-            if(response.length > 0){
-                showPosts(response)
+            if(response.data){
+                showPosts(response.data,response.next_page_url)
             }else{
                 showNoMorePostAlert();
             }
@@ -33,13 +33,13 @@ function getPublicPosts(){
     });
 }
 
-getPublicPosts();
+getPublicPosts(window.location.href + "/getPosts");
 
 
 //mostramos los posteos no visualizados
-function showPosts(posts){
+function showPosts(posts,url){
     createPostContent(posts)
-    utilsIntersection.createIntersectionObserver(".post",true,false,getPublicPosts)
+    utilsIntersection.createIntersectionObserver(".post",true,false,getPublicPosts.bind(null,url))
 }
 
 //iteramos sobre cada posteo y creamos los contenedores
@@ -126,37 +126,46 @@ function showNoMorePostAlert(){
 $(container).append(content);
 $(allPost).append(container);
 
-getPostsVisualized();
+getPostsVisualized(window.location.href + "/getPosts/visualizated");
 }
 
 //obtenemos los posteos no visualizados
-function getPostsVisualized(){
+function getPostsVisualized(url){
     $(".see_more_publics").on("click", async function () {
-        $(".no_more_posts_container").css("display","none")
-        $(allPost).append(createLoader());
-        try{
-            const response = await $.ajax({
-                type : "get",
-                url : window.location.href + "/getPosts/visualizated"
-            })
-            showMorePosts(response)
-        }
-        catch(e){
-            if(e.responseJSON){
-                return createErrorAlert(e.responseJSON.errors,allPost)
-            }
-            createErrorAlert(e,allPost);
-        }
-        finally{
-            $(".loader_container").remove();
-        }
+        fetchPublicsVisualized(url)
     });
 }
 
+async function fetchPublicsVisualized(url){
+    $(".no_more_posts_container").css("display","none")
+    $(allPost).append(createLoader());
+    try{
+        const response = await $.ajax({
+            type : "get",
+            url : url
+        })
+        if(!response.data){
+            return
+        }
+        showMorePosts(response.data,response.next_page_url)
+    }
+    catch(e){
+        if(e.responseJSON){
+            return createErrorAlert(e.responseJSON.errors,allPost)
+        }
+        createErrorAlert(e,allPost);
+    }
+    finally{
+        $(".loader_container").remove();
+    }
+}
+
 //mostramos los posteos no visualizados
-function showMorePosts(posts){
+function showMorePosts(posts,url){
+    //iteramos sobra cada posteo y luego solicitamos mas
     posts.forEach(currentPost => {
         currentPost = currentPost.post_interaction;
         createContainers(currentPost);
     });
+    utilsIntersection.createIntersectionObserver(".post",false,false,fetchPublicsVisualized.bind(null,url))
 }

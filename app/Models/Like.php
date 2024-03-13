@@ -74,7 +74,7 @@ class Like extends Model
     }
 
     //obtenemos todos los posts likeados por un usuario
-    public function getLikesPosts($username,$minID){
+    public function getLikesPosts($username){
         $user = Auth::user();
 
         $userID = $user->UserID;
@@ -119,13 +119,9 @@ class Like extends Model
             }
         ])
         ->where("NicknameID", $personalData->PersonalDataID)
-        ->when($minID > 0, function ($query) use ($minID) {
-            $query->where("LikeID", "<", $minID);
-        })
         ->orderBy("LikeID","desc")
-        ->limit(15)
-        ->get();
-
+        ->simplePaginate(15);
+        
         foreach($likes as $post){
              //mostramos los links para poder interactuar con cada post
              $post = $post->Post;

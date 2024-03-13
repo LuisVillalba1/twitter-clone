@@ -113,7 +113,7 @@ class Profile extends Model
         return [$imageName,$newUrl];
     }
 
-    public function getAnswers($username,$minID){
+    public function getAnswers($username){
         $user = Auth::user();
 
         $userID = $user->UserID;
@@ -174,12 +174,8 @@ class Profile extends Model
         ])
         ->whereNotNull('ParentID')
         ->where("UserID",$personalData->PersonalDataID)
-        ->when($minID > 0 ,function ($query) use ($minID){
-            $query->where("PostID", "<" , $minID);
-        })
         ->orderBy("PostID","desc")
-        ->limit(15)
-        ->get();
+        ->simplePaginate(15);
 
         foreach($posts as $post){
             //mostramos los links para poder interactuar con cada post

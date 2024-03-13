@@ -11,17 +11,17 @@ const profileContainer = $(".profile_container");
 
 
 //obtenemos los posteos correspondientes
-async function getUserPost(id){
+async function getUserPost(url){
     $(".profile_container").append(createLoader)
     try{
         const response = await $.ajax({
-            type: "Post",
-            url: window.location.href + "/posts",
-            data : {
-                Id: id
-            },
+            type: "get",
+            url: url,
         })
-        showPosts(response)
+        if(!response.data){
+            return
+        }
+        showPosts(response.data,response.next_page_url)
     }
     catch(e){
         if(e.responseJSON){
@@ -36,14 +36,10 @@ async function getUserPost(id){
 
 const allPost = $(".posts_container");
 
-await getUserPost(0);
+await getUserPost(window.location.href + "/posts");
 
 //mostramos los posteos
-function showPosts(info){
-    if(!info || info.length == 0){
-        return 
-    }
-    let lastID = info[info.length - 1].PostID;
+function showPosts(info,url){
     info.forEach(currentPost=>{
         //obtenemos todos los links para las interacciones y mostrar el post
         let linkPost = currentPost.linkPost;
@@ -104,5 +100,5 @@ function showPosts(info){
         utilsPosts.countIcon(currentPost,interactionContainer);
     })
     //obtenemos mas posteos una ves que se haya visualizado el ultimo
-    utilsIntersection.createIntersectionObserver(".post",false,true,getUserPost)
+    utilsIntersection.createIntersectionObserver(".post",false,false,getUserPost.bind(null,url))
 }

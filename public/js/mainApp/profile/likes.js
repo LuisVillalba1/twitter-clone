@@ -14,19 +14,19 @@ setLinks(postsLocation,null);
 setLinks(answersLocations,"answers")
 
 //obtenemos todas las publicaciones a la cual se ha dado like
-async function getLikes(id){
+async function getLikes(url){
     try{
         const response = await $.ajax({
-            type: "post",
-            url: window.location.href + "/details",
-            data : {
-                Id : id
-            }
+            type: "get",
+            url: url,
         })
-        console.log(response)
-        showPosts(response)
+        if(!response.data){
+            return 
+        }
+        showPosts(response.data,response.next_page_url);
     }
     catch(e){
+        console.log(e);
         if(e.responseJSON){
             return createErrorAlert(e.responseJSON.errors,profileContainer);
         }
@@ -38,13 +38,10 @@ async function getLikes(id){
 }
 
 
-await getLikes(0);
+await getLikes(window.location.href + "/details");
 
 
-function showPosts(info){
-    if(!info || info.length == 0){
-        return 
-    }
+function showPosts(info,url){
     info.forEach(currentPost=>{
         let postContainer = $("<a></a>");
         $(postContainer).addClass("post");
@@ -107,5 +104,5 @@ function showPosts(info){
     })
     //verificamos si el ultimo post mostrado es interceptado
     //utilizamos bind para poder llamar a esta funcion callback dentro de createIntersectionObserver con los argumentos necesarios
-    utilsIntersection.createIntersectionObserver(".post",false,true,getLikes)
+    utilsIntersection.createIntersectionObserver(".post",false,false,getLikes.bind(null,url))
 }

@@ -86,7 +86,7 @@ async function showData(data){
     utilsPosts.showRepostAndLikes(data.likes_count,data.likes_count);
     utilsPosts.showVisualizations(data.visualizations_count);
 
-    await getComments(0);
+    await getComments(window.location.href + "/comments");
 
 }
 
@@ -211,17 +211,17 @@ function showMultimedia(data){
 }
 
 //obtnemos los comentarios
-async function getComments(id){
+async function getComments(url){
     $(postContainer).append(createLoader())
     try{
         const response = await $.ajax({
-            type : "Post",
-            url : window.location.href + "/comments",
-            data : {
-                "Id" : id
-            },
+            type : "get",
+            url : url,
         })
-        showCommenst(response);
+        if(!response.data){
+            return
+        }
+        showCommenst(response.data,response.next_page_url);
     }
     catch(e){
         console.log(e);
@@ -232,10 +232,7 @@ async function getComments(id){
 }
 
 const commentsContainer = $(".comments_post_container");
-function showCommenst(commentsData){
-    if(!commentsData || commentsData.length == 0){
-        return
-    }
+function showCommenst(commentsData,url){
     commentsData.forEach(currentComment=>{
         //obtenemos el link del post y permitimos que el usuario pueda ir a ver el posteo
         let linkPost = currentComment.linkPost;
@@ -289,7 +286,7 @@ function showCommenst(commentsData){
         utilsPosts.countIcon(currentComment,interaction_container);
     })
     //verificamos que el ultimo comentario sea visible para mostrar mas
-    utilsIntersection.createIntersectionObserver(".comment_post_constainer",true,true,getComments)
+    utilsIntersection.createIntersectionObserver(".comment_post_constainer",true,false,getComments.bind(null,url))
 }
 
 

@@ -112,7 +112,7 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/post/{username}/{encryptID}",[UserPost::class,"showPost"])->name("showPost");
     Route::get("/post/{username}/{encryptID}/details",[UserPost::class,"getPostData"])->name("getPostData");
     //obtenemos los comentarios de ese posteo
-    Route::post("/post/{username}/{encryptID}/comments",[Comment::class,"getPostsComments"])->name("getPostComments");
+    Route::get("/post/{username}/{encryptID}/comments",[Comment::class,"getPostsComments"])->name("getPostComments");
 
 
     //permitimos al usuario comentar un posteo
@@ -122,7 +122,7 @@ Route::middleware(["AuthSession"])->group(function () {
     //bookwarks
     //obtenemos los elementos guardados
     Route::get("/bookmarks",[SavePost::class,"showBookmarks"])->name("showBookmarks");
-    Route::Post("/bookmarks/details",[SavePost::class,"getBookmarks"])->name("getBookmarks");
+    Route::get("/bookmarks/details",[SavePost::class,"getBookmarks"])->name("getBookmarks");
     
     //permitimos guardar un posteo
     Route::post("/bookmarks/{username}/{encryptID}",[SavePost::class,"savePost"])->name("savePost");
@@ -131,14 +131,15 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/{username}",[ProfileController::class,"showProfile"])->name("showProfile");
 
     //obtenemos todos los posteos del usuario
-    Route::post("/{username}/posts",[ProfileController::class,"getUserPosts"])->name("getUserPosts");
+    Route::get("/{username}/posts",[ProfileController::class,"getUserPosts"])->name("getUserPosts");
     
     //mostramos las respuestas de los usuarios
     Route::get("/{username}/answers",[ProfileController::class,"showAnswersUser"])->name("answersUser");
-    Route::post("/{username}/answers/details",[ProfileController::class,"getAnswersUser"])->name("getAnswersUser");
+    Route::get("/{username}/answers/details",[ProfileController::class,"getAnswersUser"])->name("getAnswersUser");
 
+    //obtenemos todos los posteos que ha likeado el usuario
     Route::get("/{username}/likes",[ProfileController::class,"showLikesUser"])->name("likesUser");
-    Route::post("/{username}/likes/details",[ProfileController::class,"getLikesUser"])->name("getLikesUser");
+    Route::get("/{username}/likes/details",[ProfileController::class,"getLikesUser"])->name("getLikesUser");
 
     //Permitimos al usuario poder modificar ciertos valores de su perfil
     Route::get("/settings/profile",[ProfileController::class,"showEditProfile"])->name("editProfilesShow");

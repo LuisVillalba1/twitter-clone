@@ -140,9 +140,8 @@ class Comment extends Model
     }
 
     //obtenemos los comentarios de un posteo, minPostID lo utilizaremos para cuando se quieran recibir nuevos comentarios
-    public function getPostsComments($username,$encryptID,MinID $request){
+    public function getPostsComments($username,$encryptID){
         try{
-            $minPostID = $request->Id;
 
             //verificamos si existe el posteo y el usuario
             $postID = Crypt::decryptString($encryptID);
@@ -184,9 +183,7 @@ class Comment extends Model
                 "MultimediaPost"
             ])
             ->where("ParentID",$postID)
-            ->where("PostID", '>',$minPostID)
-            ->limit(15)
-            ->get();
+            ->simplePaginate(15);
 
             $this->setLinksInteraction($comments);
 
