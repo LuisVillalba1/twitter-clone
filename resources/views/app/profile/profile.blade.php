@@ -55,9 +55,15 @@
                             <p>Editar perfil</p>
                         </a>
                     @else
-                        <div class="follow_user_container">
+                        @if($follow)
+                        <div class="follow_user_container" id="unfollow">
+                            <p>Dejar de seguir</p>
+                        </div>
+                        @else
+                        <div class="follow_user_container" id="follow">
                             <p>Seguir</p>
                         </div>
+                        @endif
                     @endif
                 </div>
                 <div class="nickname_and_name_container">

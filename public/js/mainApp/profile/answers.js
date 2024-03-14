@@ -27,6 +27,7 @@ async function getAnswers(url){
         showAnswers(response.data,response.next_page_url)
     }
     catch(e){
+        console.log(e);
         if(e.responseJSON){
             return createErrorAlert(e.responseJSON.errors,profileContainer)
         }
@@ -41,7 +42,6 @@ await getAnswers(window.location.href + "/details");
 
 
 function showAnswers(info,url){
-    let lastID = info[info.length - 1].PostID;
         //iteramoc sobre cada post
         info.forEach(currentPost=>{
         //creamos el contenedor del posteo

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\followController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\GoogleRegister;
 use App\Http\Controllers\InitSession;
@@ -127,8 +128,9 @@ Route::middleware(["AuthSession"])->group(function () {
     //permitimos guardar un posteo
     Route::post("/bookmarks/{username}/{encryptID}",[SavePost::class,"savePost"])->name("savePost");
 
-    //mostramos el perfil del usuario
+    //mostramos el perfil del usuario y permitimos seguirlo
     Route::get("/{username}",[ProfileController::class,"showProfile"])->name("showProfile");
+    Route::post("/{username}/follow",[followController::class,"followUser"])->name("followUser");
 
     //obtenemos todos los posteos del usuario
     Route::get("/{username}/posts",[ProfileController::class,"getUserPosts"])->name("getUserPosts");
@@ -148,6 +150,7 @@ Route::middleware(["AuthSession"])->group(function () {
     //perimitimos al usuario ver sus notificaciones
     Route::get("/user/notifications",[NotificationController::class,"showNotifications"])->name("notificationView");
     Route::get("/user/notifications/details",[NotificationController::class,"getNotifications"])->name("getNotifications");
+
 
 });
 

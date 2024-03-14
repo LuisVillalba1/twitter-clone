@@ -48,7 +48,7 @@ function closeAlert(container,alert){
 }
 
 //permitimos que la alerta se vea bien, por lo cual por cada hijo del conetenedor le agregamos opacidad
-function setOpacityChilds(container,errorContainer){
+export function setOpacityChilds(container,errorContainer){
     $(container).children().each(function (indexInArray, valueOfElement) { 
         if(valueOfElement != errorContainer[0]){
             $(valueOfElement).css("opacity", "0.2");
@@ -56,8 +56,9 @@ function setOpacityChilds(container,errorContainer){
     });
 }
 
+
 //removemos la opacidad
-function removeOpacity(container,errorContainer){
+export function removeOpacity(container,errorContainer){
     $(container).children().each(function (indexInArray, valueOfElement) { 
         if(valueOfElement != errorContainer[0]){
             $(valueOfElement).css("opacity", "1");

@@ -50,15 +50,16 @@ class Profile extends Model
         //cambiamos el formato del date
         $fecha_objeto = new DateTime($created);
         $created = $fecha_objeto->format('d/m/Y');
-    
+
+        $follow = (new Follow())->checkExistFollow($profile->PersonalDataID);
         //si el perfil al que acceder es el mismo que el que esta logeado, permitimos a este editar su perfil
         if($profile->PersonalDataID == $userID){
             $edit = true;
-            return view("app.profile." . $typeProfileContent,compact(["profile","created","edit"]));
+            return view("app.profile." . $typeProfileContent,compact(["profile","created","edit","follow"]));
         }
         $edit = false;
         //si no mostramos el perfil del usuario
-        return view("app.profile.".$typeProfileContent,compact(["profile","created","edit"]));
+        return view("app.profile.".$typeProfileContent,compact(["profile","created","edit","follow"]));
     }
 
     //creamos un nuevo perfil

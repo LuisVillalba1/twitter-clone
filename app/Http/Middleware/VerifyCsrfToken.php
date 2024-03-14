@@ -26,6 +26,7 @@ class VerifyCsrfToken extends Middleware
         "bookmarks/*",
         "post/*",
         "*/posts",
+        "*/follow",
         "*/answers/details",
         "*/likes/details"
     ];
