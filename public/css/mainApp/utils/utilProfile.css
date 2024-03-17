@@ -158,6 +158,7 @@ body{
 
 .follows_and_followers_container div{
     display: flex;
+    margin-right: 5px;
 }
 
 .count_follows,
@@ -169,7 +170,7 @@ body{
 .followers_container :nth-child(2)
 {
     color: var(--grisClaro);
-    margin-left: 5px;
+    margin-left: 3px;
 }
 
 .locations{

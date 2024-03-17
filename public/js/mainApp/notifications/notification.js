@@ -5,7 +5,8 @@ function getNotifications(){
         type: "get",
         url: window.location.href + "/details",
         success: function (response) {
-            showNotifications(response)
+            console.log(response)
+            // showNotifications(response)
         },
         error : function(error){
             console.log(error)
@@ -250,6 +251,7 @@ function getNickname(){
 Echo.channel(`notification.${getNickname()}`).
 listen("notificationEvent",(e)=>{
     //mostramos la nueva notificacion
+    console.log(e);
     showNewNotification(e.notification);
 })
 

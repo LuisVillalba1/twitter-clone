@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class PostsNotification extends Model
 {
@@ -40,13 +41,14 @@ class PostsNotification extends Model
         return false;
     }
 
-    //creamos una nueva notificacion
+    //creamos las notificaciones correspondiente
     public function createNotificationLike($postID,$userID,$username){
         try{
             $authUser = Auth::user();
             //verificamos si ya existe el posteo y en caso de que exista obtenemos el link del posteo
             $linkPost = $this->checkExistNotification($postID,"Like");
-    
+            
+            //creamos la notificacion de la tabla post notificaciones
             $newNotification = new PostsNotification();
             $newNotification->UserID = $userID;
             $newNotification->PostID = $postID;
@@ -61,8 +63,11 @@ class PostsNotification extends Model
                 $idEncrypt = Crypt::encryptString($postID);
                 $newNotification->LinkPost = route("showPost",["username"=>$username,"encryptID"=>$idEncrypt]);
             }
-    
+ 
             $newNotification->save();
+
+            //creamos la notificacion para el usuario correspondiente
+            (new Notification())->createNotificationLike($userID,$postID,$newNotification->LinkPost);
 
             //obtenemos la informacion de la notificacion
             $data = $this->getNotificationData($newNotification->PostNotificationID);
@@ -81,6 +86,8 @@ class PostsNotification extends Model
         try{
             $authUser = Auth::user();
 
+            //creamos una nueva notificacion para la tabla postNotifications la cual nos servira para enviar notificaciones en tiempo real
+            //y crear nuevas notificaciones
             $newNotification = new PostsNotification();
             $newNotification->UserID = $userID;
             $newNotification->PostID = $postUserID;
@@ -91,6 +98,9 @@ class PostsNotification extends Model
             $newNotification->LinkPost = route("showPost",["username"=>$commentUser,"encryptID"=>$idEncrypt]);
 
             $newNotification->save();
+
+            //creamos la nueva notificacion para el usuario
+            (new Notification())->createNotificationComment($userID,$postUserID,$newNotification->LinkPost);
 
             //obtenemos la informacion de la notificacion
             $data = $this->getNotificationData($newNotification->PostNotificationID);
@@ -153,6 +163,42 @@ class PostsNotification extends Model
         //tenemos que convertir la informacion a un array obligatoriamente osino, se serializa las relaciones y se cargan completamente
         $dataArray = $data->toArray();
         broadcast(new notificationEvent($dataArray,$username))->toOthers();
+    }
+
+    //otenemos el ultimo like de cada posteo del usuario autenticado
+    public function getLastUserLike(){
+        $userID = Auth::user()->UserID;
+        $lastLike = 
+        DB::table('posts_notifications as p')
+        ->select("p.PostID","up.message",
+        DB::raw('(SELECT Url from multimedia_posts where PostID = p.PostID LIMIT 1) as Multimedia'),
+        DB::raw('COUNT(CASE WHEN Action = "Like" AND ActionUserID THEN 1 END) AS SumLikes'),
+        DB::raw('(SELECT ActionUserID from posts_notifications WHERE Action = "Like" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1) AS LastUserLike'),
+        DB::raw('(SELECT LinkPost from posts_notifications WHERE Action = "Like" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1)as postLink'))
+        ->join("user_posts as up","p.PostID","=","up.PostID")
+        ->where("p.UserID", $userID)
+        ->groupBy("p.PostID")
+        ->get();
+        
+        return $lastLike;
+    }
+
+    //obtenemos el ultimo que ha comentado en cada posteo
+    public function getLastComment(){
+        $userID = Auth::user()->UserID;
+        $lastComment = 
+        DB::table('posts_notifications as p')
+        ->select("p.PostID","up.message",
+        DB::raw('(SELECT Url from multimedia_posts where PostID = p.PostID LIMIT 1) as Multimedia'),
+        DB::raw('COUNT(CASE WHEN Action = "Comment" AND ActionUserID THEN 1 END) AS SumLikes'),
+        DB::raw('(SELECT ActionUserID from posts_notifications WHERE Action = "Comment" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1) AS LastUserComment'),
+        DB::raw('(SELECT LinkPost from posts_notifications WHERE Action = "Comment" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1)as postLink'))
+        ->join("user_posts as up","p.PostID","=","up.PostID")
+        ->where("p.UserID", $userID)
+        ->groupBy("p.PostID")
+        ->get();
+
+        return $lastComment;
     }
 
 }

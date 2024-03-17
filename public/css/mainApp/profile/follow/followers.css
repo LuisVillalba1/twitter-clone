@@ -1,0 +1,59 @@
+:root{
+    --negro : rgb(0 0 0);
+    --blanco : rgb(255 255 255);
+    --gris : rgb(155 155 155);
+    --grisClaro : rgba(115, 114, 114, 0.9);
+    --celeste : rgb(72, 152, 232);
+}
+
+@keyframes iconSelected{
+    to{
+        color: var(--celeste);
+    }
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--blanco);
+}
+.main_container{
+    min-height: 100vh;
+}
+
+body{
+    background: var(--negro);
+    position: relative;
+    min-height: 100vh;
+}
+
+.header_follow{
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    padding-bottom: 1.2px;
+    border-bottom: 1px solid var(--grisClaro);
+}
+
+.header_follow span a{
+    text-decoration: none;
+}
+
+.followers_redirect_container{
+    border-bottom: 3px solid var(--celeste);
+    border-radius: 1px;
+}
+
+
+@media screen and (min-width:485px){
+    .main_container{
+        display: flex;
+        justify-content: center;
+    }
+    .follow_container{
+        width: 100%;
+        max-width: 700px; 
+        border-right: 1px solid var(--grisClaro);
+    }
+}

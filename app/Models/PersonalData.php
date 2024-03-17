@@ -20,6 +20,11 @@ class PersonalData extends Model
         return $this->belongsTo(User::class,"PersonalDataID");
     }
 
+    //obtenemos los seguidos de un usuario
+    public function Follow(){
+        return $this->hasMany(Follow::class,"FollowerID","PersonalDataID");
+    }
+
     public function getUserId($username){
         $user = PersonalData::where("Nickname",$username)->first();
 

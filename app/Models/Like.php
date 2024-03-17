@@ -41,9 +41,15 @@ class Like extends Model
             return true;
         }
 
-        //si no eliminamos el like en concreto
+        //si no eliminamos el like en concreto y la notificacion al usuario
         Like::where("PostID",$postID)
         ->where("NicknameID",$AuthpersonalDataID)
+        ->delete();
+
+        //eliminamos la notificacion del usuario
+        PostsNotification::where("PostID",$postID)
+        ->where("Action","Like")
+        ->where("ActionUserID",Auth::user()->UserID)
         ->delete();
 
         return false;

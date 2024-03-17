@@ -51,15 +51,20 @@ class Profile extends Model
         $fecha_objeto = new DateTime($created);
         $created = $fecha_objeto->format('d/m/Y');
 
+        //obtenemos la cantidad de seguidores y seguidos
+        $follows = (new Follow())->getCountFollows($profile->PersonalDataID);
+        $followers = (new Follow())->getCountFollowers($profile->PersonalDataID);
+
+        //verficamos si el usuario autenticado sigue al usuario
         $follow = (new Follow())->checkExistFollow($profile->PersonalDataID);
         //si el perfil al que acceder es el mismo que el que esta logeado, permitimos a este editar su perfil
         if($profile->PersonalDataID == $userID){
             $edit = true;
-            return view("app.profile." . $typeProfileContent,compact(["profile","created","edit","follow"]));
+            return view("app.profile." . $typeProfileContent,compact(["profile","created","edit","follow","follows","followers"]));
         }
         $edit = false;
         //si no mostramos el perfil del usuario
-        return view("app.profile.".$typeProfileContent,compact(["profile","created","edit","follow"]));
+        return view("app.profile.".$typeProfileContent,compact(["profile","created","edit","follow","follows","followers"]));
     }
 
     //creamos un nuevo perfil

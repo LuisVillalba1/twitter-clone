@@ -132,6 +132,14 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/{username}",[ProfileController::class,"showProfile"])->name("showProfile");
     Route::post("/{username}/follow",[followController::class,"followUser"])->name("followUser");
 
+    //mostramos la vista de follows y obtenemos los follows de tal usuario
+    Route::get("/{username}/follows",[ProfileController::class,"showUserFollows"])->name("showUserFollows");
+    Route::get("/{username}/follows/details",[ProfileController::class,"getUserFollows"])->name("getUserFollows");
+
+    //mostramos la vista de followers y obtenemos los followers de tal usuario
+    Route::get("/{username}/followers",[ProfileController::class,"showUserFollowers"])->name("showUserFollowers");
+    Route::get("/{username}/followers/details",[ProfileController::class,"getUserFollowers"])->name("getUserFollowers");
+
     //obtenemos todos los posteos del usuario
     Route::get("/{username}/posts",[ProfileController::class,"getUserPosts"])->name("getUserPosts");
     

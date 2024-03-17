@@ -82,11 +82,11 @@
                 </div>
                 <div class="follows_and_followers_container">
                     <div class="follows_container">
-                        <p class="count_follows"></p>
+                        <p class="count_follows">{{$follows}}</p>
                         <p>Seguidos</p>
                     </div>
                     <div class="followers_container">
-                        <p class="count_followers"></p>
+                        <p class="count_followers">{{$followers}}</p>
                         <p>Seguidores</p>
                     </div>
                 </div>

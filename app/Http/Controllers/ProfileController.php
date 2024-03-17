@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Content\MinID;
 use App\Http\Requests\ProfileUpdateRequest;
 use App\Http\Requests\settings\EditProfileRequest;
+use App\Models\Follow;
 use App\Models\Like;
 use App\Models\PersonalData;
 use App\Models\Profile;
@@ -188,6 +189,52 @@ class ProfileController extends Controller
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener los posteos likeado"],500);
+        }
+    }
+
+    //mostramos la vista de los seguidores de tal usuario
+    public function showUserFollows($username){
+        try{
+            $profile = (new PersonalData())->checkUsername($username);
+            $nickname = $profile->Nickname;
+            return view("app.profile.follow.follows",compact("nickname"));
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    public function getUserFollows($username){
+        try{
+            $profile = (new PersonalData())->checkUsername($username);
+            return (new Follow())->getFollows($profile->PersonalDataID);
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>"Ha ocurrido un error al obtener los seguidos del usuario"],500);
+        }
+        
+    }
+
+    //mostramos la vista de followers
+    public function showUserFollowers($username){
+        try{
+            $profile = (new PersonalData())->checkUsername($username);
+            $nickname = $profile->Nickname;
+            return view("app.profile.follow.followers",compact("nickname"));
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //obtenemos los followers de un usuario
+    public function getUserFollowers($username){
+        try{    
+            $profile = (new PersonalData())->checkUsername($username);
+            return (new Follow())->getFollowers($profile->PersonalDataID);
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>"Ha ocurrido un error al obtener los seguidores del usuario"],500);
         }
     }
 }

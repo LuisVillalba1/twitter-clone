@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\PostsNotification;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -31,23 +32,11 @@ class NotificationController extends Controller
     //obtenemos las notificaciones del usuario autenticado que aun no han sido vizualizadas
     public function getNotifications(){
         try{
-            $userID = Auth::user()->UserID;
-            $notifications = 
-            DB::table('posts_notifications as p')
-            ->select("p.PostID","up.Message",
-            DB::raw('(SELECT Url from multimedia_posts where PostID = p.PostID LIMIT 1) as Multimedia'),
-            DB::raw('(SELECT CONCAT(ActionUserID,"-",LinkPost) from posts_notifications WHERE Action = "Like" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1) AS LastUserLike'),
-            DB::raw('COUNT(CASE WHEN Action = "Like" AND ActionUserID THEN 1 END) AS SumLikes'),
-            DB::raw('(SELECT CONCAT(ActionUserID,"-",LinkPost) from posts_notifications WHERE Action = "Comment" AND PostID = p.PostID ORDER BY created_at DESC LIMIT 1) AS LastUserComment'),
-            DB::raw('COUNT(CASE WHEN Action = "Comment" THEN 1 END) AS SumComments')
-            )
-            ->join("user_posts as up","p.PostID","=","up.PostID")
-            ->where("p.UserID", $userID)
-            ->groupBy("p.PostID")
+            $notifications = Notification
+            ::with("ActionUser")
+            ->where("UserID",Auth::user()->UserID)
             ->get();
-
-            $notifications = $this->userNotificationContent($notifications);
-
+            
             return $notifications;
         }
         catch(\Exception $e){
