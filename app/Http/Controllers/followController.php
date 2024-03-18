@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class followController extends Controller
-{
+{   
+    //seguimos a un usuario
     public function followUser($username){
         try{
+            //verifiicamos que exista el usuario y que sea distinto al usuario autenticado
             (new PersonalData())->checkUsername($username);
             if($username == Auth::user()->PersonalData->Nickname){
                 throw new Exception("Te estas autosiguiendo");
@@ -19,7 +21,7 @@ class followController extends Controller
             return response()->json(["message"=>(new Follow())->followOrUnfollow($username)]);
         }
         catch(\Exception $e){
-            return response()->json(["erros","Ha ocurrido un error al realizar la solicitud"],500);
+            return response()->json(["erros",$e->getMessage()],500);
         }
     }
 }

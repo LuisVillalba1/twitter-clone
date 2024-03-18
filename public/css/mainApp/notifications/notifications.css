@@ -75,6 +75,13 @@ body{
     width: 100%;
 }
 
+.notification_title{
+    padding-bottom: 5px;
+}
+
+.notification_title h4{
+    font-size: 1.1em;
+}
 
 .message_container{
     padding-top: 3px;

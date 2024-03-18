@@ -201,6 +201,15 @@ class PostsNotification extends Model
         return $lastComment;
     }
 
+    //eliminamos una post notificacion
+    public function deleteNotification($postID,$userID,string $action){
+        //eliminamos la notificacion del usuario
+        PostsNotification::where("PostID",$postID)
+        ->where("Action",$action)
+        ->where("ActionUserID",$userID)
+        ->delete();
+    }
+
 }
 
 

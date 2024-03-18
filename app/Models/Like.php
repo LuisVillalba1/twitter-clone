@@ -46,11 +46,12 @@ class Like extends Model
         ->where("NicknameID",$AuthpersonalDataID)
         ->delete();
 
-        //eliminamos la notificacion del usuario
-        PostsNotification::where("PostID",$postID)
-        ->where("Action","Like")
-        ->where("ActionUserID",Auth::user()->UserID)
-        ->delete();
+        (new PostsNotification())->deleteNotification($postID,Auth::user()->UserID,"Like");
+
+        //obtenemos la notificacion del usuario que recibio el like
+        $likeNotification = (new Notification())->getNotification($userID,$postID,"Like");
+
+        (new Notification())->changeLikeNotificationCotent($likeNotification,$likeNotification->count());
 
         return false;
     }
