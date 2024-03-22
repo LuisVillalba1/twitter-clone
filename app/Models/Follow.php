@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\notificationEvent;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -23,11 +24,12 @@ class Follow extends Model
         return $this->belongsTo(PersonalData::class,"FollowUserID","PersonalDataID");
     }
 
-
-    public function checkExistFollow($userID){
+    //verificamos si un usuario sigue a otro
+    public function checkExistFollow($authUserID,$userID){
         //vamos a verificar que el usuario autenticado ya haya seguido al usuario correspondiente
         $follow = Follow::
-        where("FollowUserID",Auth::user()->UserID)
+        where("FollowUserID",$authUserID)
+        ->select("FollowID")
         ->where("FollowerID",$userID)
         ->first();
 
@@ -38,10 +40,13 @@ class Follow extends Model
         return false;
     }
 
-    public function followOrUnfollow($username){
+    public function followOrUnfollow($username,$authUserID){
         //obtenemos la informacion del usuario que vamos a seguir,y verificamos si ya se estaba siguiendo o no a este
-        $userToFollow = PersonalData::where("Nickname",$username)->first();
-        $existFollow = $this->checkExistFollow($userToFollow->PersonalDataID);
+        $userToFollow = PersonalData::
+        where("Nickname",$username)
+        ->select("PersonalDataID","Nickname")
+        ->first();
+        $existFollow = $this->checkExistFollow($authUserID,$userToFollow->PersonalDataID);
 
         //si ya existe el follow lo eliminaos y retornamos el mensaje para que el usuario pueda seguir de nuevo
         if($existFollow instanceof Follow){
@@ -62,7 +67,7 @@ class Follow extends Model
         $linkProfile = route("showProfile",["username"=>Auth::user()->PersonalData->Nickname]);
 
         //enviamos al usuario correspondiente el evento de notificacion
-        $this->sendNotificationFollowEvent($newFollow,$userToFollow->Nickname,Auth::user()->PersonalData->Nickname,$linkProfile);
+        $this->sendNotificationFollowEvent($userToFollow->Nickname,$userToFollow->PersonalDataID,$linkProfile);
 
         //creamos la notificacion para el usuario correspondiente
         (new Notification())->createNotificationFollow($userToFollow->PersonalDataID,"follow",$linkProfile);
@@ -71,8 +76,8 @@ class Follow extends Model
     }
 
     //obtenemos la informaicon del nuevo seguidor y enviamos la notificacion al usuario correspondiente
-    public function sendNotificationFollowEvent(Follow $follow,string $username,string $userFollow,$linkProfile){
-        $followData = $follow->with([
+    public function sendNotificationFollowEvent(string $username,$userID,$linkProfile){
+        $followData = Follow::with([
             "PersonalDataFollower"=>function ($queryPersonal){
                 $queryPersonal
                 ->select("PersonalDataID","Nickname")
@@ -88,7 +93,11 @@ class Follow extends Model
                     },
                 ]);
             },
-        ])->get();
+        ])
+        ->select("FollowID","FollowUserID","FollowerID")
+        ->where("FollowUserID",Auth::user()->UserID)
+        ->where("FollowerID",$userID)
+        ->first();
 
         $followData["type"] = "follow";
         $followData["link"] =  $linkProfile;
@@ -120,15 +129,32 @@ class Follow extends Model
     public function getLastFollower($userID){
         $follower = Follow::
         where("FollowerID",$userID)
+        ->select("FollowID")
         ->orderBy("created_at","desc")
-        ->limit(1)
-        ->get();
+        ->first();
 
         return $follower->FollowUserID;
     }
 
+    //añadimos el link para seguir al usuario o dejar de seguir
+    public function addLinkFollow($follow,$authUserID){
+        //en caso de que el seguido sea el mismo que el usuario autenticado no añadimos el link para seguirlo
+        if($follow->PersonalDataID == $authUserID){
+            return;
+        }
+        $follow["linkFollow"] = route("followUser",["username"=>$follow->Nickname]);
+        //en caso de que el usuario autenticado ya siga al usuario en concreto devolvemos que ya lo esta siguiendo
+        if($this->checkExistFollow($authUserID,$follow->PersonalDataID)){
+            $follow["followed"] = true;
+        }
+        else{
+            $follow["followed"] = false;
+        }
+    }
+
     //obtenemos todios los seguidores de un usuario
     public function getFollows($userID){
+        $authUser = Auth::user();
         $follows = Follow::
         with([
             "PersonalDataFollow"=>function ($queryPersonal){
@@ -137,7 +163,7 @@ class Follow extends Model
                 ->with([
                     "User"=>function ($queryUser){
                         $queryUser
-                        ->select("UserID","PersonalDataID")
+                        ->select("UserID","PersonalDataID","Name")
                         ->with([
                             "Profile"=>function ($queryProfile){
                                 $queryProfile->select("ProfileID","UserID","Biography","ProfilePhotoURL","ProfilePhotoName");
@@ -148,12 +174,20 @@ class Follow extends Model
             },
         ])
         ->where("FollowUserID",$userID)
-        ->simplePaginate(1);
+        //si el usuario sigue al usuario autenticado lo mostramos como primero
+        ->orderByRaw("CASE WHEN FollowerID = $authUser->UserID THEN 0 ELSE 1 END")
+        ->simplePaginate(20);
+        
+        //añadimos el link para seguir
+        foreach($follows as $follow){
+            $this->addLinkFollow($follow->PersonalDataFollow,$authUser->UserID);
+        }
 
         return $follows;
     }
 
     public function getFollowers($userID){
+        $authUser = Auth::user();
         $followers = Follow::
         with([
             "PersonalDataFollower"=>function ($queryPersonal){
@@ -173,7 +207,12 @@ class Follow extends Model
             },
         ])
         ->where("FollowerID",$userID)
-        ->simplePaginate(1);
+        ->orderByRaw("CASE WHEN FollowerID = $authUser->UserID THEN 0 ELSE 1 END")
+        ->simplePaginate(20);
+
+        foreach ($followers as $follower){
+            $this->addLinkFollow($follower->PersonalDataFollower,$authUser->UserID);
+        }
 
         return $followers;
     }

@@ -73,12 +73,16 @@
                 </div>
                 <div class="follows_and_followers_container">
                     <div class="follows_container">
-                        <p class="count_follows">{{$follows}}</p>
-                        <p>Seguidos</p>
+                        <a href={{route("showUserFollows",["username"=>$profile->Nickname])}}>
+                            <p class="count_follows">{{$follows}}</p>
+                            <p>Seguidos</p>
+                        </a>
                     </div>
                     <div class="followers_container">
-                        <p class="count_followers">{{$followers}}</p>
-                        <p>Seguidores</p>
+                        <a href={{route("showUserFollowers",["username"=>$profile->Nickname])}}>
+                            <p class="count_followers">{{$followers}}</p>
+                            <p>Seguidores</p>
+                        </a>
                     </div>
                 </div>
             </div>

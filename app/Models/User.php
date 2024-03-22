@@ -164,13 +164,11 @@ class User extends Model implements Authenticatable
     }
     
     //obtenemos todos los posteos del usuario autenticado
-    public function getUserPosts($userName){
+    public function getUserPosts($userName,$personalDataID){
             $user = Auth::user();
             $userID = $user->UserID;
             
-            //obtenemos el id del usuario
-            $personalData = PersonalData::where("Nickname",$userName)->first();
-        
+    
             //obtenemos su contenido multimedia
             $posts =  UserPost::with([
                 "MultimediaPost",
@@ -204,7 +202,7 @@ class User extends Model implements Authenticatable
                 "Comments"
             ])
             ->where("ParentID",null)
-            ->where("UserID",$personalData->PersonalDataID)
+            ->where("UserID",$personalDataID)
             ->orderBy("PostID","desc")
             ->simplePaginate(15);
 

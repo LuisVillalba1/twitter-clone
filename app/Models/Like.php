@@ -18,6 +18,14 @@ class Like extends Model
         return $this->belongsTo(UserPost::class,"PostID");
     }
 
+    //obtenemos la cantidad de likes de una publicacion
+    public function getCountLikes($postID){
+        $likesCount = Like::where("PostID",$postID)
+        ->count();
+
+        return $likesCount;
+    }
+
     //verificaremos si el posteo se ha likeado o no
     public function checkLike($postID,$AuthpersonalDataID,$nickname,$userID){
         //verificamos si el usuario le ha dado like al post correspondiente
@@ -50,8 +58,10 @@ class Like extends Model
 
         //obtenemos la notificacion del usuario que recibio el like
         $likeNotification = (new Notification())->getNotification($userID,$postID,"Like");
+        $likesCount = $this->getCountLikes($postID);
 
-        (new Notification())->changeLikeNotificationCotent($likeNotification,$likeNotification->count());
+        //cambiamos el contenido de la notificaion del usuario
+        (new Notification())->changeLikeNotificationCotent($likeNotification,$likesCount);
 
         return false;
     }
@@ -81,14 +91,10 @@ class Like extends Model
     }
 
     //obtenemos todos los posts likeados por un usuario
-    public function getLikesPosts($username){
+    public function getLikesPosts($username,$personalDataID){
         $user = Auth::user();
 
         $userID = $user->UserID;
-
-        //obtenemos el usuario al que se quiere obtener los posteos
-        $personalData = PersonalData::where("Nickname",$username)->first();
-
 
         $likes = Like::
         select("LikeID", "PostID", "NicknameID")
@@ -125,7 +131,7 @@ class Like extends Model
                     ]);
             }
         ])
-        ->where("NicknameID", $personalData->PersonalDataID)
+        ->where("NicknameID", $personalDataID)
         ->orderBy("LikeID","desc")
         ->simplePaginate(15);
         

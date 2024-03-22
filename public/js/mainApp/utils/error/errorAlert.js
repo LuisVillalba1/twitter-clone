@@ -1,5 +1,6 @@
 
 export function createErrorAlert(message,container){
+    console.log("sdjklñag")
     let errorContainer = $("<div></div>");
     $(errorContainer).addClass("error_alert_container");
 

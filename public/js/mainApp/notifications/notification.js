@@ -1,6 +1,10 @@
 
-import { showFollowNotification } from "./follow/followNotification.js";
-import { showNewNotificationPost } from "./posts/postsNotification.js";
+import * as utilsFollowNotification from "./follow/followNotification.js";
+import * as utilsPostNotification from "./posts/postsNotification.js";
+
+//contenedor de todas las notificaciones
+const notificationsContainer = $(".notifications")
+
 //obtenemos las notificaciones
 function getNotifications(){
     $.ajax({
@@ -8,7 +12,7 @@ function getNotifications(){
         url: window.location.href + "/details",
         success: function (response) {
             console.log(response)
-            // showNotifications(response)
+            showNotifications(response)
         },
         error : function(error){
             console.log(error)
@@ -16,94 +20,79 @@ function getNotifications(){
     });
 }
 
+function showNotifications(data){
+    for(let i of data){
+        let newNotification = $("<a></a>");
+        $(newNotification).addClass("notification");
+
+        $(newNotification).attr("href", i.Link);
+
+        //contenedor que contendra ya sea la foto del usuario o el heart
+        let containerType = $("<div></div>");
+        $(containerType).addClass("action_container");
+
+        //contenedor que contendra el contenido de la notificacion
+        let mainNotificationContainer = $("<div></div>");
+        $(mainNotificationContainer).addClass("notification_content_container");
+
+        if(i.type == "setting"){
+            return
+        }
+
+        checkTypeNotification(containerType,mainNotificationContainer,i);
+
+        $(newNotification).append(containerType);
+        $(newNotification).append(mainNotificationContainer);
+        $(notificationsContainer).append(newNotification);
+    }
+}
+
+//verificamos que tipo de notificacion es y mostramos el contenido correspondiente
+function checkTypeNotification(containerType,ContentContainer,data){
+    //obtenemos el nombre de usuario y las foto de este mismo
+    let username = data.action_user.Nickname;
+    let profilePhoto = data.action_user.user.profile.ProfilePhotoURL;
+    let profilePhotoName = data.action_user.user.profile.profilePhotoName;
+
+    //tipo de notificacion y mensaje de la notificacion
+    let type = data.Type;
+    let message = data.Content;
+
+    if(type == "follow"){
+        return followNotification(containerType,ContentContainer,profilePhoto,profilePhotoName,username,message);
+    }
+    if(type == "Comment"){
+        return commentNotification(containerType,ContentContainer,profilePhoto,profilePhotoName,username,message,data.post);
+    }
+    if(type == "Like"){
+        return likeNotification(containerType,ContentContainer,profilePhoto,profilePhotoName,username,message,data.post);
+    }
+}
+
+
+//mostramos el contenido para la notificacion de follow
+function followNotification(containerType,ContentContainer,photo,photoName,nickname,message){
+    //mostramos la imagen y el contenido de la notificacion
+    utilsFollowNotification.showPhotoUser(photo,photoName,nickname,containerType);
+    $(ContentContainer).append(utilsFollowNotification.showContent(`${nickname} ${message}`,`${nickname}`));
+}
+
+//mostramos la notificacion de comentario
+function commentNotification(containerType,ContentContainer,photo,photoName,nickname,message,post){
+    utilsPostNotification.commentNotification(photo,photoName,nickname,containerType)
+    $(ContentContainer).append(utilsPostNotification.showContent(message,nickname,post))
+}
+
+//mostramos la notificacion de like
+function likeNotification(containerType,ContentContainer,photo,photoName,nickname,message,post){
+    utilsPostNotification.likeNotification(photo,photoName,nickname,containerType,ContentContainer)
+    $(ContentContainer).append(utilsPostNotification.showContent(message,nickname,post))
+}
+
 //eliminamos la cantidadad de notificaciones
 localStorage.removeItem("notificationCount");
 
-//contenedor de todas las notificaciones
-const notificationsContainer = $(".notifications")
-
 getNotifications();
-
-//por cada notificacion vamos a obtener informacion de comentarios y likes
-function showNotifications(data){
-    for(let i of data){
-        let messageUniq = "";
-        let message = "";
-        //obtenemos los datos de los comentarios
-        if(i.LastUserComment){
-            messageUniq = "ha comentado tu posteo";
-            message = "han comentado tu posteo";
-            showNotification(i,i.LastUserComment,"Comment",i.SumComments,messageUniq,message)
-        }
-        //obtenemos los datos de los likes
-        if(i.LastUserLike){
-            messageUniq = "ha indicado que le gusta tu posteo";
-            message = "han indico que le gusta tu posteo";
-            showNotification(i,i.LastUserLike,"Likes",i.SumLikes,messageUniq,message);
-        }
-    }
-}
-
-function showNotification(allContent,content,typeContent,countActions,uniqActiontext,actionTex){
-    //creamos el contenedor de la notificacion
-    let newNotification = $("<a></a>");
-    $(newNotification).addClass("notification");
-    $(newNotification).attr("href", content.Link);
-
-    //obtenemos el link del posteo y el usuario que reliazo el ultimo like
-    let linkPost = content.Link;
-    let nickname = content.personal_data.Nickname;
-
-    //le añadimos el link del posteo
-    $(newNotification).addClass("href",linkPost);
-
-    //contenedor que contendra la imagen correspondiente,de un corazon en caso de que sea un like,o la del usuario si es un comentario
-    let containerAction = $("<div></div>");
-    $(containerAction).addClass("action_container");
-
-    //contenedor del contenido de la notificacion
-    let mainNotificationContainer = $("<div></div>");
-    $(mainNotificationContainer).addClass("notification_content_container");
-
-    //creamos el mensaje de la notificacion esta varia de la cantidad de personas que interactuaron con el posteo
-    let message = ` ${uniqActiontext}`;
-    if(countActions == 2){
-        message = ` y ${countActions - 1} persona mas ${actionTex}`;
-    }
-    if(countActions > 2){
-        message = ` y ${countActions} personas mas ${actionTex}`
-    }
-    //obtenemos las imagenes del usuario
-    let userPhoto = content.profile.ProfilePhotoURL;
-    let userPhotoName = content.profile.ProfilePhotoName;
-
-    //creamos un objeto con el contenido del posteo
-    let post = {
-        Message : allContent.Message,
-        multimedia_post : [{
-            Url : allContent.Multimedia
-        }
-        ]
-    }
-
-    //en caso de que sea un comentario lo mostramos de la manera correspondiente
-    if(typeContent == "Comment"){
-        //mostramos la imagen,en caso de que posea, del usuario
-        commentNotification(userPhoto,userPhotoName,nickname,containerAction)
-        //mostramos el contenido del posteo con el cual se interactuo
-        $(mainNotificationContainer).append(showContent(message,nickname,post))
-    }
-    else{
-        //mostramos el corazon junto a la imagen del usuario
-        likeNotification(userPhoto,userPhotoName,nickname,containerAction,mainNotificationContainer);
-        //mostramos el contenido del posteo
-        $(mainNotificationContainer).append(showContent(message,nickname,post));
-    }
-
-    newNotification.append(containerAction);
-    newNotification.append(mainNotificationContainer);
-    notificationsContainer.append(newNotification);
-}
 
 
 const linkProfileContainer = $(".logo_icon_container");
@@ -120,9 +109,9 @@ function getNickname(){
 Echo.channel(`notification.${getNickname()}`).
 listen("notificationEvent",(e)=>{
     //mostramos la nueva notificacion
-    console.log(e);
     if(e.notification.type && e.notification.type == "follow"){
-        return showFollowNotification(e.notification,notificationsContainer);
+        console.log(e.notification);
+        return utilsFollowNotification.showFollowNotification(e.notification,notificationsContainer);
     }
-    showNewNotificationPost(e.notification,notificationsContainer);
+    utilsPostNotification.showNewNotificationPost(e.notification,notificationsContainer);
 })

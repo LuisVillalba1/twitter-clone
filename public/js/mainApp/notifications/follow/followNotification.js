@@ -1,14 +1,13 @@
 
 export function showFollowNotification(data,containerNotification){
-    console.log(data);
     let newNotification = $("<a></a>");
     $(newNotification).addClass("notification");
 
     $(newNotification).attr("href", data.link);
 
-    let username = data[0].personal_data_follower.Nickname;
-    let photoUser = data[0].personal_data_follower.ProfilePhotoURL;
-    let photoUserName = data[0].personal_data_follower.ProfilePhotoName;
+    let username = data.personal_data_follower.Nickname;
+    let photoUser = data.personal_data_follower.ProfilePhotoURL;
+    let photoUserName = data.personal_data_follower.ProfilePhotoName;
 
     let containerType = $("<div></div>");
     $(containerType).addClass("action_container");
@@ -28,7 +27,7 @@ export function showFollowNotification(data,containerNotification){
 }
 
 //mostramos la imagen del usuario
-function showPhotoUser(photo,photoName,nickname,containerType){
+export function showPhotoUser(photo,photoName,nickname,containerType){
     let imgContainer = $("<div></div>");
     $(imgContainer).addClass("img_action_container");
 
@@ -53,7 +52,7 @@ function showPhotoUser(photo,photoName,nickname,containerType){
 }
 
 //mostramos el contenido de la notificacion
-function showContent(message,nickname){
+export function showContent(message,nickname){
     let content = $("<div></div>");
     $(content).addClass("notification_title_container");
 

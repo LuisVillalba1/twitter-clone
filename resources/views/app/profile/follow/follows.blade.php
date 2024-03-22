@@ -12,6 +12,8 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilRedireckHome.css">
+<link rel="stylesheet" href="../../css/mainApp/profile/follow/utils/utilFollow.css">
+<link rel="stylesheet" href="../../css/mainApp/profile/follow/utils/alertUnfollow.css">
 <link rel="stylesheet" href="../../css/mainApp/profile/follow/follows.css">
 
 <title>{{$nickname}} follows</title>
@@ -39,5 +41,6 @@
 
 @section('scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="../../js/mainApp/profile/follow/follows.js"></script>
+<script type="module" src="../../js/mainApp/profile/follow/follows.js"></script>
+<script type="module" src="../../js/mainApp/profile/follow/utils/utilFollow.js"></script>
 @endsection

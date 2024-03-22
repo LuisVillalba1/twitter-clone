@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
@@ -14,8 +15,14 @@ class Notification extends Model
 
     protected $primaryKey = "NotificationID";
 
+    //obtenemos el ultimo usuario que ha realizado la interaccion
     public function ActionUser(){
         return $this->belongsTo(PersonalData::class,"LastUserAction");
+    }
+
+    //obtenemos informacion sobre el posteo
+    public function Post(){
+        return $this->belongsTo(UserPost::class,"PostID");
     }
 
     public function deleteNotification($userID,$postID,$type){
@@ -149,6 +156,7 @@ class Notification extends Model
 
         $countFollowers = (new Follow())->getCountFollowers($userID);
 
+
         //en caso de que no contenga mas seguidores, eliminamos la notificacion
         if($countFollowers == 0){
             return $notification->delete();
@@ -209,13 +217,13 @@ class Notification extends Model
     //cambiamos el mensaje de la notificacion con respecto a la cantidad de usuario likeado
     public function changeLikeNotificationCotent(Notification $notification,$count){
         //en caso de que sea solo uno la eliminamos
-        if($count == 1){
+        if($count == 0){
             return $notification->delete();
         }
-        if($count == 2){
+        else if($count == 1){
             $notification->Content = "Ha comentado tu posteo";
         }
-        if($count == 3){
+        else if($count == 2){
             $notification->Content = "y 1 persona mas han indicado que le gusta tu posteo";
         }
         else{

@@ -49,19 +49,19 @@ function showHeart(){
 }
 
 //en caso de que sea un comentario mostramos la notificacion de la forma deseada
-function commentNotification(photo,photoName,nickname,containerType){
+export function commentNotification(photo,photoName,nickname,containerType){
     $(containerType).append(showImgComment(photo,photoName,nickname));
 }
 
 //mostramos el contenido de la notificacion
-function showContent(message,nickname,post){
+export function showContent(message,nickname,post){
     let content = $("<div></div>");
     $(content).addClass("notification_content");
     
     let messageContainer = $("<div></div>");
     $(messageContainer).addClass("message_container");
     let messageParagrahp = $("<p></p>");
-    $(messageParagrahp).text(`${nickname} ${message}`);
+    $(messageParagrahp).text(`@${nickname} ${message}`);
 
     $(messageContainer).append(messageParagrahp);
 
@@ -77,7 +77,7 @@ function showContent(message,nickname,post){
 }
 
 //mostramos la notificacion en caso de que la accion haya sido de like
-function likeNotification(photo,photoName,nickname,containerType,mainNotificationContainer){
+export function likeNotification(photo,photoName,nickname,containerType,mainNotificationContainer){
     //agregamos el corazon y la imagen del usuario en caos de que posea
     $(containerType).append(showHeart());
     $(mainNotificationContainer).append(showImgLike(photo,photoName,nickname))

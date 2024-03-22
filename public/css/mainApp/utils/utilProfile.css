@@ -157,8 +157,12 @@ body{
 }
 
 .follows_and_followers_container div{
-    display: flex;
     margin-right: 5px;
+}
+
+.follows_and_followers_container div a{
+    display: flex;
+    text-decoration: none;
 }
 
 .count_follows,

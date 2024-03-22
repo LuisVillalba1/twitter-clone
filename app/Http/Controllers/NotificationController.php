@@ -12,7 +12,6 @@ use PhpParser\Node\Expr\Cast\Array_;
 
 class NotificationController extends Controller
 {
-    //
     //mostramos la vista de notificaciones
     public function showNotifications(){
         try{
@@ -33,8 +32,30 @@ class NotificationController extends Controller
     public function getNotifications(){
         try{
             $notifications = Notification
-            ::with("ActionUser")
+            ::with([
+                "ActionUser"=>function ($actionUser){
+                    $actionUser->select("PersonalDataID","Nickname")
+                    ->with([
+                        "User"=>function ($queryUser){
+                            $queryUser->select("UserID","PersonalDataID")
+                            ->with([
+                                "Profile"=>function ($queryProfile){
+                                    $queryProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
+                                }
+                            ]);
+                        }
+                    ]);
+                },
+                "Post"=>function ($queryPost){
+                    $queryPost->select("PostID","Message")
+                    ->with([
+                        "MultimediaPost"
+                    ]);
+                }
+            ])
             ->where("UserID",Auth::user()->UserID)
+            ->orderBy("updated_at","desc")
+            ->limit(20)
             ->get();
             
             return $notifications;

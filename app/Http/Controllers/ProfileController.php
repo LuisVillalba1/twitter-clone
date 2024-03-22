@@ -142,8 +142,8 @@ class ProfileController extends Controller
     public function getUserPosts($username){
         try{
             //verificamos primero que exista el usuario
-            (new PersonalData())->checkUsername($username);
-            return (new User())->getUserPosts($username);
+            $personalData = (new PersonalData())->checkUsername($username);
+            return (new User())->getUserPosts($username,$personalData->PersonalDataID);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al cargar los posteos del usuario"],500);
@@ -164,8 +164,8 @@ class ProfileController extends Controller
     public function getAnswersUser($username){
         try{
             //verificamos que exista el usuario y obtenemos las respuestas de este
-            (new PersonalData())->checkUsername($username);
-            return (new Profile())->getAnswers($username);
+            $personalData = (new PersonalData())->checkUsername($username);
+            return (new Profile())->getAnswers($username,$personalData->PersonalDataID);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener las respuestas"],500);
@@ -185,7 +185,8 @@ class ProfileController extends Controller
     //obtenemos los posteos likeados
     public function getLikesUser($username){
         try{
-            return (new Like())->getLikesPosts($username);
+            $personalData = (new PersonalData())->checkUsername($username);
+            return (new Like())->getLikesPosts($username,$personalData->PersonalDataID);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>"Ha ocurrido un error al obtener los posteos likeado"],500);
@@ -200,17 +201,19 @@ class ProfileController extends Controller
             return view("app.profile.follow.follows",compact("nickname"));
         }
         catch(\Exception $e){
+            $errorData = json_encode($e->getMessage(),true);
             return redirect()->route("errorPage");
         }
     }
 
+    //obtenemos los seguidos de un usuario
     public function getUserFollows($username){
         try{
             $profile = (new PersonalData())->checkUsername($username);
             return (new Follow())->getFollows($profile->PersonalDataID);
         }
         catch(\Exception $e){
-            return response()->json(["errors"=>"Ha ocurrido un error al obtener los seguidos del usuario"],500);
+            return response()->json(["errors" => "Ha ocurrido un error al obtener los seguidos del usuario"], 404);
         }
         
     }
@@ -227,7 +230,7 @@ class ProfileController extends Controller
         }
     }
 
-    //obtenemos los followers de un usuario
+    //obtenemos los seguidores de un usuario
     public function getUserFollowers($username){
         try{    
             $profile = (new PersonalData())->checkUsername($username);

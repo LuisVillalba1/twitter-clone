@@ -1,0 +1,80 @@
+:root{
+    --negro : rgb(0 0 0);
+    --blanco : rgb(255 255 255);
+    --gris : rgb(155 155 155);
+    --grisClaro : rgba(115, 114, 114, 0.9);
+    --celeste : rgb(72, 152, 232);
+}
+
+.follow_user_container{
+    display: flex;
+    width: 100%;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--grisClaro);
+}
+
+.photo_user_container{
+    padding: 2px 5px;
+}
+
+.photo_img_container{
+    border-radius: 20px;
+    background: var(--blanco);
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.img_photo_user{
+    width: 100%;
+}
+
+.photo_img_container h3{
+    font-size: 1.1em;
+    color: var(--negro);
+}
+
+.user_content{
+    flex-grow: 1;
+}
+
+.user_title{
+    font-size: 1.1em;
+}
+
+.nickname_user_container{
+    padding: 2px 0;
+}
+
+.follow_or_unfollow_user{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.follow_form_container{
+    cursor: pointer;
+    min-width: 80px;
+    padding: 2px 2px;
+    border-radius: 30px;
+    background: var(--grisClaro);
+
+}
+
+.follow_form_container p{
+    color: var(--negro);
+    text-align: center;
+}
+
+@media screen and (min-width:485px){
+    .follow_or_unfollow_user{
+        padding: 0px 5px;
+    }
+    .follow_form_container{
+        padding: 8px 4px;
+        min-width: 120px;
+    }
+}

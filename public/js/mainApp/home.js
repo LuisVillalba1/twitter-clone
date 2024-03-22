@@ -7,8 +7,6 @@ const header = $("header");
 const mainContainer = $(".main_container");
 const footer = $("footer");
 
-let contador = 1;
-
 const allPost = $(".posts_container");
 
 //obtenemos todas las publicaciones

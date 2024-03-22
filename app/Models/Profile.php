@@ -32,6 +32,7 @@ class Profile extends Model
                 ]);
             }
         ])
+        ->select("PersonalDataID","Nickname")
         ->first();
     
         $user = Auth::user();
@@ -56,7 +57,7 @@ class Profile extends Model
         $followers = (new Follow())->getCountFollowers($profile->PersonalDataID);
 
         //verficamos si el usuario autenticado sigue al usuario
-        $follow = (new Follow())->checkExistFollow($profile->PersonalDataID);
+        $follow = (new Follow())->checkExistFollow($userID,$profile->PersonalDataID);
         //si el perfil al que acceder es el mismo que el que esta logeado, permitimos a este editar su perfil
         if($profile->PersonalDataID == $userID){
             $edit = true;
@@ -119,13 +120,10 @@ class Profile extends Model
         return [$imageName,$newUrl];
     }
 
-    public function getAnswers($username){
+    public function getAnswers($username,$personalDataID){
         $user = Auth::user();
 
         $userID = $user->UserID;
-
-        //obtenemos el usuario al que se quiere obtener los posteos
-        $personalData = PersonalData::where("Nickname",$username)->first();
 
         //obtenemos los posteos donde hayan sido respuestas 
         $posts =  UserPost::with([
@@ -179,7 +177,7 @@ class Profile extends Model
             "Comments"
         ])
         ->whereNotNull('ParentID')
-        ->where("UserID",$personalData->PersonalDataID)
+        ->where("UserID",$personalDataID)
         ->orderBy("PostID","desc")
         ->simplePaginate(15);
 
