@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\notiTest;
 use App\Http\Requests\UserPost\NewPostRequest;
+use App\Models\Follow;
 use App\Models\MultimediaPost;
 use App\Models\PersonalData;
 use App\Models\UserPost;
@@ -15,7 +16,19 @@ use Illuminate\Support\Facades\Storage;
 use function PHPSTORM_META\type;
 
 class AppController extends Controller
-{
+{   
+    //eliminamos la session
+    public function deleteSession(){
+        try{
+            Auth::logout();
+
+            return route("main");
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>$e->getMessage()]);
+        }
+    }
+
     //mostramos la main ap
     public function show(){
         try{
@@ -24,8 +37,28 @@ class AppController extends Controller
             $name = $user->Name;
             $nickname =  $user->PersonalData->Nickname;
             $profilePhoto = [$user->Profile->ProfilePhotoURL,$user->Profile->ProfilePhotoName];
+            $follows = (new Follow())->getCountFollows($user->UserID);
+            $followers = (new Follow())->getCountFollowers($user->UserID);
 
-            return view("app.main",compact(["name","nickname","profilePhoto"]));
+            return view("app.main",compact(["name","nickname","profilePhoto","follows","followers"]));
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //mostramos la vista para explorar
+    public function showExplore(){
+        try{
+            //obtenemos ciertos datos de la aunteticacion del usuario
+            $user = Auth::user();
+            $name = $user->Name;
+            $nickname =  $user->PersonalData->Nickname;
+            $profilePhoto = [$user->Profile->ProfilePhotoURL,$user->Profile->ProfilePhotoName];
+            $follows = (new Follow())->getCountFollows($user->UserID);
+            $followers = (new Follow())->getCountFollowers($user->UserID);
+
+            return view("app.explore.explore",compact(["name","nickname","profilePhoto","follows","followers"]));
         }
         catch(\Exception $e){
             return redirect()->route("errorPage");
@@ -73,6 +106,7 @@ class AppController extends Controller
         }
     }
 
+    //obtenemos los posteos visualizados
     public function getPostsVisualizated(){
         try{
             return (new UserPost())->getPostsVisualized();
@@ -81,5 +115,6 @@ class AppController extends Controller
             return response()->json(["errors"=>$e->getMessage()],500);
         }
     }
+
 }
 

@@ -3,9 +3,6 @@ import * as utilsIntersection from "./utils/utilsIntersection.js";
 import {createErrorAlert} from "./utils/error/errorAlert.js";
 import { createLoader } from "./utils/createLoader.js";
 
-const header = $("header");
-const mainContainer = $(".main_container");
-const footer = $("footer");
 
 const allPost = $(".posts_container");
 

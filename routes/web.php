@@ -2,22 +2,16 @@
 
 use App\Http\Controllers\AccessController;
 use App\Http\Controllers\AppController;
+use App\Http\Controllers\CookiesController;
 use App\Http\Controllers\followController;
 use App\Http\Controllers\GoogleController;
-use App\Http\Controllers\GoogleRegister;
-use App\Http\Controllers\InitSession;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RecuperateAccountController;
 use App\Http\Controllers\RegisterController;
-use App\Http\Middleware\CheckFirstStepRegistration;
 use App\Models\Comment;
 use App\Models\Like;
-use App\Models\PersonalData;
-use App\Models\PostsNotification;
-use App\Models\Profile;
 use App\Models\SavePost;
-use App\Models\User;
 use App\Models\UserPost;
 use App\Models\Visualization;
 use Illuminate\Support\Facades\Route;
@@ -91,10 +85,18 @@ Route::controller(RecuperateAccountController::class)->group(function(){
 
 //main app
 Route::middleware(["AuthSession"])->group(function () {
+    Route::delete("/deleteSession",[AppController::class,"deleteSession"])->name("deleteSession");
+
     Route::get("/home",[AppController::class,"show"])->name("mainApp");
     //mostramos y permitimos crear un nuevo post
     Route::get("/home/createPost",[AppController::class,"showCreatePost"])->name("showCreatePost");
     Route::post("/home/createPost",[AppController::class,"createPost"])->name("createPost");
+
+    Route::get("/explore",[AppController::class,"showExplore"])->name("showExplore");
+
+    Route::delete("/deleteSearchs",[CookiesController::class,"deleteSearchs"])->name("deleteSearchs");
+
+    Route::get("/recentSearchs",[CookiesController::class,"getRecentSearchs"])->name("getRecentSearchs");
 
     //mostramos todos los posts de los usuarios
     //obtenemos los posteos aun no vistos

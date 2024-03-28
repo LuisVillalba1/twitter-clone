@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\CookiesController;
 use App\Http\Requests\Content\MinID;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -17,7 +19,7 @@ class Profile extends Model
 
     protected $primaryKey = "ProfileID";
 
-    public function showProfile($username,$typeProfileContent){
+    public function showProfile($username,$typeProfileContent,$request){
         //obtenemos el perfil
         $profile = PersonalData::
         where("Nickname",$username)
@@ -34,6 +36,7 @@ class Profile extends Model
         ])
         ->select("PersonalDataID","Nickname")
         ->first();
+
     
         $user = Auth::user();
     
@@ -64,8 +67,12 @@ class Profile extends Model
             return view("app.profile." . $typeProfileContent,compact(["profile","created","edit","follow","follows","followers"]));
         }
         $edit = false;
+
+        //guardamos el usuario en la cookie
+        $cookie = (new CookiesController())->setCookieSearch($profile->Nickname,"User",$request);
+
         //si no mostramos el perfil del usuario
-        return view("app.profile.".$typeProfileContent,compact(["profile","created","edit","follow","follows","followers"]));
+        return response()->view("app.profile.".$typeProfileContent,compact(["profile","created","edit","follow","follows","followers"]))->withCookie($cookie);
     }
 
     //creamos un nuevo perfil

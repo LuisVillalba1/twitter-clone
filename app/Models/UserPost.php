@@ -52,20 +52,15 @@ class UserPost extends Model
 
     //creamos un nueva post
     public function createPost($user,$message){
-        try{
-            $userID = $user->UserID;
+        $userID = $user->UserID;
 
-            $newPost = new UserPost();
-            $newPost->Message = $message;
-            $newPost->UserID = $userID;
-    
-            $newPost->save();
-    
-            return $newPost->PostID;
-        }
-        catch(\Exception $e){
-            return response()->json(["error",$e->getMessage()],500);
-        }
+        $newPost = new UserPost();
+        $newPost->Message = $message;
+        $newPost->UserID = $userID;
+
+        $newPost->save();
+
+        return $newPost->PostID;
     }
 
     //obtenemos todas las publicaciones

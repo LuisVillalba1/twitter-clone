@@ -11,6 +11,7 @@ use App\Models\PersonalData;
 use App\Models\Profile;
 use App\Models\User;
 use App\Models\UserPost;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -101,9 +102,10 @@ class ProfileController extends Controller
     }
 
     //mostramos el perfil del usuario
-    public function showProfile($username){
+    public function showProfile($username,Request $request){
+        // return response("sdjklñg")->cookie(cookie()->forget("userSearch"));
         try{
-            return (new Profile())->showProfile($username,"profile");
+            return (new Profile())->showProfile($username,"profile",$request);
         }
         catch(\Exception $e){
             return redirect()->route("errorPage");
@@ -151,9 +153,9 @@ class ProfileController extends Controller
     }
 
     //mostramos la vista de respuestas
-    public function showAnswersUser($username){
+    public function showAnswersUser($username,Request $request){
         try{
-            return (New Profile())->showProfile($username,"answers");
+            return (New Profile())->showProfile($username,"answers",$request);
         }
         catch(\Exception $e){
             return redirect()->route("errorPage");
@@ -173,9 +175,9 @@ class ProfileController extends Controller
     }
 
     //mostramos la vista de los megustas de cierto usuario
-    public function showLikesUser($username){
+    public function showLikesUser($username,Request $request){
         try{
-            return (new Profile())->showProfile($username,"likes");
+            return (new Profile())->showProfile($username,"likes",$request);
         }
         catch(\Exception $e){
             return redirect()->route("errorPage");
@@ -232,7 +234,7 @@ class ProfileController extends Controller
 
     //obtenemos los seguidores de un usuario
     public function getUserFollowers($username){
-        try{    
+        try{     
             $profile = (new PersonalData())->checkUsername($username);
             return (new Follow())->getFollowers($profile->PersonalDataID);
         }

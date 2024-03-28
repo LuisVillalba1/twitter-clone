@@ -51,7 +51,11 @@
             <div class="create_post_main">
                 <div class="create_post_logo_container">
                     <div class="create_post_logo">
-                        <i class="fa-solid fa-l"></i>
+                        @if (count($profilePhoto) > 0 && $profilePhoto[0])
+                            <img src={{$profilePhoto[0]}} alt={{$profilePhoto[1]}}>
+                        @else
+                            <h2>{{strtoupper($nickname[0])}}</h2>
+                        @endif
                     </div>
                 </div>
                 <form class="new_post" method="POST" action="{{route("createPost")}}" enctype="multipart/form-data">

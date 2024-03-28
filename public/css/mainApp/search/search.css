@@ -1,0 +1,11 @@
+:root{
+    --negro : rgb(0 0 0);
+    --blanco : rgb(255 255 255);
+    --gris : rgb(155 155 155);
+    --grisClaro : rgba(115, 114, 114, 0.9);
+    --celeste : rgb(72, 152, 232);
+}
+
+.search_content{
+    position: relative;
+}

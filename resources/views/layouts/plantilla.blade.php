@@ -29,7 +29,7 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href="#" title="Buscar">
+                    <a href={{route("showExplore")}} title="Buscar">
                         <div class="nav_icon_link_container">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>

@@ -30,11 +30,11 @@
             </div>
             <div class="follows_container">
                 <div class="follows">
-                    <p class="follows__p">28</p>
+                    <p class="follows__p">{{$follows}}</p>
                     <p class="follows_cant quantity">Siguiendo</p>
                 </div>
                 <div class="followers">
-                    <p class="followers_p">3</p>
+                    <p class="followers_p">{{$followers}}</p>
                     <p class="followers_cant quantity">Seguidores</p>
                 </div>
             </div>
@@ -52,28 +52,6 @@
                 </a>
             </li>
             <li class="nav_link_li">
-                <a href="#">
-                    <div class="nav_link__icon_container">
-                    <i class="fa-brands fa-x-twitter"></i>
-    
-                    </div>
-                    <div class="nav_link__text_container">
-                        <h3>Premium</h3>
-                    </div>
-                </a>
-            </li>
-            <li class="nav_link_li">
-                <a href="#">
-                    <div class="nav_link__icon_container">
-                    <i class="fa-solid fa-sheet-plastic"></i>
-    
-                    </div>
-                    <div class="nav_link__text_container">
-                        <h3>Listas</h3>   
-                    </div>
-                </a>
-            </li>
-            <li class="nav_link_li">
                 <a href={{route("showBookmarks")}}>
                     <div class="nav_link__icon_container">
                     <i class="fa-regular fa-bookmark"></i>
@@ -87,43 +65,23 @@
             <li class="nav_link_li">
                 <a href="#">
                     <div class="nav_link__icon_container">
-                    <i class="fa-solid fa-users"></i>
-                    </div>
-                    <div class="nav_link__text_container">
-                        <h3>Comunidades</h3>
-                    </div>
-                </a>
-            </li>
-            <li class="nav_link_li">
-                <a href="#">
-                    <div class="nav_link__icon_container">
-                    <i class="fa-solid fa-money-bill"></i>
-    
-                    </div>
-                    <div class="nav_link__text_container">
-                        <h3>Monetización</h3>
-                    </div>
-                </a>
-            </li>
-            <li class="nav_link_li">
-                <a href="#">
-                    <div class="nav_link__icon_container">
                     <i class="fa-solid fa-gear"></i>
                     </div>
                     <div class="nav_link__text_container">
-                        <h3>Configuracion y privacidad</h3>
+                        <h3>Configuracion</h3>
                     </div>
                 </a>
             </li>
             <li class="nav_link_li">
-                <a href="#">
+                <div class="delete_session_container">
                     <div class="nav_link__icon_container">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     </div>
-                    <div class="nav_link__text_container">
+                    <form class="nav_link__text_container" id="delete_session_form" action={{route("deleteSession")}} method="POST">
+                        @csrf
                         <h3>Cerrar sesión</h3>
-                    </div>
-                </a>
+                    </form>
+                </div>
             </li>
         </ul>
     </div>
@@ -148,7 +106,7 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href="#" title="Buscar">
+                    <a href={{route("showExplore")}} title="Buscar">
                         <div class="nav_icon_link_container">
                             <i class="fa-solid fa-magnifying-glass"></i>
                         </div>
@@ -210,16 +168,6 @@
                       </div>
                     </a>
                   </div>
-                  <div class="nav_icon_container">
-                    <a href="#" title="Premium">
-                      <div class="nav_icon_link_container">
-                        <i class="fab fa-twitter"></i>
-                      </div>
-                      <div class="nav_link_description_container">
-                        <p class="nav_link_description">Premium</p>
-                      </div>
-                    </a>
-                  </div>
                 <div class="nav_owner_icon_container">
                     <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} title="Cuenta">
                         <i class="fa-solid fa-user"></i>
@@ -250,4 +198,5 @@
     {!! Vite::content('resources/js/app.js') !!}
 </script>
 @yield("scripts")
+<script src={{ asset('js/mainApp/closeSession/deleteSession.js') }}></script>
 </html>

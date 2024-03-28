@@ -88,6 +88,12 @@
     width: 100%;
 }
 
+.delete_session_container{
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
 .nav_link__icon_container{
     width: 50px;
 }
