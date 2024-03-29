@@ -15,7 +15,7 @@ function getPublicPosts(url){
         url: url,
         success: function (response) {
             if(response.data){
-                showPosts(response.data,response.next_page_url)
+                showPosts(response.data,allPost,getPublicPosts.bind(null,url))
             }else{
                 showNoMorePostAlert();
             }
@@ -32,19 +32,19 @@ getPublicPosts(window.location.href + "/getPosts");
 
 
 //mostramos los posteos no visualizados
-function showPosts(posts,url){
-    createPostContent(posts)
-    utilsIntersection.createIntersectionObserver(".post",true,false,getPublicPosts.bind(null,url))
+export function showPosts(posts,container,callBack){
+    createPostContent(posts,container)
+    utilsIntersection.createIntersectionObserver(".post",true,false,callBack)
 }
 
 //iteramos sobre cada posteo y creamos los contenedores
-function createPostContent(posts){
+function createPostContent(posts,container){
     posts.forEach(currentPost=>{
-        createContainers(currentPost);
+        createContainers(currentPost,container);
     })
 }
 //creamos los contenedores
-function createContainers(currentPost){
+function createContainers(currentPost,mainContainer){
     let linkPost = currentPost.linkPost;
     let linkLike = currentPost.linkLike;
     let linkVisualization = currentPost.linkVisualization;
@@ -94,7 +94,7 @@ function createContainers(currentPost){
     $(postContainer).append(interactionContainer);
 
     //agregamos todos los post al contenedor principal
-    $(allPost).append(postContainer);
+    $(mainContainer).append(postContainer);
 
     //Obtenemos el contenedor del like y la suma de likes que contiene el mismo
     let likeContainer = $(interactionContainer).children(".like_container");
@@ -102,7 +102,7 @@ function createContainers(currentPost){
 
     utilsPosts.postYetInteraction(interactionContainer,currentPost)
     utilsPosts.postYetLiked(likeContainer,currentPost.likes);
-    utilsPosts.likePost(likeContainer,likesCount,allPost);
+    utilsPosts.likePost(likeContainer,likesCount,mainContainer);
 
     utilsPosts.countIcon(currentPost,interactionContainer);
 }

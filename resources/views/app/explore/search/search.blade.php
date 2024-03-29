@@ -16,9 +16,11 @@
 <link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilFooter.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 <link rel="stylesheet" href="../../css/mainApp/explore/utils/utilsSearch.css">
-<link rel="stylesheet" href="../../css/mainApp/explore/search/searchPosts.css">
+<link rel="stylesheet" href="../../css/mainApp/explore/search/search.css">
+<link rel="stylesheet" href="../../css/mainApp/profile/follow/utils/utilFollow.css">
+<link rel="stylesheet" href="../../css/mainApp/profile/follow/utils/alertUnfollow.css">
 
-<title>Twitter</title>
+<title>Posteos</title>
 @endsection
 
 @section('header')
@@ -35,9 +37,6 @@
 
 @section('content')
     <div class="main_content">
-        <div class="search_title_container">
-            <h3>Explorar</h3>
-        </div>
         <div class="search_container">
             <div class="input_container">
                 <div class="search_icon_container">
@@ -61,8 +60,18 @@
                 </div>
             </div>
         </div>
+        <div class="types_search">
+            <a href={{route("searchView") . "?q=" . rawurlencode($query)}}>
+                <span>Posteos</span>
+            </a>
+            <a href={{route("searchView") . "?q=" . rawurlencode($query) . "&u=true"}}>
+                <span>Usuarios</span>
+            </a>
+            <a href={{route("searchView") . "?q=" . rawurlencode($query) . "&c=true"}}>
+                <span>Comentarios</span>
+            </a>
+        </div>
         <div class="search_content">
-    
         </div>
     </div>
 @endsection
@@ -72,4 +81,5 @@
 <script src="../../js/mainApp/utils/responsive/utilNav.js"></script>
 <script src="../../js/mainApp/utils/socket/echo.js"></script>
 <script type="module" src="../../js/mainApp/explore/utils/utilsSearch.js"></script>
+<script type="module" src="../../js/mainApp/explore/search/search.js"></script>
 @endsection

@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RecuperateAccountController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\searchController;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\SavePost;
@@ -92,11 +93,18 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/home/createPost",[AppController::class,"showCreatePost"])->name("showCreatePost");
     Route::post("/home/createPost",[AppController::class,"createPost"])->name("createPost");
 
+    //obtenemos las busquedas recientes
+    Route::get("/recentSearchs",[CookiesController::class,"getRecentSearchs"])->name("getRecentSearchs");
+
+    //ruta para permitir al usuario explorar 
     Route::get("/explore",[AppController::class,"showExplore"])->name("showExplore");
 
+    //eliminamos todas las recientes busquedas
     Route::delete("/deleteSearchs",[CookiesController::class,"deleteSearchs"])->name("deleteSearchs");
 
-    Route::get("/recentSearchs",[CookiesController::class,"getRecentSearchs"])->name("getRecentSearchs");
+    //mostramos la vista de los resultados encontrados
+    Route::get("/search",[searchController::class,"showSearchs"])->name("searchView");
+    Route::get("/searchData",[searchController::class,"getSearchsData"])->name("searchData");
 
     //mostramos todos los posts de los usuarios
     //obtenemos los posteos aun no vistos

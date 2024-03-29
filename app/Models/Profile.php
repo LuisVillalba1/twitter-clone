@@ -206,4 +206,36 @@ class Profile extends Model
 
         return $posts;
     }
+
+    //obtenemos todos los perfiles que sean iguales o contengan como nickname un valor en especifico
+    public function getProfiles($nickname,$authUserID){
+        $queryWhere = "%" . $nickname . "%";
+        $profiles = PersonalData::
+        select("PersonalDataID","Nickname")
+        ->with([
+            "user"=>function ($queryUser){
+                $queryUser
+                ->select("UserID","Name",)
+                ->with([
+                    "Profile"=>function ($queryProfile){
+                        $queryProfile->select("ProfileID","UserID","Biography","CoverPhotoURL","ProfilePhotoURL","CoverPhotoName","ProfilePhotoName");
+                    }
+                ]);
+            }
+        ])
+        ->where("Nickname","like",$queryWhere)
+        ->simplePaginate(15);
+
+        foreach($profiles as $profile){
+            (new Follow())->addLinkFollow($profile,$authUserID);
+        }
+
+        $response = [
+            "type" => "profiles",
+            "data" => $profiles
+        ];
+
+
+        return $response;
+    }
 }

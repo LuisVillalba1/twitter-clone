@@ -156,4 +156,17 @@ function deleteAllSearchsFetch(){
 ocultResultSearch();
 
 
+function search(){
+    $(inputSearch).on("keydown", function (e) {
+        if(e.key == "Enter" && inputSearch.val().length > 0){
+            let inputValue = inputSearch.val();
+
+            window.location.href = window.location.origin + "/search?q=" + inputValue;
+        }
+    });
+}
+
+
+search();
+
 

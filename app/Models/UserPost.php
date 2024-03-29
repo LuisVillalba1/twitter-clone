@@ -299,4 +299,56 @@ class UserPost extends Model
         }
     }
 
+    //obtenemos los posteos que contengan cierta informacion
+    public function getPosts($data,$userID){
+        $queryWhere = '%' . $data . "%";
+
+        $posts = UserPost::with([
+            "MultimediaPost",
+            //verificamos si el usuario logeado ya ha visualizado o likeado el post
+            "Likes"=>function($queryLike) use ($userID){
+                $queryLike->where("NicknameID",$userID);
+            },
+            "Visualizations"=>function($queryVisualization) use ($userID){
+                $queryVisualization->where("NicknameID",$userID);
+            },
+            //obtenemos datos del usuario correspondiente al post
+            "User"=>function($queryUser){
+                $queryUser->select("UserID","PersonalDataID")
+                ->with([
+                    "PersonalData"=>function($queryPersonal){
+                        $queryPersonal->select("PersonalDataID","Nickname");
+                    },
+                    "Profile"=>function($queryProfile){
+                        $queryProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
+                    }
+                ]);
+            },
+            "Comments"=>function($queryComments) use ($userID){
+                $queryComments->where("UserID",$userID);
+            },
+        ])
+        //mostramos la cantidad de interacciones que contiene el post
+        ->withCount([
+            "Likes",
+            "Visualizations",
+            "Comments"
+        ])
+        ->where("ParentID",null)
+        ->where("Message", "like", $queryWhere)
+        ->orderBy("PostID","desc")
+        ->simplePaginate(35);
+
+        foreach($posts as $post){
+            $this->setLinksInteraction($post,false);
+        }
+
+        $response = [
+            "type" => "posts",
+            "data" => $posts
+        ];
+
+        return $response;
+    }
+
 }

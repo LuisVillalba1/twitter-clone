@@ -23,6 +23,7 @@ class Comment extends Model
         return $this->belongsTo(UserPost::class,"PostID");
     }
 
+
     public function commentPostView(Request $request,$username,$encryptID){
         try{
             //verificamos que exista el usuario y el post en cuestion
@@ -206,6 +207,73 @@ class Comment extends Model
             $comment["linkPost"] = route("showPost",["username"=>$userName,"encryptID"=>$commentID]);
             $comment["linkProfile"] = route("showProfile",["username"=>$userName]);
         } 
+    }
+
+    //obtenemos los comentarios segun un parametro de busqueda
+    public function getComments($query,$userID){
+        $queryWhere = "%" . $query . "%";
+
+        $comments = UserPost::
+            select("PostID","UserID","ParentID","Message")
+            //obtenemos la cantidad de visualizaciones,likes y comentarios
+            ->withCount([
+                "Visualizations",
+                "Likes",
+                "Comments"
+            ])
+            //a su ves informacion del usuario que realizo el comentario
+            ->with([
+                "user"=>function($queryUserComment){
+                    $queryUserComment->select("UserID","PersonalDataID")
+                    ->with([
+                        "PersonalData"=>function($queryPersonalComment){
+                            $queryPersonalComment->select("PersonalDataID","Nickname");
+                        },
+                        "Profile"=>function($parentProfile){
+                            $parentProfile->select("ProfileID","ProfilePhotoURL","ProfilePhotoName");
+                        }
+                    ]);
+                },
+                //tambien obtenemos si el usuario autenticado likeo o visualizo el comentario
+                "Likes"=>function($queryLikeComment) use ($userID){
+                    $queryLikeComment->where("NicknameID",$userID);
+                },
+                "Visualizations"=>function($queryVisualizationComment) use ($userID){
+                    $queryVisualizationComment->where("NicknameID",$userID);
+                },
+                //obtenemos el contenido multimedia del posteo
+                "MultimediaPost",
+                "Parent"=>function ($queryParent){
+                    $queryParent
+                    ->select("PostID","UserID")
+                    ->with([
+                        "user"=>function($queryUserComment){
+                            $queryUserComment->select("UserID","PersonalDataID")
+                            ->with([
+                                "PersonalData"=>function($queryPersonalComment){
+                                    $queryPersonalComment->select("PersonalDataID","Nickname");
+                                },
+                            ]);
+                        },
+                    ]);
+                }
+            ])
+            ->where("Message","like",$queryWhere)
+            ->where("ParentID" , "!=" , null)
+            ->orderBy("PostID","desc")
+            ->simplePaginate(15);
+
+            $this->setLinksInteraction($comments);
+
+            foreach($comments as $comment){
+                $comment->Parent["linkProfile"] = route("showProfile",["username"=>$comment->Parent->user->PersonalData->Nickname]);
+            }
+        $response = [
+            "type" => "comments",
+            "data" => $comments
+        ];
+
+        return $response;
     }
 
 }

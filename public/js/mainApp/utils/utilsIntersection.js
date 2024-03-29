@@ -20,7 +20,7 @@ function chekIntersection(e,isLastPost,observer,visualizationValue,getID,callbac
     let data = e[0];
     let post = data.target;
     let lastChild = post.lastElementChild;
-    let visualization = $(lastChild.lastChild)
+    let visualization = lastChild.lastElementChild
 
     //en caso de que el usuario lo haya visto y se desee enviar la visuzalizacion,obtenemos los datos del post y la enviamos al servidor
     if(data.isIntersecting && visualizationValue != false){

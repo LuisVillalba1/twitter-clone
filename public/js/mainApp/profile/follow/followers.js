@@ -2,6 +2,8 @@ import { createFollow } from "./utils/utilFollow.js";
 import * as utilsIntersection from "../../utils/utilsIntersection.js"
 import { createErrorAlert } from "../../utils/error/errorAlert.js";
 
+const mainContent = $(".main_content");
+const followContainer = $(".follow_container")
 //obtenemos los seguidores del usuario
 function getFollowers(url){
     $.ajax({
@@ -23,7 +25,7 @@ function getFollowers(url){
 //mostramos los seguidos
 function showFollowers(data,nextPage){
     for(let i of data){
-        createFollow(i.personal_data_follower);
+        createFollow(i.personal_data_follower,mainContent,followContainer);
     }
     utilsIntersection.createIntersectionObserver(".follow_user_container",false,false,getFollowers.bind(null,nextPage))
 }

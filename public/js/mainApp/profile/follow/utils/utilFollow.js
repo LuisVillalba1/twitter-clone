@@ -1,11 +1,10 @@
 
 import { createErrorAlert,setOpacityChilds,removeOpacity } from "../../../utils/error/errorAlert.js";
 
-const mainContent = $(".main_content");
 const followContainer = $(".follow_container")
 
 //creamos los cotenedores de la notificacion y le agregamos el contenido correspondiente
-export function createFollow(dataUser){
+export function createFollow(dataUser,mainContent,mainContainer){
     let container = $("<div></div>");
     $(container).addClass("follow_user_container");
 
@@ -28,7 +27,7 @@ export function createFollow(dataUser){
 
     $(container).append(photoContainer);
     $(container).append(contentUser);
-    followOrUnfollowUser(container,dataUser.followed,dataUser.linkFollow);
+    followOrUnfollowUser(container,dataUser.followed,dataUser.linkFollow,mainContainer);
 
     $(mainContent).append(container);
 }
@@ -87,7 +86,7 @@ function showUserInformation(containerContent,userData){
     return containerContent;
 }
 
-function followOrUnfollowUser(followContainer,followed,followLink){
+function followOrUnfollowUser(followContainer,followed,followLink,mainContainer){
     if(!followLink){
         return;
     }
@@ -116,11 +115,11 @@ function followOrUnfollowUser(followContainer,followed,followLink){
     $(followContainer).append(followUser);
 
     //peritimos seguir o dejar de seguir al usuario
-    createAllertUnfollow(followOrUnfollowForm)
+    createAllertUnfollow(followOrUnfollowForm,mainContainer)
 }
 
 //
-function createAllertUnfollow(follow_form){
+function createAllertUnfollow(follow_form,mainContainer){
     $(follow_form).on("click", function (e) {
         //obtenemos el link de follow y el texto del form
         let actionLink = $(this).attr("action");
@@ -131,7 +130,7 @@ function createAllertUnfollow(follow_form){
 
         //en caso de que se quiera dejar de seguir cremos una alerta de la misma
         if($(textFollow).text() == "Dejar de seguir"){
-            return createAlertUnfollow(user,actionLink,textFollow)
+            return createAlertUnfollow(user,actionLink,textFollow,mainContainer)
         }
         followOrUnfollowUserFetch(actionLink,textFollow);
     });
@@ -151,7 +150,7 @@ function followOrUnfollowUserFetch(link,text_follow){
     });
 }
 
-function createAlertUnfollow(user,linkUnfollow,text_follow){
+function createAlertUnfollow(user,linkUnfollow,text_follow,mainContainer){
     //creamos un contenedor para preguntar si en verdad desea dejar de seguir al usuario
     let alertContainer = $("<div></div>");
     $(alertContainer).addClass("unfollow_container_alert");
@@ -194,32 +193,32 @@ function createAlertUnfollow(user,linkUnfollow,text_follow){
     $(alertContainer).append(responseContainer);
 
     //lo añadimos al dom
-    $(followContainer).append(alertContainer);
+    $(mainContainer).append(alertContainer);
 
     //perimitimos cancelar la operacion o dejar de seguir al usuario
-    setOpacityChilds(mainContent,alertContainer)
-    unfollow(unfollowContainer,alertContainer,linkUnfollow,text_follow);
-    closeAlertUnfollow(cancelContainer,alertContainer);
+    setOpacityChilds(mainContainer,alertContainer)
+    unfollow(unfollowContainer,alertContainer,linkUnfollow,text_follow,mainContainer);
+    closeAlertUnfollow(cancelContainer,alertContainer,mainContainer);
 }
 
 //dejamos de seguir al usuario
-function unfollow(container,alertContainer,unfollowLink,text_follow){
+function unfollow(container,alertContainer,unfollowLink,text_follow,mainContainer){
     $(container).on("click", function () {
-        removeAlertAndOpactity(alertContainer);
+        removeAlertAndOpactity(alertContainer,mainContainer);
         followOrUnfollowUserFetch(unfollowLink,text_follow)
     });
 }
 
 //cerramos la alerta de unfollow en caso de que se desee
-function closeAlertUnfollow(cancelContainer,alertContainer){
+function closeAlertUnfollow(cancelContainer,alertContainer,mainContainer){
     $(cancelContainer).on("click", function () {
-        removeAlertAndOpactity(alertContainer)
+        removeAlertAndOpactity(alertContainer,mainContainer)
     });
 }
 
 //eliminamos la alerta y removemos la opacidad del dom
-function removeAlertAndOpactity(alertContainer){
+function removeAlertAndOpactity(alertContainer,mainContainer){
     $(".unfollow_container_alert").remove();
     //removemos la opacidad de los objetos
-    removeOpacity(mainContent,alertContainer)
+    removeOpacity(mainContainer,alertContainer)
 }
