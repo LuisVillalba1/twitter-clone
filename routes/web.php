@@ -10,6 +10,7 @@ use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RecuperateAccountController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\searchController;
+use App\Http\Controllers\SettingsController;
 use App\Models\Comment;
 use App\Models\Like;
 use App\Models\SavePost;
@@ -84,6 +85,7 @@ Route::controller(RecuperateAccountController::class)->group(function(){
     Route::patch("/recuperateAccount/{id}","change")->name("changePasswordPatch");
 });
 
+
 //main app
 Route::middleware(["AuthSession"])->group(function () {
     Route::delete("/deleteSession",[AppController::class,"deleteSession"])->name("deleteSession");
@@ -105,6 +107,10 @@ Route::middleware(["AuthSession"])->group(function () {
     //mostramos la vista de los resultados encontrados
     Route::get("/search",[searchController::class,"showSearchs"])->name("searchView");
     Route::get("/searchData",[searchController::class,"getSearchsData"])->name("searchData");
+
+    Route::get("/settings",[SettingsController::class],"redirectAccountData")->name("settings");
+    Route::get("/settings/account",[SettingsController::class],"accountInformation")->name("showViewAccountData");
+    Route::get("/settings/password",[SettingsController::class],"changePassword")->name("settingsPassword");
 
     //mostramos todos los posts de los usuarios
     //obtenemos los posteos aun no vistos

@@ -30,16 +30,16 @@ body{
     padding: 10px 10px;
 }
 
-.redireck_home_container{
+.redireck_back_container{
     width: 100%;
     display: flex;
 }
 
-.redireck_home_container a{
+.redireck_back_container a{
     text-decoration: none;
 }
 
-.redireck_home_container a i{
+.redireck_back_container a i{
     font-size: 1.2em;
 }
 
@@ -215,7 +215,7 @@ body{
         padding: 20px;
         height: max-content;
     }
-    .redireck_home_container{
+    .redireck_back_container{
         margin-bottom: 10px;
     }
 }

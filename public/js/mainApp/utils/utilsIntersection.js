@@ -24,7 +24,7 @@ function chekIntersection(e,isLastPost,observer,visualizationValue,getID,callbac
 
     //en caso de que el usuario lo haya visto y se desee enviar la visuzalizacion,obtenemos los datos del post y la enviamos al servidor
     if(data.isIntersecting && visualizationValue != false){
-        let actionVisualization = $(visualization).attr("action");
+        let actionVisualization = $(visualization).attr("id");
         sendVisualization(actionVisualization);
     }
     //si se observa el ultimo post detenemos el observer y mostramos mas posts en caso de que existan

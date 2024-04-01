@@ -73,8 +73,7 @@ async function showData(data){
             utilsPosts.postYetLiked(child,data.likes);
         }
         if($(child).hasClass("save_container")){
-            $(child).attr("method", "POST");
-            $(child).attr("action", data.linkSave);
+            $(child).attr("id", data.linkSave);
             utilsPosts.savePost(child,null,postContainer);
             utilsPosts.postYetSave(child,data.safes);
         }
@@ -301,11 +300,6 @@ function createInteraction(data){
         <i class="fa-regular fa-comment interaction_icon"></i>
     </div>
 </a>
-<div class="repost_container interaction_container">
-    <div class="interaction_icon_container">
-        <i class="fa-solid fa-repeat interaction_icon"></i>
-    </div>
-</div>
 <form class="like_container interaction_container" method="POST" action=${data.linkLike}>
     <div class="heart_bg">
         <div class="heart_icon">
@@ -313,12 +307,12 @@ function createInteraction(data){
         </div>
     </div>
 </form>
-<form class="save_container interaction_container">
+<div class="save_container interaction_container">
     <div class="save_bg">
         <div class="save_icon">
         </div>
     </div>
-</form>
+</div>
 <div class="visualizations_container interaction_container">
     <div class="interaction_icon_container">
         <i class="fa-solid fa-chart-simple interaction_icon"></i>

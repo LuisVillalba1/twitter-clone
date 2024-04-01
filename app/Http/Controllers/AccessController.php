@@ -36,6 +36,11 @@ class AccessController extends Controller
                         $query->where("Nickname",$request->input("user"));
                     });
         })->first();
+
+        if(!$user){
+            throw new Exception("Incorrect user or password");
+        }
+
         $password = $user->Password;
 
         //chequeamos que la contraseña ingresada sea la misma que posee el usuario
@@ -44,7 +49,7 @@ class AccessController extends Controller
             Auth::login($user);
             return route("mainApp");
         }
-        throw new Exception("Incorrect password") ;       
+        throw new Exception("Incorrect user or password") ;       
         }
         catch(\Exception $e){
             return response()->json(["error"=>$e->getMessage()],500);

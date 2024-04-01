@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
+    <meta name="view-transition" content="same-origin" />
+    {{-- font --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href={{asset("css/mainApp/utils/fonts/ubuntuFont.css")}}>
+    <link rel="stylesheet" href={{asset("css/mainApp/utils/responsive/utilFooter.css")}}>
+    <link rel="stylesheet" href={{asset("css/mainApp/utils/responsive/utilHeader.css")}}>
+    <link rel="stylesheet" href={{asset("css/mainApp/utils/responsive/utilNav.css")}}>
+    <link rel="stylesheet" href={{asset("css/mainApp/utils/utilNav.css")}}>
+    <link rel="stylesheet" href={{asset("css/mainApp/utils/utilLoader.css")}}>
     @yield("head")
 </head>
 <body>
     <header>
-        {{-- font --}}
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
         @yield("header")
     </header>
     {{-- nav reponsive --}}
@@ -139,16 +150,6 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href="#" title="Listas">
-                        <div class="nav_icon_link_container">
-                            <i class="fa-solid fa-sheet-plastic"></i>
-                        </div>
-                        <div class="nav_link_description_container">
-                            <p class="nav_link_description">Listas</p>
-                        </div>
-                    </a>
-                </div>
-                <div class="nav_icon_container">
                     <a href={{route("showBookmarks")}} title="Guardados">
                         <div class="nav_icon_link_container">
                             <i class="fa-regular fa-bookmark"></i>
@@ -158,16 +159,6 @@
                         </div>
                     </a>
                 </div>
-                <div class="nav_icon_container">
-                    <a href="#" title="Amigos">
-                      <div class="nav_icon_link_container">
-                        <i class="fas fa-user-group"></i>
-                      </div>
-                      <div class="nav_link_description_container">
-                        <p class="nav_link_description">Amigos</p>
-                      </div>
-                    </a>
-                  </div>
                 <div class="nav_owner_icon_container">
                     <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} title="Cuenta">
                         <i class="fa-solid fa-user"></i>
@@ -184,7 +175,7 @@
     </div>
     <footer>
         <a href={{route("mainApp")}}><i class="fa-solid fa-house"></i></a>
-        <i class="fa-solid fa-magnifying-glass"></i>
+        <a href={{route("showExplore")}}><i class="fa-solid fa-magnifying-glass"></i></a>
         <a href={{route("notificationView")}} class="notification_container">
             <i class="fa-regular fa-bell"></i>
             <div class="count_notification_container count_notification_container_footer">

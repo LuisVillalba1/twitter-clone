@@ -106,11 +106,6 @@ function showInteraction(data){
     </div>
     <p class="comments_count"></p>
 </a>
-<div class="repost_container interaction_container">
-    <div class="interaction_icon_container">
-        <i class="fa-solid fa-repeat interaction_icon"></i>
-    </div>
-</div>
 <form class="like_container interaction_container" method="POST" action=${data.linkLike}>
     <div class="heart_bg">
         <div class="heart_icon">

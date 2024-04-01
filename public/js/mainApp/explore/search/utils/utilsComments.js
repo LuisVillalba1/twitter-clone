@@ -162,24 +162,28 @@ function createInteraction(data){
     <div class="interaction_icon_container">
         <i class="fa-regular fa-comment interaction_icon"></i>
     </div>
-</a>
-<div class="repost_container interaction_container">
-    <div class="interaction_icon_container">
-        <i class="fa-solid fa-repeat interaction_icon"></i>
-    </div>
+    <div class="count_interaction_container">
+    <p class="comments_count">${data.comments_count}</p>
 </div>
-<form class="like_container interaction_container" method="POST" action=${data.linkLike}>
+</a>
+<div class="like_container interaction_container" id=${data.linkLike}>
     <div class="heart_bg">
         <div class="heart_icon">
 
         </div>
     </div>
-</form>
-<form class="visualizations_container interaction_container method="POST" action=${data.linkVisualization}">
+    <div class="count_interaction_container">
+        <p class="likes_count count_interaction">${data.likes_count}</p>
+    </div>
+</div>
+<div class="visualizations_container interaction_container" id=${data.linkVisualization}>
     <div class="interaction_icon_container">
         <i class="fa-solid fa-chart-simple interaction_icon"></i>
     </div>
-</form>
+    <div clas="count_interaction_container">
+        <p class="visualizations_count count_interaction">${data.visualizations_count}</p>
+    </div>
+</div>
 </div>
     `
  return interaction;

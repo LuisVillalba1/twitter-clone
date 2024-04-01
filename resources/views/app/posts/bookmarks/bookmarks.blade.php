@@ -23,9 +23,15 @@
 @section('content')
     <div class="saves_posts_container">
         <div class="redireck_home_container">
-            <a class="redireck_home_icon_container" href="{{route("mainApp")}}">
+            @if (url()->previous() == url()->current())
+                <a class="redireck_home_icon_container" href="{{route("mainApp")}}">
+                    <i class="fa-solid fa-arrow-left-long"></i>
+                </a>
+            @else
+            <a class="redireck_home_icon_container" href={{url()->previous()}}>
                 <i class="fa-solid fa-arrow-left-long"></i>
-            </a>
+            </a> 
+            @endif
             <div class="redireck_home_content">
                 <h3>Elementos Guardados</h3>
             </div>

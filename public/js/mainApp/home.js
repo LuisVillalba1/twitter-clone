@@ -5,17 +5,26 @@ import { createLoader } from "./utils/createLoader.js";
 
 
 const allPost = $(".posts_container");
+const urlLocation = window.location.href + "/getPosts";
 
 //obtenemos todas las publicaciones
-function getPublicPosts(url){
+function getPublicPosts(pageUrl){
+    let url = "";
+    if(pageUrl == 0){
+        url = urlLocation;
+    }
+    else{
+        url = pageUrl;
+    }
     //mostramos un el loader
     //obtenemos las publicaciones aun no vistas por el usuario
     $.ajax({
         type: "get",
         url: url,
         success: function (response) {
-            if(response.data){
-                showPosts(response.data,allPost,getPublicPosts.bind(null,url))
+            if(response.data.length > 0){
+                let nextPageUrl = response.next_page_url;
+                showPosts(response.data,allPost,getPublicPosts.bind(null,nextPageUrl))
             }else{
                 showNoMorePostAlert();
             }
@@ -28,11 +37,11 @@ function getPublicPosts(url){
     });
 }
 
-getPublicPosts(window.location.href + "/getPosts");
+getPublicPosts(0);
 
 
 //mostramos los posteos no visualizados
-export function showPosts(posts,container,callBack){
+function showPosts(posts,container,callBack){
     createPostContent(posts,container)
     utilsIntersection.createIntersectionObserver(".post",true,false,callBack)
 }
@@ -142,7 +151,7 @@ async function fetchPublicsVisualized(url){
         if(!response.data){
             return
         }
-        showMorePosts(response.data,response.next_page_url)
+        showMorePosts(response.data,allPost,response.next_page_url)
     }
     catch(e){
         if(e.responseJSON){
@@ -156,11 +165,12 @@ async function fetchPublicsVisualized(url){
 }
 
 //mostramos los posteos no visualizados
-function showMorePosts(posts,url){
+function showMorePosts(posts,mainContainer,url){
     //iteramos sobra cada posteo y luego solicitamos mas
     posts.forEach(currentPost => {
-        currentPost = currentPost.post_interaction;
-        createContainers(currentPost);
+        let postData = currentPost.post_interaction;
+        createContainers(postData,mainContainer);
+        
     });
     utilsIntersection.createIntersectionObserver(".post",false,false,fetchPublicsVisualized.bind(null,url))
 }

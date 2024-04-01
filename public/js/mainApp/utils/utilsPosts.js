@@ -96,15 +96,7 @@ export function showInteraction(linkLike,linkComment,linkVisualization){
                 <p class="comments_count count_interaction"></p>
             </div>
         </div>
-    <div class="repost_container interaction_container">
-        <div class="interaction_icon_container">
-            <i class="fa-solid fa-repeat interaction_icon"></i>
-        </div>
-        <div class="count_interaction_container">
-            <p class="visualizations_count count_interaction"></p>
-        </div>
-    </div>
-    <form class="like_container interaction_container" method="POST" action ="${linkLike}">
+    <div class="like_container interaction_container" id="${linkLike}">
         <div class="heart_bg">
             <div class="heart_icon">
 
@@ -113,20 +105,29 @@ export function showInteraction(linkLike,linkComment,linkVisualization){
         <div class="count_interaction_container">
             <p class="likes_count count_interaction"></p>
         </div>
-    </form>
-    <form class="visualizations_container interaction_container" method="POST" action=${linkVisualization}>
+    </div>
+    <div class="visualizations_container interaction_container" id=${linkVisualization}>
         <div class="interaction_icon_container">
             <i class="fa-solid fa-chart-simple interaction_icon"></i>
         </div>
         <div class="count_interaction_container">
             <p class="visualizations_count count_interaction"></p>
         </div>
-    </form>`
+    </div>`
 
     $(interactionContainer).append(interactions);
 
     return interactionContainer;
 }
+
+{/* <div class="repost_container interaction_container">
+<div class="interaction_icon_container">
+    <i class="fa-solid fa-repeat interaction_icon"></i>
+</div>
+<div class="count_interaction_container">
+    <p class="visualizations_count count_interaction"></p>
+</div>
+</div> */}
 
 //verificamos si ya se ha interactuado con cierto contenido
 export function postYetInteraction(interactionContainer,data){
@@ -184,7 +185,7 @@ export async function likePost(likeContainer,likesCount,containerAddError){
          $(valueOfElement).on("click", async function (e) {
             e.preventDefault();
             let padre = $(e.target).closest(".like_container");
-            let action = $(padre).attr("action");
+            let action = $(padre).attr("id");
             let response = await sendLike(action,containerAddError);
             if(response){
                 $(e.target).css("animation","like-anim 0.5s steps(28) forwards");
@@ -281,7 +282,7 @@ export function savePost(saveFormContainer,saveCount,containerError){
 
     $(saveFormContainer).on("click", async function (e) {
         e.preventDefault();
-        let action = $(saveFormContainer).attr("action");
+        let action = $(saveFormContainer).attr("id");
         let response = await sendSavePost(action,containerError);
 
         if(response){

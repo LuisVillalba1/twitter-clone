@@ -27,7 +27,29 @@
 .types_search a{
     text-decoration: none;
     padding: 4px 0 0 0;
+}
+
+.link_visited{
     border-bottom: 2px solid var(--celeste);
+}
+
+.no_content_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.title_no_content{
+    text-align: center;
+    color: var(--blanco);
+    font-size: 1.3em;
+}
+
+.no_content_text{
+    color: var(--gris);
+    text-align: center;
 }
 
 .search_content{

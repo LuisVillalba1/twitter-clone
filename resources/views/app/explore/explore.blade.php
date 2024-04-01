@@ -1,24 +1,13 @@
 @extends('../layouts.mainPlantilla')
 
 @section('head')
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-<script src="https://kit.fontawesome.com/ba9bd7b863.js" crossorigin="anonymous"></script>
-<meta name="view-transition" content="same-origin" />
-<link rel="stylesheet" href="../../css/mainApp/utils/fonts/ubuntuFont.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/error/errorAlert.css">
 <link rel="stylesheet" href="../../css/mainApp/home.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/utilNav.css">
 <link rel="stylesheet" href="../../css/mainApp/utils/utilPost.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilHeader.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilNav.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/responsive/utilFooter.css">
-<link rel="stylesheet" href="../../css/mainApp/utils/utilLoader.css">
 <link rel="stylesheet" href="../../css/mainApp/explore/utils/utilsSearch.css">
 <link rel="stylesheet" href="../../css/mainApp/explore/search/searchPosts.css">
 
-<title>Twitter</title>
+<title>Explorar</title>
 @endsection
 
 @section('header')

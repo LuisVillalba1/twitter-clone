@@ -16,3 +16,7 @@
 .current_post{
     display: none;
 }
+
+.response_container{
+    display: flex;
+}

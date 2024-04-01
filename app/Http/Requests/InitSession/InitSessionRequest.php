@@ -24,17 +24,7 @@ class InitSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "user"=>["required","string",
-                function($attribute,$value,$fail){
-                    $email = User::where("Email",$value)->first();
-
-                    $nickName = PersonalData::where("Nickname",$value)->first();
-
-                    if(!$email && !$nickName){
-                        $fail("Email or Nickname not found");
-                    }
-                }
-            ],
+            "user"=>["required","string"],
             "password"=>["required","string"]
         ];
     }

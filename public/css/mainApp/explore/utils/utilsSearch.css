@@ -9,6 +9,9 @@
 .main_content{
     width: 100%;
     max-width: 700px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 

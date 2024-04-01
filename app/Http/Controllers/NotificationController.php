@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Follow;
 use App\Models\Notification;
 use App\Models\PostsNotification;
 use App\Models\User;
@@ -20,10 +21,13 @@ class NotificationController extends Controller
             $name = $user->Name;
             $nickname =  $user->PersonalData->Nickname;
             $profilePhoto = [$user->Profile->ProfilePhotoURL,$user->Profile->ProfilePhotoName];
+            $follows = (new Follow())->getCountFollows($user->UserID);
+            $followers = (new Follow())->getCountFollowers($user->UserID);
 
-            return view("app.notifications.notification",compact(["name","nickname","profilePhoto"]));
+            return view("app.notifications.notification",compact(["name","nickname","profilePhoto","follows","followers"]));
         }
         catch(\Exception $e){
+            return $e->getMessage();
             return redirect()->route("errorPage");
         }
     }
