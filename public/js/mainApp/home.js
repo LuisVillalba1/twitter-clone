@@ -22,7 +22,7 @@ function getPublicPosts(pageUrl){
         type: "get",
         url: url,
         success: function (response) {
-            if(response.data.length > 0){
+            if(response.data && response.data.length > 0){
                 let nextPageUrl = response.next_page_url;
                 showPosts(response.data,allPost,getPublicPosts.bind(null,nextPageUrl))
             }else{

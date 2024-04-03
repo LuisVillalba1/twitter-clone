@@ -23,7 +23,7 @@
 @section('content')
     <div class="saves_posts_container">
         <div class="redireck_home_container">
-            @if (url()->previous() == url()->current())
+            @if (url()->previous() == url()->current() || url()->previous() == route("errorPage"))
                 <a class="redireck_home_icon_container" href="{{route("mainApp")}}">
                     <i class="fa-solid fa-arrow-left-long"></i>
                 </a>

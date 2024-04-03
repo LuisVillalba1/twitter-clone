@@ -1,0 +1,24 @@
+.config_container{
+    display: none;
+}
+
+.content_results{
+    width: 100%;
+    max-width: 600px;
+    border-right: 1px solid var(--grisClaro);
+}
+
+@media screen and (min-width:1000px){
+    .config_container{
+        display: block;
+        width: 100%;
+        max-width: 600px;
+    }
+    .content_results{
+        padding: 0px 0px 0 10px;
+    }
+
+    .redireck_back_container a{
+        display: none;
+    }
+}

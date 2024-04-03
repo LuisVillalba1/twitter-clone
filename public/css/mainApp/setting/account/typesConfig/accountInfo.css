@@ -1,0 +1,31 @@
+
+
+.result_content_ul{
+    list-style: none;
+}
+
+.no_edit_container h4{
+    font-size: 1.1em;
+    padding-bottom: 5px;
+}
+
+.result_content_link{
+    display: flex;
+    text-decoration: none;
+    align-items: center;
+}
+
+.result_content_link_description{
+    flex-grow: 1;
+}
+
+.result_content_link_description h4{
+    font-size: 1.1em;
+    padding-bottom: 5px;
+}
+
+@media screen and (min-width:1000px){
+    #account_data_li{
+        background: rgba(180,180,180,0.3);
+    }
+}

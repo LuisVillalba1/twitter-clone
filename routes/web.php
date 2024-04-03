@@ -98,6 +98,9 @@ Route::middleware(["AuthSession"])->group(function () {
     //obtenemos las busquedas recientes
     Route::get("/recentSearchs",[CookiesController::class,"getRecentSearchs"])->name("getRecentSearchs");
 
+    //permitimos al usuario cambiar cierta configuracion de su cuenta
+    Route::get("/settings",[SettingsController::class,"settings"])->name("settings");
+
     //ruta para permitir al usuario explorar 
     Route::get("/explore",[AppController::class,"showExplore"])->name("showExplore");
 
@@ -107,10 +110,6 @@ Route::middleware(["AuthSession"])->group(function () {
     //mostramos la vista de los resultados encontrados
     Route::get("/search",[searchController::class,"showSearchs"])->name("searchView");
     Route::get("/searchData",[searchController::class,"getSearchsData"])->name("searchData");
-
-    Route::get("/settings",[SettingsController::class],"redirectAccountData")->name("settings");
-    Route::get("/settings/account",[SettingsController::class],"accountInformation")->name("showViewAccountData");
-    Route::get("/settings/password",[SettingsController::class],"changePassword")->name("settingsPassword");
 
     //mostramos todos los posts de los usuarios
     //obtenemos los posteos aun no vistos
@@ -174,8 +173,22 @@ Route::middleware(["AuthSession"])->group(function () {
     //perimitimos al usuario ver sus notificaciones
     Route::get("/user/notifications",[NotificationController::class,"showNotifications"])->name("notificationView");
     Route::get("/user/notifications/details",[NotificationController::class,"getNotifications"])->name("getNotifications");
+});
+
+//vista para ingresar la contraseña
+//el segundo middleware nos servira para que este no pueda acceder a esta ruta en de no poseer una contraseña
+
+//verificamos si la contraseña ingresada es valida
+Route::middleware(["AuthSession","cantSetPasswordView"])->group(function(){
+    Route::get("/settings/setPassword",[SettingsController::class,"setPasswordView"])->name("setPasswordView");
+    Route::post("/settings/setPassword",[SettingsController::class,"setPassword"])->name("setPasswordSettings");
+});
 
 
+//ruta para cambiar cierta informacion del usuario,a esta le agregamos el middleware de contraseña
+Route::middleware(["AuthSession","setPasswordSetting"])->group(function(){
+    Route::get("/settings/account",[SettingsController::class,"accountInformation"])->name("showViewAccountData");
+    Route::get("/settings/password",[SettingsController::class,"changePasswordView"])->name("settingsPassword");
 });
 
 

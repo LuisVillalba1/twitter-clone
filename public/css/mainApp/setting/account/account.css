@@ -1,0 +1,102 @@
+:root{
+    --negro : rgb(0 0 0);
+    --blanco : rgb(255 255 255);
+    --gris : rgb(155 155 155);
+    --grisClaro : rgba(115, 114, 114, 0.9);
+    --celeste : rgb(72, 152, 232);
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: var(--blanco);
+}
+
+body{
+    background: var(--negro);   
+}
+
+.main_container{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.config_container{
+    border-right: 2px solid var(--grisClaro);
+}
+
+.redireck_back_container{
+    display: flex;
+    width: 100%;
+}
+
+.redireck_back_container a{
+    padding: 8px 20px 8px 14px;
+}
+
+.title_container{
+    margin-left: 10px;
+    padding: 5px 0;
+}
+
+.title_container h3{
+    font-size: 1.1em;
+}
+
+.header_user_container{
+    margin-top: 4px;
+} 
+
+.header_user_container h5{
+    color: var(--grisClaro);
+}
+
+.types_config_ul{
+    width: 100%;
+}
+
+.types_config_ul__li{
+    display: flex;
+    width: 100%;
+    margin: 8px 0;
+}
+
+.icon_type_config_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 15px;
+}
+
+.icon_type_config_container i{
+    color: var(--grisClaro);
+}
+
+.link_type_config{
+    height: 100%;
+    text-decoration: none;
+    width: 100%;
+}
+
+.link_type_config h5{
+    margin-bottom: 3px;
+    font-size: 1.1em;
+    flex-grow: 1;
+}
+
+.link_type_config p{
+    color: var(--grisClaro);
+}
+
+.icon_config_continue_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 15px 20px 10px;
+}
+
+.icon_config_continue_container i{
+    color: var(--grisClaro);
+}

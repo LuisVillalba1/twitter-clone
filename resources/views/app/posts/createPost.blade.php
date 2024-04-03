@@ -9,7 +9,7 @@
 @section('content')
         <div class="new_post_container">
             <div class="redireck_back_container">
-                @if (url()->previous() == url()->current())
+                @if (url()->previous() == url()->current() || url()->previous() == route("errorPage"))
                     <a href={{route("mainApp")}}>
                         <i class="fa-solid fa-arrow-left"></i>
                     </a>
