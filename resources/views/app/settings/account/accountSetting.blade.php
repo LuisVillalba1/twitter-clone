@@ -6,5 +6,5 @@
 @endsection
 
 @section('scripts')
-    <script src="../../js/mainApp/setting/account/account.js"></script>
+    <script src="../../js/mainApp/setting/account/accountSetting.js"></script>
 @endsection

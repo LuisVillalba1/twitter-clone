@@ -31,13 +31,13 @@
                 <h4>Confirma tu contraseña</h4>
                 <p>Intresa tu contraseña para recibir esto</p>
             </div>
-            <form action={{route("setPasswordSettings")}} method="POST" action="" class="form_password">
+            <form action={{route("setPasswordSettings")}} method="POST" class="form_password">
                 @csrf
                 <div class="input_container">
                     <div class="label_container">
                         <label for="init_session_input">Contraseña</label>
                     </div>
-                    <input id="init_session_input" type="text" placeholder="Contraseña" name="user_password" autocomplete="username">
+                    <input id="input_set_password" type="text" placeholder="Contraseña" name="user_password" autocomplete="username">
                 </div>
                 <p class="error_form"></p>
             </form>

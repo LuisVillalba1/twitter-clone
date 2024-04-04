@@ -131,7 +131,7 @@
                     <div class="icon_type_config_container">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
-                    <a href="" class="link_type_config">
+                    <a href={{route("settingsPassword")}} class="link_type_config">
                         <h5>Cambiar contraseña</h5>
                         <p>Cambia tu contraseña en cualquier momento</p>
                     </a>

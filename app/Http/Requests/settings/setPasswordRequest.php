@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class setPasswordRequest extends FormRequest
 {
@@ -34,7 +35,9 @@ class setPasswordRequest extends FormRequest
                 if(!Hash::check($value,$userData->Password)){
                     $fail("Incorrect password");
                 }
-            }]
+            }],
+            //rutas validas
+            "location"=>["required",Rule::in(route("showViewAccountData"),route("settingsPassword"))]
         ];
     }
 }

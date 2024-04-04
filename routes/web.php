@@ -175,20 +175,17 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/user/notifications/details",[NotificationController::class,"getNotifications"])->name("getNotifications");
 });
 
-//vista para ingresar la contraseña
-//el segundo middleware nos servira para que este no pueda acceder a esta ruta en de no poseer una contraseña
-
 //verificamos si la contraseña ingresada es valida
-Route::middleware(["AuthSession","cantSetPasswordView"])->group(function(){
-    Route::get("/settings/setPassword",[SettingsController::class,"setPasswordView"])->name("setPasswordView");
+Route::middleware(["AuthSession"])->group(function(){
     Route::post("/settings/setPassword",[SettingsController::class,"setPassword"])->name("setPasswordSettings");
 });
 
 
 //ruta para cambiar cierta informacion del usuario,a esta le agregamos el middleware de contraseña
-Route::middleware(["AuthSession","setPasswordSetting"])->group(function(){
+Route::middleware(["AuthSession"])->group(function(){
     Route::get("/settings/account",[SettingsController::class,"accountInformation"])->name("showViewAccountData");
     Route::get("/settings/password",[SettingsController::class,"changePasswordView"])->name("settingsPassword");
+    Route::put("/settings/password",[SettingsController::class,"changePassoword"])->name("changePasswordSetting");
 });
 
 

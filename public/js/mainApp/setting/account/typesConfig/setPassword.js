@@ -1,44 +1,41 @@
-const inputs = $("input");
 
+const inputPassword = $("#input_set_password");
+const formPassword = $(".form_password");
 
-//recorremos todos los inputs
-$.each(inputs, function (indexInArray, valueOfElement) { 
-    if(indexInArray != 0){
-        $(valueOfElement).on("focus",function(e){
-            //obtenemos el contenedor padre y su respectivo label container
-            let padre = e.target.closest(".input_container");
+//mostramos el label o lo ocultamos,asi como coloreamos el contenedor
+$(inputPassword).on("focus",function(e){
+    //obtenemos el contenedor padre y su respectivo label container
+    let padre = e.target.closest(".input_container");
 
-            let label = padre.firstElementChild;
+    let label = padre.firstElementChild;
 
-            //mostramos el label correspondiente y le agregamos estilos al contenedor
-            if(!document.startViewTransition){
+    //mostramos el label correspondiente y le agregamos estilos al contenedor
+    if(!document.startViewTransition){
 
-                $(e.target).addClass("input_focus");
+        $(e.target).addClass("input_focus");
 
-                showLabel(label);
-                $(padre).css("border-color", "rgb(29, 155, 240)");
+        showLabel(label);
+        $(padre).css("border-color", "rgb(29, 155, 240)");
 
-                return ;
-            }
-            document.startViewTransition(()=>{
-                $(e.target).addClass("input_focus");
-
-                showLabel(label);
-                $(padre).css("border-color", "rgb(29, 155, 240)");
-            })
-            
-        });
-        //ocultamos el label y le quitamos los estilos al contenedor
-        $(valueOfElement).on("blur",function(e){
-            let padre = e.target.closest(".input_container");
-            let label = padre.firstElementChild;
-
-            $(e.target).removeClass("input_focus");
-            showLabel(label);
-            $(padre).css("border-color", "rgb(156, 152, 152)");
-        })
+        return ;
     }
+    document.startViewTransition(()=>{
+        $(e.target).addClass("input_focus");
+
+        showLabel(label);
+        $(padre).css("border-color", "rgb(29, 155, 240)");
+    })
+    
 });
+//ocultamos el label y le quitamos los estilos al contenedor
+$(inputPassword).on("blur",function(e){
+    let padre = e.target.closest(".input_container");
+    let label = padre.firstElementChild;
+
+    $(e.target).removeClass("input_focus");
+    showLabel(label);
+    $(padre).css("border-color", "rgb(156, 152, 152)");
+})
 
 //mostramos u ocultamos los label
 function showLabel(label){
@@ -53,9 +50,6 @@ function showLabel(label){
         $(label).addClass("label_container");
     }
 }
-
-const inputPassword = $("#init_session_input");
-const formPassword = $(".form_password");
 
 //enviamos el formulario en caso de que se presiones la tecla enter en el input o si se presiona el boton de confirmar
 $(inputPassword).on("keydown", function (e) {
@@ -77,6 +71,9 @@ $(formPassword).on("submit ", function (e) {
 //enviamos el formulario
 function sendForm(){
     let dataForm = $(formPassword).serialize();
+    //enviamos tambien la ruta actual
+    const location = `&location=${window.location.href}`.toString()
+    dataForm += location;
     $.ajax({
         type: "POST",
         url: $(formPassword).attr("action"),
