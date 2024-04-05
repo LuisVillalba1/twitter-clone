@@ -42,7 +42,7 @@
                 <p class="error_form"></p>
             </form>
             <div class="forgot_password_container">
-                <a href="" class="forgott_password">¿Olvidaste tu contraseña?</a>
+                <a href={{route("recuperateAccount")}} class="forgott_password">¿Olvidaste tu contraseña?</a>
             </div>
             <div class="send_form_container">
                 <div class="button_send_form">

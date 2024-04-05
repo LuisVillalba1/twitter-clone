@@ -1,0 +1,62 @@
+.content_results{
+    padding: 10px 10px;
+}
+
+.title_content_container{
+    margin: 2px 0 10px 0;
+}
+
+.content_config_container{
+    padding: 5px 0 10px 0;
+}
+
+
+.date_input{
+    background: var(--negro);
+    font-size: 1.2em;
+    padding: 5px 0px;
+    border: none;
+    outline: none;
+}
+
+.date_input_focus{
+    border: 1px solid var(--celeste);
+    border-radius: 4px;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    background-color: var(--blanco);
+    border-radius: 3px;
+    padding: 3px;
+    margin-right: 2px;
+}
+
+.save_content_container{
+    display: flex;
+    width: 100%;
+    justify-content: end;
+}
+
+.save_buttom{
+    padding: 6px 9px;
+    background: var(--celeste);
+    border-radius: 20px;
+    margin: 8px 10px;
+    cursor: pointer;
+}
+
+.save_buttom p{
+    font-size: 1.2em;
+}
+
+.error_form{
+    padding-top: 5px;
+    color: red;
+}
+
+@media screen and (min-width:100px){
+    .content_results{
+        padding: 0;
+        padding-left: 4px;
+    }
+}

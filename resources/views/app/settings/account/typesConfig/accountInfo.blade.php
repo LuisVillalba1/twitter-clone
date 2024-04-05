@@ -35,7 +35,13 @@
                     </div>
                 </li>
                 <li class="result_content_ul__li">
-                    <a href="" class="result_content_link">
+                    <div class="no_edit_container">
+                        <h4>Correo electronico</h4>
+                        <p>{{$email}}</p>
+                    </div>
+                </li>
+                <li class="result_content_ul__li">
+                    <a href={{route("editProfilesShow")}} class="result_content_link">
                         <div class="result_content_link_description">
                             <h4>Nombre</h4>
                             <p>{{$name}}</p>
@@ -46,18 +52,7 @@
                     </a>
                 </li>
                 <li class="result_content_ul__li">
-                    <a href="" class="result_content_link">
-                        <div class="result_content_link_description">
-                            <h4>Correo electronico</h4>
-                            <p>{{$email}}</p>
-                        </div>
-                        <div class="icon_config_continue_container">
-                            <i class="fa-solid fa-greater-than"></i>
-                        </div>
-                    </a>
-                </li>
-                <li class="result_content_ul__li">
-                    <a href="" class="result_content_link">
+                    <a href={{route("accountBirthdayView")}} class="result_content_link">
                         <div class="result_content_link_description">
                             <h4>Fecha de nacimiento</h4>
                             <p>{{$date}}</p>

@@ -1,0 +1,34 @@
+.account_verified{
+    padding: 10px 0;
+}
+
+.account_verified h4{
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.send_email_container{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.send_email_buttom{
+    width: 60%;
+    padding: 8px 12px;
+    border-radius: 20px;
+    background: var(--celeste);
+    cursor: pointer;
+}
+
+.send_email_buttom p{
+    width: 100%;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.main_send_title{
+    margin-top: 20px;
+    text-align: center;
+}

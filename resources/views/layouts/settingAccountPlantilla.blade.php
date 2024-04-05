@@ -143,7 +143,7 @@
                     <div class="icon_type_config_container">
                         <i class="fa-solid fa-user-gear"></i>
                     </div>
-                    <a href="" class="link_type_config">
+                    <a href={{route("verifyEmailView")}} class="link_type_config">
                         <h5>Verifica tu cuenta</h5>
                         <p>Verifica tu direccion de correo electronico en caso de no haberlo hecho</p>
                     </a>

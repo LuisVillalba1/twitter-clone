@@ -16,7 +16,9 @@
         <i class="fa-brands fa-x-twitter"></i>
     </div>
     <div class="config_container">
-        <i class="fa-solid fa-gear"></i>
+        <a href={{route("settings")}}>
+            <i class="fa-solid fa-gear"></i>
+        </a>
     </div>
 @endsection
 

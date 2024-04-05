@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\settings\changePasswordRequest;
+use App\Http\Requests\settings\PersonalData\BirthdayRequest;
 use App\Http\Requests\settings\setPasswordRequest;
+use App\Models\PersonalData;
 use App\Models\User;
+use App\Models\VerificationAccount;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use Exception;
 use Illuminate\Http\Request;
@@ -57,6 +60,57 @@ class SettingsController extends Controller
         }
     }
 
+    //vista para verificar si el usuario tiene el mail verificado
+    public function verifyEmailView(){
+        try{
+            $userData = User::select("UserID","PersonalDataID","VerifiedMail","Email")
+            ->with([
+                "PersonalData"=>function ($queryPersonal){
+                    $queryPersonal->select("PersonalDataID","Nickname");
+                }
+            ])
+            ->where("UserID",Auth::id())
+            ->first();
+            $username = $userData->PersonalData->Nickname;
+            $email = $userData->Email;
+
+            //devolvemos la vista con el valor de verified en caso de que la cuenta tenga o no el email verificado
+            $verified = true;
+            if($userData->VerifiedMail){
+                return view("app.settings.account.typesConfig.verifyEmail",compact("username","verified","email"));
+            }
+            $verified = false;
+            return view("app.settings.account.typesConfig.verifyEmail",compact("username","verified","email"));
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //enviamos el email para verificar la cuenta
+    public function sendEmailVerify(){
+        try{
+            $userData = User::select("UserID","VerificationID","Email")->where("UserID",Auth::id())->first();
+            $verificationID = (new VerificationAccount())->createCode();
+
+            //creamos el codigo de verificacion
+            $userData->VerificationID = $verificationID;
+
+
+            $userData->save();
+
+            //enviamos el mail con el codigo
+            (new User())->sendEmailCode($userData->Email);
+
+            return response()->json(["message"=>"Se ha enviado el codigo correctamente"],200);
+
+        }
+        catch(\Exception $e){
+            Debugbar::info($e->getMessage());
+            return response()->json(["errors"=>"Ha ocurrido un error al enviar el email,por favor intentelo mas tarde"],500);
+        }
+    }
+
     //antes de cambiar cualquier informacion personal del usuario, hacemos que esta ingrese su contraseña en caso de no haberla echa previamente
     public function setPasswordView($username){
         return view("app.settings.account.typesConfig.enterPassword",compact("username"));
@@ -102,6 +156,7 @@ class SettingsController extends Controller
         return view("app.settings.account.typesConfig.accountPassword",compact("username","edit"));
     }
 
+    //cambiamos la contraseña del usuario
     public function changePassoword(changePasswordRequest $request){
         try{
             $userData = User::select("UserID","Password")->where("UserID",Auth::id())->first();
@@ -117,6 +172,66 @@ class SettingsController extends Controller
         }
         catch(\Exception $e){
             return response()->json(["error"=>"Ha ocurrido un error al cambiar la contraseña"],500);
+        }
+    }
+
+    //vista para permitir cambiar la fecha de nacimiento
+    public function birthdayView(Request $request){
+        try{
+            $userData = User::
+            select("UserID","PersonalDataID","Password")
+            ->with([
+                "PersonalData"=>function ($queryPersonal){
+                    $queryPersonal->select("PersonalDataID","Nickname");
+                }
+            ])
+            ->where("UserID",Auth::id())->first();
+
+            $username = $userData->PersonalData->Nickname;
+
+            //en caso de que aun no se haya ingresado la contraseña,y este posea una,mostramos la vista para que ingrese su contraseña
+            if(!$request->session()->get("passwordSet") && $userData->Password){
+                return $this->setPasswordView($username);
+            }
+
+            return view("app.settings.account.typesConfig.personalData.birthday",compact("username"));
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
+        }
+    }
+
+    //cambiamos la fecha de nacimiento del usuario
+    public function changeBirthday(BirthdayRequest $request){
+        try{
+            $user = PersonalData::
+            select("PersonalDataID","Date")
+            ->where("PersonalDataID",Auth::id())->first();
+
+            $user->Date = $request->date;
+
+            $user->save();
+
+            return response()->json(["message"=>"Se ha modificado la fecha correctamente","redirect"=>route("showViewAccountData")],201);
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>"Ha ocurrido un error al intentar cambiar la fecha de cumpleaños"],500);
+        }
+    }
+
+    //permitimos generar una contraseña al usuario en caso de que no la contenga
+    public function generatePassword(Request $request){
+        try{
+            if(!Auth::user()->VerifiedMail){
+                throw new Exception("Verifica tu cuenta");
+            }
+            return response()->json(["message"=>"Se ha enviado el mail a su correo electronico"],200);
+        }
+        catch(\Exception $e){
+            if($e->getMessage() == "Verifica tu cuenta"){
+                return response()->json(["errors"=>"Necesita verificar su email primero para crear una contraseña, por favor ve al apartado de 'Verifica tu cuenta'"],401);
+            }
+            return response()->json(["errors"=>"Ha ocurrido un error al enviar el email,por favor intentelo mas tarde"],500);
         }
     }
 }

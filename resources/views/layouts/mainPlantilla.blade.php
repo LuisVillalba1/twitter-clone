@@ -74,7 +74,7 @@
                 </a>
             </li>
             <li class="nav_link_li">
-                <a href="#">
+                <a href={{route("settings")}}>
                     <div class="nav_link__icon_container">
                     <i class="fa-solid fa-gear"></i>
                     </div>
@@ -140,12 +140,12 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href="#" title="Mensajes">
+                    <a href={{route("settings")}} title="Mensajes">
                         <div class="nav_icon_link_container">
-                            <i class="fa-regular fa-envelope"></i>
+                            <i class="fa-solid fa-gear"></i>
                         </div>
                         <div class="nav_link_description_container">
-                            <p class="nav_link_description">Mensajes</p>
+                            <p class="nav_link_description">Configuracion</p>
                         </div>
                     </a>
                 </div>

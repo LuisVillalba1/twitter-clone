@@ -183,9 +183,23 @@ Route::middleware(["AuthSession"])->group(function(){
 
 //ruta para cambiar cierta informacion del usuario,a esta le agregamos el middleware de contraseña
 Route::middleware(["AuthSession"])->group(function(){
+    //visualizamos las vistas que nos permitiran cambiar datos como la informacion personal,contraseña y tambien verificar el mail
     Route::get("/settings/account",[SettingsController::class,"accountInformation"])->name("showViewAccountData");
     Route::get("/settings/password",[SettingsController::class,"changePasswordView"])->name("settingsPassword");
+    Route::get("/settings/verifyAccount",[SettingsController::class,"verifyEmailView"])->name("verifyEmailView");
+
+    //perimitmos al usuario cambiar su contraseña
     Route::put("/settings/password",[SettingsController::class,"changePassoword"])->name("changePasswordSetting");
+
+    //en caso de que el usuario no posea una contraseña le permitimos que cree una
+    Route::put("/setting/createPassword",[SettingsController::class,"generatePassword"])->name("generatePassword");
+    
+    //veriricamos el email en caso de que lo desee
+    Route::put("/setting/verifyAccount",[SettingsController::class,"sendEmailVerify"])->name("sendEmailVerify");
+
+    //permitimos cambiar la fecha de cumpleaños del usuario
+    Route::get("/settings/account/birthday",[SettingsController::class,"birthdayView"])->name("accountBirthdayView");
+    Route::put("/settings/account/birthday",[SettingsController::class,"changeBirthday"])->name("changeBirthday");
 });
 
 

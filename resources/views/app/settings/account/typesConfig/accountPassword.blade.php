@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../../../css/mainApp/setting/account/typesConfig/changePassword.css">
 <link rel="stylesheet" href="../../../css/mainApp/utils/error/errorAlert.css">
 <link rel="stylesheet" href="../../../css/mainApp/setting/account/typesConfig/utils/successAlert.css">
-<title>Settings account</title>
+<title>Change password</title>
 @endsection
 
 
@@ -42,7 +42,7 @@
                     </div>
                     <p id="error_user_password" class="error_form"></p>
                     <div class="forgot_password_container">
-                        <a href="" class="forgott_password">¿Olvidaste tu contraseña?</a>
+                        <a href={{route("recuperateAccount")}} class="forgott_password">¿Olvidaste tu contraseña?</a>
                     </div>
                 </div>
                 <div class="new_password_container">
@@ -68,12 +68,30 @@
                 </div>
             </div>
             @else
-                <p>no</p>
+                <form method="POST" class="no_password_container" action={{route("generatePassword")}}>
+                    @csrf
+                    @method("PUT")
+                    <div class="title_no_password_container">
+                        <h3>Genere una contraseña para mayor seguridad</h3>
+                    </div>
+                    <div class="content_no_password">
+                        <p>Su cuenta no posee una contraseña,por seguridad le recomendamos generar una.De click en el boton de abajo para enviarle un mail y generar una contraseña.</p>
+                    </div>
+                    <div class="button_generate_password_container">
+                        <div class="button_generate_password">
+                            <p>Enviar correo</p>
+                        </div>
+                    </div>
+                </form>
             @endif
         </div>
     </div>
 @endsection
 
 @section('scripts')
-    <script type="module" src="../../../js/mainApp/setting/account/typesConfig/changePassword.js"></script>
+     @if ($edit)
+     <script type="module" src="../../../js/mainApp/setting/account/typesConfig/changePassword.js"></script> 
+     @else
+         <script type="module" src="../../../js/mainApp/setting/account/typesConfig/generatePassword.js"></script>
+     @endif
 @endsection
