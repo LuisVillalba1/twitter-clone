@@ -35,9 +35,6 @@
         <div class="posts_container">
             <div class="header">
                 <h2>Inicio</h2>
-                <div class="header_icon_config_container">
-                    <i class="fa-solid fa-gear"></i>
-                </div>
             </div>
             <div class="create_post_main">
                 <div class="create_post_logo_container">

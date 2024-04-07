@@ -103,7 +103,6 @@ class ProfileController extends Controller
 
     //mostramos el perfil del usuario
     public function showProfile($username,Request $request){
-        // return response("sdjklñg")->cookie(cookie()->forget("userSearch"));
         try{
             return (new Profile())->showProfile($username,"profile",$request);
         }

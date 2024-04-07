@@ -116,7 +116,7 @@ class UserPost extends Model
     }
 
     //obtenemos los posteos que ya se han visualizados
-    public function getPostsVisualized(){
+    public function getPostsVisualized($lastVisited){
         $userID = Auth::user()->UserID;
         $posts = Visualization::
         with([
@@ -160,6 +160,7 @@ class UserPost extends Model
             $queryPostWhere->where("ParentID",null);
         })
         ->where("NicknameID",$userID)
+        ->where("created_at","<",$lastVisited)
         ->orderBy("created_at","desc")
         ->simplePaginate(15);
 

@@ -8,9 +8,11 @@ use App\Models\Follow;
 use App\Models\MultimediaPost;
 use App\Models\PersonalData;
 use App\Models\UserPost;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Storage;
 
 use function PHPSTORM_META\type;
@@ -30,7 +32,7 @@ class AppController extends Controller
     }
 
     //mostramos la main ap
-    public function show(){
+    public function show(Request $request){
         try{
             //obtenemos ciertos datos de la aunteticacion del usuario
             $user = Auth::user();
@@ -40,7 +42,11 @@ class AppController extends Controller
             $follows = (new Follow())->getCountFollows($user->UserID);
             $followers = (new Follow())->getCountFollowers($user->UserID);
 
-            return view("app.main",compact(["name","nickname","profilePhoto","follows","followers"]));
+            //obtenemos la fecha en la que se visito el link y creamos una cookie con este valor
+            $now = now()->format('Y-m-d H:i:s');
+            $cookie = Cookie::forever("lastHomeVisited",$now);
+
+            return response()->view("app.main",compact(["name","nickname","profilePhoto","follows","followers"]))->withCookie($cookie);
         }
         catch(\Exception $e){
             return redirect()->route("errorPage");
@@ -107,9 +113,16 @@ class AppController extends Controller
     }
 
     //obtenemos los posteos visualizados
-    public function getPostsVisualizated(){
+    public function getPostsVisualizated(Request $request){
         try{
-            return (new UserPost())->getPostsVisualized();
+            //en caso de que no exista la cookie de la ultima visita a la vista home lanzamos una exepcion
+            //ya que esta nos permitira no mostrar posteos repetidos
+            if(!$request->cookie("lastHomeVisited")){
+                throw new Exception();
+            }
+            $lastVisited = $request->cookie("lastHomeVisited");
+            //obtenemos aquellos posteos visualizados por parte del usuario autenticado que sean inferiores a la ultima visita de la ruta home
+            return (new UserPost())->getPostsVisualized($lastVisited);
         }
         catch(\Exception $e){
             return response()->json(["errors"=>$e->getMessage()],500);

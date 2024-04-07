@@ -22,10 +22,12 @@ class NewPostRequest extends FormRequest
     public function rules(): array
     {
         return [
-            "images.*"=>["image","mimes:jpeg,jpg,png,gif"],
+            "images.*"=>["image","mimes:jpeg,jpg,png"],
             "images.*.name"=>["string"],
             "images.*.size"=>["max:5120"],
             "message" =>["max:280"],
+            //solo se pueden ingresar hasta 4 imagenes
+            "images"=>["max:4","array"],
             //al menos uno de los dos campos debe de existir
             'images' => 'required_without_all:message',
             'message' => 'required_without_all:images',
