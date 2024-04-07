@@ -105,7 +105,6 @@ $(".continue_botton").on("click", function (e) {
             showSucefullyReponse(response);
         },
         error: function(error){
-            console.log(error);
             ocultLoader();
             showContainer();
             if(error.status == 422){

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Register\CodeRequest;
 use App\Http\Requests\settings\changePasswordRequest;
 use App\Http\Requests\settings\PersonalData\BirthdayRequest;
 use App\Http\Requests\settings\setPasswordRequest;
@@ -87,8 +88,41 @@ class SettingsController extends Controller
         }
     }
 
+    //verificamos el email del usuario
+    public function verifyEmailCode(CodeRequest $request){
+        try{
+            Debugbar::info($request->input("number5"));
+            //obtenemos el codigo ingresado
+            $suma = [];
+            // iteramos sobre los inputs
+            for($i = 1;$i <=5;$i++){
+                $valor = $request->input("number{$i}");
+                array_push($suma,$valor);
+            }
+    
+            $code = implode("",$suma);
+
+            //obtenemos la informacion del usuario,junto a su codigo
+            $userData = User::select("UserID","VerificationID")
+            ->with([
+                "verificationAccount"=>function ($verifyCode){
+                    $verifyCode->select("VerificationID","CodeVerification","Expiration");
+                }
+            ])
+            ->where("UserID",Auth::id())->first();
+            
+            //vericamos si el codigo es correcto
+            (new VerificationAccount())->verifyCodeEmail($userData,$code);
+
+            return response()->json(["redirect"=>route("sendEmailVerify")],200);
+        }
+        catch(\Exception $e){
+            return response()->json(["errors"=>$e->getMessage()], 404);
+        }
+    }
+
     //enviamos el email para verificar la cuenta
-    public function sendEmailVerify(){
+    public function sendEmailVerify(Request $request){
         try{
             $userData = User::select("UserID","VerificationID","Email")->where("UserID",Auth::id())->first();
             $verificationID = (new VerificationAccount())->createCode();
@@ -99,15 +133,39 @@ class SettingsController extends Controller
 
             $userData->save();
 
+
             //enviamos el mail con el codigo
             (new User())->sendEmailCode($userData->Email);
 
-            return response()->json(["message"=>"Se ha enviado el codigo correctamente"],200);
+            //guardamos en la session que se ha enviado el codigo
+            $request->session()->put("sendCode","send");
+
+            return response()->json(["redirect"=>route("codeEmailView")],200);
 
         }
         catch(\Exception $e){
             Debugbar::info($e->getMessage());
             return response()->json(["errors"=>"Ha ocurrido un error al enviar el email,por favor intentelo mas tarde"],500);
+        }
+    }
+
+    //vista para que se envie el codigo de verificacion
+    public function verifyEmaiView(){
+        try{
+            $userData = User::select("UserID","PersonalDataID","VerifiedMail","Email")
+            ->with([
+                "PersonalData"=>function ($queryPersonal){
+                    $queryPersonal->select("PersonalDataID","Nickname");
+                }
+            ])
+            ->where("UserID",Auth::id())
+            ->first();
+            $username = $userData->PersonalData->Nickname;
+
+            return view("app.settings.account.typesConfig.verifyCode.verifyCode",compact("username"));
+        }
+        catch(\Exception $e){
+            return redirect()->route("errorPage");
         }
     }
 

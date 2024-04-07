@@ -1,9 +1,9 @@
-const formDelete = $("#delete_session");
+const formDeleteResponsive = $("#delete_session_form");
 function deleteSession(){
-    $(formDelete).on("click", function (e) {
+    $(formDeleteResponsive).on("click", function (e) {
         e.preventDefault();
 
-        let action = $(formDelete).attr("action");
+        let action = $(formDeleteResponsive).attr("action");
         deleteSessionFetch(action);
     });
 }
@@ -12,7 +12,7 @@ function deleteSessionFetch(url){
     $.ajax({
         type: "DELETE",
         url: url,
-        data : $(formDelete).serialize(),
+        data : $(formDeleteResponsive).serialize(),
         success: function (response) {
             window.location.href = response;
         },

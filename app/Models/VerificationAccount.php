@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -62,5 +63,25 @@ class VerificationAccount extends Model
         catch(\Exception $e){
             return response()->json(["error"=>"Missing error,please try after"],404);
         }
+    }
+
+    public function verifyCodeEmail($userData,$code){
+            $codeExpired = $userData->verificationAccount->Expiration;
+            $codeVerification = $userData->verificationAccount->CodeVerification;
+            $now = now()->format('Y-m-d H:i:s');
+
+            //if el codigo expiro
+            if($now > $codeExpired){
+                throw new Exception("Expired code");
+            }    
+            //en caso de que el codigo no haya expirado y sea el correcto lo redirigimos a la ruta main
+            if(intval($code) == $codeVerification){
+                $userData->VerifiedMail = true;
+                $userData->save();
+                //eliminamos los datos de session
+                session()->forget("sendCode");
+                return ;
+            }
+            throw new Exception("Incorrect code,please try again");
     }
 }

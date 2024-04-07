@@ -133,7 +133,6 @@ $(coverPhotoContainer).on("drop", function (e) {
     $(coverPhotoContainer).css("border", "none");
     let file = e.originalEvent.dataTransfer.files;
     
-    console.log(file[0]);
 
     createFileReader(file[0],"cover")
 });
@@ -330,7 +329,6 @@ function sendForm(formData){
             window.location.href = response;
         },
         error:function(error){
-            console.log(error);
             let errores = error.responseJSON.errors;
             if(error.status == 422){
                 $.each(errores, function (indexInArray, valueOfElement) {

@@ -27,7 +27,6 @@ function getNickname(){
 
 Echo.channel(`notification.${getNickname()}`).
 listen("notificationEvent",(e)=>{
-    console.log(e)
     sumNotificationCount();
 })
 

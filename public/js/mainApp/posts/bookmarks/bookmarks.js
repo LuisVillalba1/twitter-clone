@@ -17,7 +17,6 @@ async function getBookmarks(url){
         showPosts(response.data,response.next_page_url);
     }
     catch(e){
-        console.log(e);
         createErrorAlert(e.responseJSON.errors,savesPostContainer)
     }
     finally{

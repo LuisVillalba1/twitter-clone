@@ -26,7 +26,6 @@ async function getLikes(url){
         showPosts(response.data,response.next_page_url);
     }
     catch(e){
-        console.log(e);
         if(e.responseJSON){
             return createErrorAlert(e.responseJSON.errors,profileContainer);
         }

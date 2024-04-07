@@ -25,12 +25,7 @@ function sendForm(){
         data: $(formVerifyEmail).serialize(),
         dataType: "json",
         success: function (response) {
-
-            let mailSendTitle = $("<h4></h4>");
-            $(mailSendTitle).addClass("main_send_title");
-            $(mailSendTitle).text(response.message);
-
-            $(resultContainer).append(mailSendTitle);
+            window.location.href = response.redirect;
         },
         error : function (e){
             createErrorAlert(e.responseJSON.errors,mainContainer)

@@ -100,7 +100,14 @@
         border: 1px solid var(--blanco);
         font-size: 1.2em;
         text-decoration: none;
+    }
 
+    .delete_session_container{
+        cursor: pointer;
+    }
+
+    #delete_session{
+        display: none;
     }
 }
 
@@ -119,6 +126,10 @@
     }
     .nav_icon_link_container{
         min-width: 24px;
+    }
+
+    #delete_session{
+        display: block;
     }
 
     .nav_link_description_container{

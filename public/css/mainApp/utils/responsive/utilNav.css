@@ -88,7 +88,7 @@
     width: 100%;
 }
 
-.delete_session_container{
+.delete_session_container_responsive{
     display: flex;
     align-items: center;
     width: 100%;

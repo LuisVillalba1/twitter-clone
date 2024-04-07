@@ -56,7 +56,7 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href={{route("settings")}} title="Mensajes">
+                    <a href={{route("settings")}} title="Configuracion">
                         <div class="nav_icon_link_container">
                             <i class="fa-solid fa-gear"></i>
                         </div>

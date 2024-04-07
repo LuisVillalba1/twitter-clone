@@ -41,9 +41,9 @@
 @section('content')
     <div class="confirm_account">
         <h2>Confirma tu direccion de correo</h2>
-        <p>Debes de completaar este paso rapido para poder crear tu cuenta.Confirma que esta es la direccion correcta</p>
+        <p>Debe de completar este paso para poder verificar tu correo electronico</p>
 
-        <p class="code_p">Introduce este codigo de verificacion para poder usar tu cuenta</p>
+        <p class="code_p">Introduce este codigo de verificacion</p>
         <h3 id="code">{{$code}}</h3>
         <b>Los codigos de verificacion caducan despues de una hora</b>
     </div>

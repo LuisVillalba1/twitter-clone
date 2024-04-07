@@ -63,12 +63,12 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href="#" title="Mensajes">
+                    <a href={{route("settings")}} title="Configuracion">
                         <div class="nav_icon_link_container">
                             <i class="fa-regular fa-envelope"></i>
                         </div>
                         <div class="nav_link_description_container">
-                            <p class="nav_link_description">Mensajes</p>
+                            <p class="nav_link_description">Configuracion</p>
                         </div>
                     </a>
                 </div>

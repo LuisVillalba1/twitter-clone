@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../../../css/mainApp/setting/account/typesConfig/verifyEmail.css">
 <link rel="stylesheet" href="../../../css/mainApp/utils/error/errorAlert.css">
 <link rel="stylesheet" href="../../../css/mainApp/setting/account/typesConfig/utils/successAlert.css">
-<title>Change password</title>
+<title>Verify account</title>
 @endsection
 
 

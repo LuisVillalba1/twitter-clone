@@ -84,7 +84,6 @@ function sendForm(){
             if(e.status == 422){
                 let errors = e.responseJSON.errors;
                 for(let i in errors){
-                    console.log(i);
                     $(`#error_${i}`).text(errors[i]);
                 }
                 return

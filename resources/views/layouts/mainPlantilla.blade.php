@@ -84,7 +84,7 @@
                 </a>
             </li>
             <li class="nav_link_li">
-                <div class="delete_session_container">
+                <div class="delete_session_container_responsive">
                     <div class="nav_link__icon_container">
                         <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     </div>
@@ -140,7 +140,7 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href={{route("settings")}} title="Mensajes">
+                    <a href={{route("settings")}} title="Configuracion">
                         <div class="nav_icon_link_container">
                             <i class="fa-solid fa-gear"></i>
                         </div>
@@ -159,10 +159,14 @@
                         </div>
                     </a>
                 </div>
-                <div class="nav_owner_icon_container">
-                    <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} title="Cuenta">
-                        <i class="fa-solid fa-user"></i>
-                    </a>
+                <div class="nav_icon_container delete_session_container">
+                    <div class="nav_icon_link_container">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <form class="nav_link_description_container" id="delete_session" action={{route("deleteSession")}} method="POST">
+                        @csrf
+                        <p class="nav_link_description">Cerrar sesión</p>
+                    </form>
                 </div>
                 <div class="nav_owner_logo_container">
                     <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} class="logo_icon_container" title="Cuenta">
@@ -189,5 +193,6 @@
     {!! Vite::content('resources/js/app.js') !!}
 </script>
 @yield("scripts")
-<script src={{ asset('js/mainApp/closeSession/deleteSession.js') }}></script>
+<script src={{asset("js/mainApp/closeSession/deleteSession.js")}}></script>
+<script src={{ asset('js/mainApp/closeSession/deleteSessionResponsive.js') }}></script>
 </html>

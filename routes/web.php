@@ -88,9 +88,12 @@ Route::controller(RecuperateAccountController::class)->group(function(){
 
 //main app
 Route::middleware(["AuthSession"])->group(function () {
+    //cerramos session
     Route::delete("/deleteSession",[AppController::class,"deleteSession"])->name("deleteSession");
 
+    //vista main de los posteos
     Route::get("/home",[AppController::class,"show"])->name("mainApp");
+
     //mostramos y permitimos crear un nuevo post
     Route::get("/home/createPost",[AppController::class,"showCreatePost"])->name("showCreatePost");
     Route::post("/home/createPost",[AppController::class,"createPost"])->name("createPost");
@@ -98,8 +101,29 @@ Route::middleware(["AuthSession"])->group(function () {
     //obtenemos las busquedas recientes
     Route::get("/recentSearchs",[CookiesController::class,"getRecentSearchs"])->name("getRecentSearchs");
 
-    //permitimos al usuario cambiar cierta configuracion de su cuenta
+    //permitimos al usuario cambiar cierta configuracion de su cuenta,pero primero se debera de ingresar la contraseña para ciertos apartados
     Route::get("/settings",[SettingsController::class,"settings"])->name("settings");
+
+    //verificamos si la contraseña ingresada es valida
+    Route::post("/settings/setPassword",[SettingsController::class,"setPassword"])->name("setPasswordSettings");
+
+    //visualizamos las vistas que nos permitiran cambiar datos como la informacion personal,contraseña y tambien verificar el mail
+    Route::get("/settings/account",[SettingsController::class,"accountInformation"])->name("showViewAccountData");
+    Route::get("/settings/password",[SettingsController::class,"changePasswordView"])->name("settingsPassword");
+    Route::get("/settings/verifyAccount",[SettingsController::class,"verifyEmailView"])->name("verifyEmailView");
+    
+    //perimitmos al usuario cambiar su contraseña
+    Route::put("/settings/password",[SettingsController::class,"changePassoword"])->name("changePasswordSetting");
+    
+    //en caso de que el usuario no posea una contraseña le permitimos que cree una
+    Route::put("/settings/createPassword",[SettingsController::class,"generatePassword"])->name("generatePassword");
+        
+    //verificamos el email en caso de que lo desee
+    Route::put("/settings/verifyAccount",[SettingsController::class,"sendEmailVerify"])->name("sendEmailVerify");
+    
+    //permitimos cambiar la fecha de cumpleaños del usuario
+    Route::get("/settings/account/birthday",[SettingsController::class,"birthdayView"])->name("accountBirthdayView");
+    Route::put("/settings/account/birthday",[SettingsController::class,"changeBirthday"])->name("changeBirthday");
 
     //ruta para permitir al usuario explorar 
     Route::get("/explore",[AppController::class,"showExplore"])->name("showExplore");
@@ -175,31 +199,10 @@ Route::middleware(["AuthSession"])->group(function () {
     Route::get("/user/notifications/details",[NotificationController::class,"getNotifications"])->name("getNotifications");
 });
 
-//verificamos si la contraseña ingresada es valida
-Route::middleware(["AuthSession"])->group(function(){
-    Route::post("/settings/setPassword",[SettingsController::class,"setPassword"])->name("setPasswordSettings");
-});
-
-
-//ruta para cambiar cierta informacion del usuario,a esta le agregamos el middleware de contraseña
-Route::middleware(["AuthSession"])->group(function(){
-    //visualizamos las vistas que nos permitiran cambiar datos como la informacion personal,contraseña y tambien verificar el mail
-    Route::get("/settings/account",[SettingsController::class,"accountInformation"])->name("showViewAccountData");
-    Route::get("/settings/password",[SettingsController::class,"changePasswordView"])->name("settingsPassword");
-    Route::get("/settings/verifyAccount",[SettingsController::class,"verifyEmailView"])->name("verifyEmailView");
-
-    //perimitmos al usuario cambiar su contraseña
-    Route::put("/settings/password",[SettingsController::class,"changePassoword"])->name("changePasswordSetting");
-
-    //en caso de que el usuario no posea una contraseña le permitimos que cree una
-    Route::put("/setting/createPassword",[SettingsController::class,"generatePassword"])->name("generatePassword");
-    
-    //veriricamos el email en caso de que lo desee
-    Route::put("/setting/verifyAccount",[SettingsController::class,"sendEmailVerify"])->name("sendEmailVerify");
-
-    //permitimos cambiar la fecha de cumpleaños del usuario
-    Route::get("/settings/account/birthday",[SettingsController::class,"birthdayView"])->name("accountBirthdayView");
-    Route::put("/settings/account/birthday",[SettingsController::class,"changeBirthday"])->name("changeBirthday");
+//ruta para verificar el email 
+Route::middleware(["AuthSession","CodeVerifyEmail"])->group(function(){
+    Route::get("/settings/verifyAccount/code",[SettingsController::class,"verifyEmaiView"])->name("codeEmailView");
+    Route::post("/settings/verifyAccount/code",[SettingsController::class,"verifyEmailCode"])->name("codeEmailVerify");
 });
 
 

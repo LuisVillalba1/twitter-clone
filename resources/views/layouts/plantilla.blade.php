@@ -52,12 +52,12 @@
                     </a>
                 </div>
                 <div class="nav_icon_container">
-                    <a href="#" title="Mensajes">
+                    <a href={{route("settings")}} title="Configuracion">
                         <div class="nav_icon_link_container">
                             <i class="fa-regular fa-envelope"></i>
                         </div>
                         <div class="nav_link_description_container">
-                            <p class="nav_link_description">Mensajes</p>
+                            <p class="nav_link_description">Configuracion</p>
                         </div>
                     </a>
                 </div>
@@ -71,20 +71,14 @@
                         </div>
                     </a>
                 </div>
-                  <div class="nav_icon_container">
-                    <a href="#" title="Premium">
-                      <div class="nav_icon_link_container">
-                        <i class="fab fa-twitter"></i>
-                      </div>
-                      <div class="nav_link_description_container">
-                        <p class="nav_link_description">Premium</p>
-                      </div>
-                    </a>
-                </div>
-                <div class="nav_owner_icon_container">
-                    <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} title="Cuenta">
-                        <i class="fa-solid fa-user"></i>
-                    </a>
+                <div class="nav_icon_container delete_session_container">
+                    <div class="nav_icon_link_container">
+                        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <form class="nav_link_description_container" id="delete_session" action={{route("deleteSession")}} method="POST">
+                        @csrf
+                        <p class="nav_link_description">Cerrar sesión</p>
+                    </form>
                 </div>
                 <div class="nav_owner_logo_container">
                     <a href={{route("showProfile",["username"=>Auth::user()->PersonalData->Nickname])}} class="logo_icon_container" title="Cuenta">

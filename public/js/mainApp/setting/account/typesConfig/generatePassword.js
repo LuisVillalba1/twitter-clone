@@ -13,7 +13,7 @@ function sendMail(){
             data : $(formPassword).serialize(),
             dataType: "json",
             success: function (response) {
-                console.log(response)
+                
             },
             error : function (e){
                 if(e.status == 401){

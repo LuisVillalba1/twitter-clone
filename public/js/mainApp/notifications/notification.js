@@ -11,7 +11,6 @@ function getNotifications(){
         type: "get",
         url: window.location.href + "/details",
         success: function (response) {
-            console.log(response)
             showNotifications(response)
         },
         error : function(error){
@@ -110,7 +109,6 @@ Echo.channel(`notification.${getNickname()}`).
 listen("notificationEvent",(e)=>{
     //mostramos la nueva notificacion
     if(e.notification.type && e.notification.type == "follow"){
-        console.log(e.notification);
         return utilsFollowNotification.showFollowNotification(e.notification,notificationsContainer);
     }
     utilsPostNotification.showNewNotificationPost(e.notification,notificationsContainer);
