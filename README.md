@@ -40,6 +40,7 @@ Para poder utilizar la app necesitaremos tener instalado PHP, MySQL, Xampp, comp
     - [Base de datos](#base-de-datos)
     - [Pusher](#pusher)
     - [Mail](#mail)
+    - [Imagenes](#imagenes)
   
   - [Google](#google-config)
   - [Levantar servidor](#levantar-servidor)
@@ -144,6 +145,14 @@ A continuación mostraremos los valores que se deberán de modificar en nuestro 
 - MAIL_FROM_ADDRESS=*Nombre del que envía el correo electrónico*
 
 - MAIL_FROM_NAME="${APP_NAME}"
+
+##### imagenes
+
+A la hora de hacer posteos, se nos puede dar la idea de querer subir imagenes en concreto,en esta aplicacion vamos a poder realizarlo haciendo un sensillo paso.Colocado en la principal del proyecto, cree una nueva terminal y ejecuta el siguiente comando:
+
+``php artisan storage:link``
+
+Esto va generar un acceso directo de la carpeta sotorage, donde se almacenan las imágenes, a la carpeta public, para que pueda ser visualizada por los usuario.
 
 #### google-config
 
