@@ -194,3 +194,13 @@ Para levantar nuestro servidor deberemos de correr 3 comandos en distintas termi
 ``npm run dev``
 
 El primer comando levantara nuestro servidor en el servidor local de su computador; el segundo nos permitirá conectar nuestra aplicación son webosockets para poder trabajar con nuestras acciones en tiempo real; y el tercero nos permitirá compilar los archivos estáticos pertenecientes a la aplicación.
+
+Si a la hora de ejecutar npm run dev, ocurre algun error, ejecute en la terminal el siguiente comando
+
+``npm install autoprefixer``
+
+Y luego ejecute en la misma terminal:
+
+``npm run build``
+
+``npm run dev``
